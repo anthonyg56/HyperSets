@@ -3,10 +3,11 @@ import { faStar, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PresetTile from './PresetTile'
 import { Enums, Tables } from '../../../../types/supabase'
+import { QueryData } from '@supabase/supabase-js'
 
 interface Props {
   table: 'likes' | 'downloads' | 'presets'; 
-  hardware?: Enums<'hardware_type'>
+  hardware?: Enums<'hardware_type'>;
   limit?: number;
   user_id?: string;
 }
@@ -14,60 +15,97 @@ interface Props {
 export default async function Presets(props: Props) {
   const { hardware, limit, table, user_id } = props
 
-  const selectQuery = () => {
-    let str;
+  const fetchPresets = async () => {
+    let presetsList,query, data, error
     switch (table) {
       case ('likes'):
-        str = `
-          preset_id (
-            preset_id,
-            name,
-            photo_url,
-            hardware
-          )
-        `;
-        break;
+        query = supabase
+          .from('likes')
+          .select(`presets(preset_id,name,photo_url,hardware,profile_id)`);
+
+        if (hardware) query = query.eq("presets.hardware", hardware)
+        if (user_id) query = query.eq("presets.profile_id", user_id)
+        if (limit) query = query.limit(limit)
+
+        data = (await query).data
+        error = (await query).error
+
+        if (error || !data) {
+          return <div>there was an error</div>
+        }
+
+        presetsList = data.map(({ presets: preset }) => <PresetTile
+          key={preset?.preset_id}
+          preset={preset as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
+        />)
+
+        return presetsList;
       case ('downloads'):
-        str = `
-          preset_id (
-            preset_id,
-            name,
-            photo_url,
-            hardware
-          )
-        `;
-        break;
+        query = supabase
+          .from('downloads')
+          .select(`presets(preset_id,name,photo_url,hardware,profile_id)`);
+
+        if (hardware && query) query = query.eq("presets.hardware", hardware)
+        if (user_id) query = query.eq("presets.profile_id", user_id)
+        if (limit) query = query.limit(limit)
+
+        data = (await query).data
+        error = (await query).error
+        
+        if (error || !data) {
+          return <div>there was an error</div>
+        }
+
+        presetsList = data.map(({ presets: preset }) => <PresetTile
+          key={preset?.preset_id}
+          preset={preset as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
+        />)
+
+        return presetsList;
       case ('presets'):
-        str = 'preset_id,name,photo_url,hardware'
-        break;
+        query = supabase
+          .from('presets')
+          .select(`preset_id,name,photo_url,hardware,profile_id`)
+
+        if (hardware && query) query = query.eq("hardware", hardware)
+        if (user_id) query = query.eq("profile_id", user_id)
+        if (limit) query = query.limit(limit)
+
+        data = (await query).data
+        error = (await query).error
+        
+        if (error || !data) {
+          return <div>there was an error</div>
+        }
+
+        presetsList = data.map((preset) => <PresetTile
+          key={preset?.preset_id}
+          preset={preset as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
+        />)
+
+        return presetsList;
       default:
-        break;
+        query = supabase
+          .from(table)
+          .select(`*`)
+
+          data = (await query).data
+          error = (await query).error
+          
+          if (error || !data) {
+            return <div>there was an error</div>
+          }
+  
+          presetsList = data.map((preset) => <PresetTile
+            key={preset}
+            preset={preset}
+          />)
+  
+          return presetsList;
     }
-    return str;
   }
 
-  const fetchPresets = async () => {
-    const selectStr = selectQuery()
-    let query = supabase
-      .from(table)
-      .select(selectStr)
-    
-    if (hardware) query = query.eq("hardware", hardware)
-    if (user_id) query = query.eq("profile_id", user_id)
-    if (limit) query = query.limit(limit)
-
-    return await query
-  }
-
-  const { data, error } = await fetchPresets()
-
-  if (error || !data) return <div>there was an error</div>
-
-  console.log(data)
-  // const presetsList = data.map(item => <PresetTile
-  //   key={item}
-  //   preset={item}
-  // />)
+  const presetsList = await fetchPresets()
 
   return (
     <div className='py-[50px]'>
@@ -88,9 +126,9 @@ export default async function Presets(props: Props) {
           </div>
         </div>
 
-        {/* <div className='flex flex-col md:flex-row'>
+        <div className='flex flex-col md:flex-row'>
           {presetsList}
-        </div> */}
+        </div>
       </div>
     </div>
   )

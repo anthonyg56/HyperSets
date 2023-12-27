@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
 interface Props {
-  preset: Tables<'presets'>
+  preset: Tables<'presets'> | Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>
 }
 
 export default async function PresetTile(props: Props) {
