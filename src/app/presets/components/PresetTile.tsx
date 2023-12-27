@@ -13,6 +13,7 @@ export default async function PresetTile(props: Props) {
     hardware,
     photo_url: photo,
     preset_id,
+    profile_id
   } = props.preset
 
   const { data: effects, error } = await supabase
