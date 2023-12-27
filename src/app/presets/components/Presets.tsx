@@ -3,7 +3,6 @@ import { faStar, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PresetTile from './PresetTile'
 import { Enums, Tables } from '../../../../types/supabase'
-import { QueryData } from '@supabase/supabase-js'
 
 interface Props {
   table: 'likes' | 'downloads' | 'presets'; 
@@ -16,7 +15,7 @@ export default async function Presets(props: Props) {
   const { hardware, limit, table, user_id } = props
 
   const fetchPresets = async () => {
-    let presetsList,query, data, error
+    let presetsList, query, data, error
     switch (table) {
       case ('likes'):
         query = supabase
