@@ -10,7 +10,7 @@ export default function Home() {
       <HeroSection />
       <div className='container'>
         <UpgradeSetup />
-        <FeaturedPresets />
+        <FeaturedPresets table='presets' />
         <Options />  
         <About />
       </div>
