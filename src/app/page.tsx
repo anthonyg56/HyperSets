@@ -1,6 +1,6 @@
 import HeroSection from '@/app/components/hero'
 import UpgradeSetup from '@/app/components/upgradeSetup'
-import FeaturedPresets from '@/app/presets/components/Presets'
+import Presets from '@/app/presets/components/Presets'
 import Options from '@/app/components/Options'
 import About from './components/About'
 
@@ -10,7 +10,7 @@ export default function Home() {
       <HeroSection />
       <div className='container'>
         <UpgradeSetup />
-        <FeaturedPresets table='presets' />
+        <Presets table='presets' />
         <Options />  
         <About />
       </div>
