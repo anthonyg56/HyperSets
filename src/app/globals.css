@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  input {
+    @apply border-[##C4C4C4] rounded-xl border-[2px] py-[6px] pl-[6px];
+  }
+
+  input::placeholder {
+    @apply text-[##C4C4C4] text-sm ;
+  }
+
+  input:focus {
+    @apply border-hyper-red border-[3px] outline-none;
+  }
+
+  label {
+    @apply pb-1;
+  }
+}
+
+@layer components {
+  .auth-container {
+    @apply pb-[22px] pt-[120px] px-10;
+  }
+
+  .input-container {
+    @apply pb-[22px] flex flex-col ;
+  }
+
+  .padding-header {
+    @apply pt-[120px];
+  }
+  
+  .preset-download {
+    @apply
+    rounded-sm
+    ml-auto
+    mt-auto
+    bg-hyper-red
+    py-[6px]
+    px-2
+    text-white
+    text-[10px]
+    font-normal;
+  }
+
+  .preset-prop {
+    @apply
+    rounded-sm
+    mt-auto
+    bg-hyper-dark-white
+    py-[6px]
+    px-2
+    text-hyper-dark-grey
+    text-[10px]
+    font-normal;
+  }
+
+  .text-container {
+    @apply flex flex-col text-center;
+  }
+
+  .title-2xl {
+    @apply text-hyper-red text-2xl font-medium tracking-wide;
+  }
+
+  .title-2xl-upper {
+    @apply text-hyper-red text-2xl font-medium tracking-wide uppercase;
+  }
+
+  .title-xl {
+    @apply text-hyper-red text-2xl font-medium tracking-wide;
+  }
+
+  .sub-text {
+    @apply text-hyper-dark-grey text-sm font-normal tracking-wide;
+  }
+  
+  .sub-text-sm-light {
+    @apply
+    text-hyper-grey
+    text-[13px]
+    font-normal
+  }
+
+  .sub-text-xs {
+    @apply
+    text-hyper-dark-grey
+    text-xs
+    font-medium
+    tracking-tight
+  }
+
+  .sub-text-xs-light {
+    @apply
+    text-hyper-grey
+    text-[10px]
+    font-medium
+    tracking-tight
+  }
+
+  .label-text {
+    @apply
+    text-hyper-dark-grey 
+    text-sm
+    font-medium
+    tracking-wide
+  }
+
+  .input-text {
+
+  }
+
+  .button-auto {
+    @apply bg-red-600 rounded-xl shadow px-10 py-[10px] mt-5 text-hyper-white;
+  }
+}
+
+/* :root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+} */
