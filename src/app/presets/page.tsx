@@ -64,25 +64,25 @@ export default function page() {
       </div>
 
       <HardwareTile
-        url='/presets/keyboard'
+        url='/presets/Keyboard'
         gradient={hardware.keyboard.gradient}
         photo={hardware.keyboard.photo}
         name="Alloy Origins"
       />
       <HardwareTile
-        url='/presets/mic'
+        url='/presets/Microphone'
         gradient={hardware.mic.gradient}
         photo={hardware.mic.photo}
         name='QuadCast'
       />
       <HardwareTile
-        url='/presets/mouse'
+        url='/presets/Mouse'
         gradient={hardware.mouse.gradient}
         photo={hardware.mouse.photo}
         name='Pulsefire'
       />
       <HardwareTile
-        url='/presets/headset'
+        url='/presets/Headset'
         gradient={hardware.headset.gradient}
         photo={hardware.headset.photo}
         name='Cloud Alpha II'

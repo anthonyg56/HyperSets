@@ -15,36 +15,36 @@ export default function Options() {
       {/** Mouse DPI */}
       <div className='pb-[50px]'>
         <div className='pb-5 flex justify-center'>
-          <FontAwesomeIcon icon={faComputerMouse} height={60} width={60}/>
+          <FontAwesomeIcon icon={faComputerMouse} height={60} width={60} className='w-[60px] h-[60px]'/>
         </div>
 
         <div className='text-container'>
           <h3 className='title-xl'>Mouse DPI</h3>
-          <h4 className='sub-text-xs'>Lorem ipsum is placeholder text commonly used in the graphic, print</h4>
+          <h4 className='sub-text'>Lorem ipsum is placeholder text commonly used in the graphic, print</h4>
         </div>
       </div>
 
       {/** Mic Settings */}
       <div className='pb-[50px]'>
         <div className='pb-5 flex justify-center'>
-          <FontAwesomeIcon icon={faMicrophone} height={60} width={60}/>
+          <FontAwesomeIcon icon={faMicrophone} height={60} width={60} className='w-[60px] h-[60px]'/>
         </div>
 
         <div className='text-container'>
           <h3 className='title-xl'>Mic Settings</h3>
-          <h4 className='sub-text-xs'>Lorem ipsum is placeholder text commonly used in the graphic, print</h4>
+          <h4 className='sub-text'>Lorem ipsum is placeholder text commonly used in the graphic, print</h4>
         </div>
       </div>
 
       {/** Audio Tuning  */}
       <div className='pb-[50px]'>
         <div className='pb-5 flex justify-center'>
-          <FontAwesomeIcon icon={faHeadset} height={60} width={60} />
+          <FontAwesomeIcon icon={faHeadset} height={60} width={60} className='w-[60px] h-[60px]' />
         </div>
 
         <div className='text-container'>
           <h3 className='title-xl'>Audio Tuning</h3>
-          <h4 className='sub-text-xs'>Lorem ipsum is placeholder text commonly used in the graphic, print</h4>
+          <h4 className='sub-text'>Lorem ipsum is placeholder text commonly used in the graphic, print</h4>
         </div>
       </div>
     </div>

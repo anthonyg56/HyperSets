@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter, Poppins} from 'next/font/google'
 
 import NavWrapper from '@/components/layout/NavWrapper'
+import AuthWrapper from '@/components/AuthWrapper'
 
 const inter = Poppins({ subsets: ['latin'], weight: ["100", "200" , "300" , "400" , "500" , "600" , "700" , "800" , "900"] })
 
@@ -20,8 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NavWrapper />
-        {children}
+        <AuthWrapper>
+          <NavWrapper />
+          {children}
+        </AuthWrapper>
       </body>
     </html>
   )

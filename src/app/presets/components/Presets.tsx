@@ -113,7 +113,7 @@ export default async function Presets(props: Props) {
       </div>
 
       <div>
-        <div className='flex flex-row'>
+        <div className='flex flex-row pb-1'>
           <div className='flex flex-row gap-1'>
             <FontAwesomeIcon icon={faStar} height={18} width={18} />
             <h4 className='text-hyper-dark-grey text-sm font-normal'>Featured</h4>
