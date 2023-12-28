@@ -31,9 +31,7 @@ export default async function PresetTile(props: Props) {
         <div className='preset-prop'>
           <h4>{hardware}</h4>
         </div>
-        <div className='preset-prop'>
-          <h4>primary effect</h4>
-        </div>
+
         <div className='preset-download'>
           <Link href={`/preset/${preset_id}`}>download</Link>
         </div>

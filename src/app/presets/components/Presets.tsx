@@ -115,13 +115,13 @@ export default async function Presets(props: Props) {
       <div>
         <div className='flex flex-row pb-1'>
           <div className='flex flex-row gap-1'>
-            <FontAwesomeIcon icon={faStar} height={18} width={18} />
-            <h4 className='text-hyper-dark-grey text-sm font-normal'>Featured</h4>
+            <FontAwesomeIcon icon={faStar} height={18} width={18} className='text-hyper-dark-grey'/>
+            <h4 className='text-hyper-dark-grey text-sm font-medium'>Featured</h4>
           </div>
 
           <div className='flex flex-row gap-1 ml-auto'>
-            <h4 className='text-hyper-dark-grey text-sm font-normal'>Most Downloads</h4>
-            <FontAwesomeIcon icon={faFilter} height={18} width={18} />
+            <h4 className='text-hyper-dark-grey text-sm font-medium'>Most Downloads</h4>
+            <FontAwesomeIcon icon={faFilter} height={18} width={18} className='text-hyper-dark-grey' />
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 export default function HeroSection() {
@@ -10,8 +11,8 @@ export default function HeroSection() {
       <div className='text-container z-10 translate-y-[60px]'>
         <h1 className='title-2xl-upper'>HYPER SETS</h1>
         <h4 className='sub-text'>Community collection of HyperX NGenuity RGB presets</h4>
-        <div>
-          <button className='button-auto'>Explore Presets</button>
+        <div className='translate-y-[25px]'>
+          <Link href="/presets" className='button-auto'>Explore Presets</Link>
         </div>
       </div>
     </div>

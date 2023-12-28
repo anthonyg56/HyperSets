@@ -15,7 +15,7 @@ export default function Options() {
       {/** Mouse DPI */}
       <div className='pb-[50px]'>
         <div className='pb-5 flex justify-center'>
-          <FontAwesomeIcon icon={faComputerMouse} height={60} width={60} className='w-[60px] h-[60px]'/>
+          <FontAwesomeIcon icon={faComputerMouse} height={60} width={60} className='w-[60px] h-[60px] text-hyper-dark-grey'/>
         </div>
 
         <div className='text-container'>
@@ -27,7 +27,7 @@ export default function Options() {
       {/** Mic Settings */}
       <div className='pb-[50px]'>
         <div className='pb-5 flex justify-center'>
-          <FontAwesomeIcon icon={faMicrophone} height={60} width={60} className='w-[60px] h-[60px]'/>
+          <FontAwesomeIcon icon={faMicrophone} height={60} width={60} className='w-[60px] h-[60px] text-hyper-dark-grey'/>
         </div>
 
         <div className='text-container'>
@@ -39,7 +39,7 @@ export default function Options() {
       {/** Audio Tuning  */}
       <div className='pb-[50px]'>
         <div className='pb-5 flex justify-center'>
-          <FontAwesomeIcon icon={faHeadset} height={60} width={60} className='w-[60px] h-[60px]' />
+          <FontAwesomeIcon icon={faHeadset} height={60} width={60} className='w-[60px] h-[60px] text-hyper-dark-grey' />
         </div>
 
         <div className='text-container'>
