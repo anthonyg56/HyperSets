@@ -11,24 +11,10 @@ type Props = {
 export default function page(props: Props) {
   const { hardware } = props.params
   
-  // const transformSlug = (): Enums<'hardware_type'> | undefined => {
-  //   switch (hardware) {
-  //     case ("keyboard"):
-  //       return "Keyboard"
-  //     case ("mic"):
-  //       return "Microphone"
-  //     case ("mouse"):
-  //         return "Mouse"
-  //     case ("headset"):
-  //       return "Headset"
-  //   }
-  // }
-
-  // const newSlug = transformSlug()
-
   return (
     <div className='container pt-[120px]'>
       <Presets
+        key={'Hardware Presets Page'}
         limit={10}
         table='presets'
         hardware={hardware}

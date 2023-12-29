@@ -4,7 +4,7 @@
 
 @layer base {
   input {
-    @apply border-[##C4C4C4] rounded-xl border-[2px] py-[6px] pl-[6px];
+    @apply border-[##C4C4C4] rounded-lg border-[2px] py-[6px] pl-[6px];
   }
 
   input::placeholder {
@@ -12,7 +12,7 @@
   }
 
   input:focus {
-    @apply border-hyper-red border-[3px] outline-none;
+    @apply border-hyper-red border-[1px] outline-none;
   }
 
   label {
@@ -81,6 +81,10 @@
     font-medium;
   }
 
+  .sub-medium {
+    @apply text-hyper-dark-grey text-sm font-medium tracking-wide;
+  }
+
   .sub-text {
     @apply text-hyper-dark-grey text-sm font-normal tracking-wide;
   }
@@ -121,7 +125,7 @@
   }
 
   .button-auto {
-    @apply bg-red-600 rounded-xl shadow px-10 py-[10px] mt-5 text-hyper-white;
+    @apply bg-red-600 rounded-xl px-10 py-[10px] mt-5 text-hyper-white shadow-[0px_4px_10px_0px_rgba(233,68,75,0.25)];
   }
 
   .icon-container {

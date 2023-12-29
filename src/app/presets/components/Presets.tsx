@@ -3,121 +3,141 @@ import { faStar, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PresetTile from './PresetTile'
 import { Enums, Tables } from '../../../../types/supabase'
+import { getMaxListeners } from 'events'
 
-interface Props {
+type Props = {
   table: 'likes' | 'downloads' | 'presets'; 
   hardware?: Enums<'hardware_type'>;
   limit?: number;
-  user_id?: string;
+  profile_id?: number;
+}
+
+type LADQueryReturnType = {
+  presets: {
+    preset_id: number;
+    name: string;
+    photo_url: string | null;
+    hardware: "Keyboard" | "Mouse" | "Microphone" | "Headset";
+    profile_id: number;
+  } | null;
+  downloads: {
+    count: number;
+  }[];
+};
+
+type UserPresetsQueryReturnType = {
+  preset_id: number;
+  name: string;
+  photo_url: string | null;
+  hardware: "Keyboard" | "Mouse" | "Microphone" | "Headset";
+  profile_id: number;
+  downloads: {
+    count: number;
+  }[];
+};
+
+interface DefaultQueryReturnType extends Tables<'presets'> {
+  downloads: {
+    count: number;
+  }[];
+};
+
+function isUserPresets(lad: LADQueryReturnType | UserPresetsQueryReturnType | DefaultQueryReturnType): lad is UserPresetsQueryReturnType {
+  return 'preset_id' in lad
+}
+
+// function isDefault (lad: LADQueryReturnType | UserPresetsQueryReturnType | DefaultQueryReturnType): lad is DefaultQueryReturnType {
+//   return 'download_url' in lad
+// }
+
+function isLAD (lad: LADQueryReturnType | UserPresetsQueryReturnType | DefaultQueryReturnType): lad is LADQueryReturnType {
+  return 'presets' in lad
 }
 
 export default async function Presets(props: Props) {
-  const { hardware, limit, table, user_id } = props
+  const { hardware, limit, table, profile_id } = props
 
-  const fetchPresets = async () => {
-    let presetsList, query, data, error
+  
+  const generateSelectClause = () => {
+    const likesAndDownloadSelectClause = `presets(preset_id,name,photo_url,hardware,profile_id),downloads(count)`
+
+    const presetsSelectClause = `preset_id,name,photo_url,hardware,profile_id,downloads(count)`
+
+    const allSelectClause = `*,downloads(count)`
+
     switch (table) {
-      case ('likes'):
-        query = supabase
-          .from('likes')
-          .select(`presets(preset_id,name,photo_url,hardware,profile_id)`);
-
-        if (hardware) query = query.eq("presets.hardware", hardware)
-        if (user_id) query = query.eq("presets.profile_id", user_id)
-        if (limit) query = query.limit(limit)
-
-        data = (await query).data
-        error = (await query).error
-
-        if (error || !data) {
-          return <div>there was an error</div>
-        }
-
-        presetsList = data.map(({ presets: preset }) => <PresetTile
-          key={preset?.preset_id}
-          preset={preset as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
-        />)
-
-        return presetsList;
       case ('downloads'):
-        query = supabase
-          .from('downloads')
-          .select(`presets(preset_id,name,photo_url,hardware,profile_id)`);
-
-        if (hardware && query) query = query.eq("presets.hardware", hardware)
-        if (user_id) query = query.eq("presets.profile_id", user_id)
-        if (limit) query = query.limit(limit)
-
-        data = (await query).data
-        error = (await query).error
-        
-        if (error || !data) {
-          return <div>there was an error</div>
-        }
-
-        presetsList = data.map(({ presets: preset }) => <PresetTile
-          key={preset?.preset_id}
-          preset={preset as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
-        />)
-
-        return presetsList;
+        return likesAndDownloadSelectClause
+      case ('likes'):
+        return likesAndDownloadSelectClause
       case ('presets'):
-        query = supabase
-          .from('presets')
-          .select(`preset_id,name,photo_url,hardware,profile_id`)
-
-        if (hardware && query) query = query.eq("hardware", hardware)
-        if (user_id) query = query.eq("profile_id", user_id)
-        if (limit) query = query.limit(limit)
-
-        data = (await query).data
-        error = (await query).error
-        
-        if (error || !data) {
-          return <div>there was an error</div>
-        }
-
-        presetsList = data.map((preset) => <PresetTile
-          key={preset?.preset_id}
-          preset={preset as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
-        />)
-
-        return presetsList;
+        return presetsSelectClause
       default:
-        query = supabase
-          .from(table)
-          .select(`*`)
-
-          data = (await query).data
-          error = (await query).error
-          
-          if (error || !data) {
-            return <div>there was an error</div>
-          }
-  
-          presetsList = data.map((preset) => <PresetTile
-            key={preset}
-            preset={preset}
-          />)
-  
-          return presetsList;
+        return allSelectClause
     }
   }
 
-  const presetsList = await fetchPresets()
+  let query = supabase
+    .from(table)
+    .select(generateSelectClause())
+    
+  //if (hardware || profile_id) query = query.match({ hardware: hardware })
+  if (hardware) query = query.eq("hardware", hardware)
+  if (profile_id) query = query.eq("profile_id", profile_id)
+  if (limit) query = query.limit(limit)
+
+  const { data, error } = await query
+    .returns<LADQueryReturnType[] | UserPresetsQueryReturnType[] | DefaultQueryReturnType[] | null>()
+
+    console.log(data)
+  if (error || !data) {
+    return <div>there was an error</div>
+  }
+
+  const presetsList = data.map((item) => {
+    if (isLAD(item)) {
+      return <PresetTile
+        key={item?.presets?.preset_id}
+        preset={item.presets as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
+        downloads={item.downloads}
+      />
+    } 
+
+    if (isUserPresets(item)) {
+      const preset = {
+        preset_id: item.preset_id,
+        name: item.name,
+        photo_url: item.photo_url,
+        hardware: item.hardware,
+        profile_id: item.profile_id
+      }
+      return <PresetTile
+        key={item?.preset_id}
+        preset={preset as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
+        downloads={item.downloads}
+      />
+    }
+    
+    // if (isDefault(item)) {
+    //   return <PresetTile
+    //     key={item.preset_id}
+    //     preset={item as Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>}
+    //   />
+    // }
+  })
 
   return (
     <div className='py-[50px]'>
-      <div className='text-center pb-5'>
+      {!profile_id && <div className='text-center pb-5'>
         <h2 className='title-2xl-upper'>Featured Presets</h2>
-      </div>
+      </div>}
 
       <div>
         <div className='flex flex-row pb-1'>
-          <div className='flex flex-row gap-1'>
+          {!profile_id && <div className='flex flex-row gap-1'>
             <FontAwesomeIcon icon={faStar} height={18} width={18} className='text-hyper-dark-grey'/>
             <h4 className='text-hyper-dark-grey text-sm font-medium'>Featured</h4>
-          </div>
+          </div>}
 
           <div className='flex flex-row gap-1 ml-auto'>
             <h4 className='text-hyper-dark-grey text-sm font-medium'>Most Downloads</h4>
