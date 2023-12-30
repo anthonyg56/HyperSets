@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 @layer base {
-  input {
+  input, textarea {
     @apply border-[##C4C4C4] rounded-lg border-[2px] py-[6px] pl-[6px];
   }
 
-  input::placeholder {
+  input::placeholder, textarea::placeholder {
     @apply text-[##C4C4C4] text-sm ;
   }
 
-  input:focus {
+  input:focus, textarea:focus {
     @apply border-hyper-red border-[1px] outline-none;
   }
 

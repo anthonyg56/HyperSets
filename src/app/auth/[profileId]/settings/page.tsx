@@ -80,9 +80,7 @@ export default async function page(props: Props) {
         </Link> */}
       </div>
 
-      <div>
-
-      </div>
+      <button className='button-auto text-[14px] w-full mt-[25px]'>Logout</button>
     </div>
   )
 }
