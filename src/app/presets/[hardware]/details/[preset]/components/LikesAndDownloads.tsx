@@ -4,19 +4,17 @@ import React, { useContext } from 'react'
 import { Tables } from '../../../../../../../types/supabase'
 import { faDownload, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AuthContext, TAuthContext } from '@/utils/contexts/Auth';
+import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
 
 type Props = {
   userId: string;
-  likes: Tables<'likes'>[];
   downloads: Tables<'downloads'>[];
 }
 
 export default function LikesAndDownloads(props: Props) {
-  const { userId, likes, downloads } = props
+  const { userId, downloads } = props
   const { profile } = useContext(AuthContext) as TAuthContext
 
-  const isLiked = likes.findIndex(item => item.profile_id === profile?.profile_id)
   const isDownload = downloads.findIndex(item => item.profile_id === profile?.profile_id)
 
   return (

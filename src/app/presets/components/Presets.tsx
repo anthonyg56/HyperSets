@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import supabase from '@/lib/supabase'
 import { faStar, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PresetTile from './PresetTile'
@@ -6,7 +6,7 @@ import { Enums, Tables } from '../../../../types/supabase'
 import { getMaxListeners } from 'events'
 
 type Props = {
-  table: 'likes' | 'downloads' | 'presets'; 
+  table: 'downloads' | 'presets'; 
   hardware?: Enums<'hardware_type'>;
   limit?: number;
   profile_id?: number;
@@ -67,8 +67,6 @@ export default async function Presets(props: Props) {
 
     switch (table) {
       case ('downloads'):
-        return likesAndDownloadSelectClause
-      case ('likes'):
         return likesAndDownloadSelectClause
       case ('presets'):
         return presetsSelectClause

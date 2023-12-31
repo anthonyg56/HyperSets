@@ -12,6 +12,8 @@ type Props = {
 export default function page(props: Props) {
   const { params: { profileId } } = props
   
+    // Figure out how to validate that a user came here from an email invitation (maybe do it in the middle ware?)
+    
   return (
     <div className='container pt-[120px] text-center'>
       <Title

@@ -2,7 +2,7 @@
 
 import { User } from "@supabase/supabase-js"
 import { createContext, useEffect, useState } from "react"
-import { Tables } from "../../../types/supabase";
+import { Tables } from "../../../../types/supabase";
 
 type Props = {
   user: User | null,

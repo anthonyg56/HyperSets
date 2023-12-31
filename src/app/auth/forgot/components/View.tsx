@@ -1,22 +1,32 @@
 "use client"
-import React, { useState } from 'react'
 
+import React, { useContext, useState } from 'react'
 import Form from './Form';
-import { AuthError } from '@supabase/supabase-js';
+import { AuthError, Session } from '@supabase/supabase-js';
 import ResetPassword from './views/ResetPassword';
 import CheckEmail from './views/CheckEmail'
 import Link from 'next/link';
+import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
+import { redirect } from 'next/navigation';
 
 interface Props {
   resetPassword(email: string): Promise<{
     data: {} | null;
     error: AuthError | null;
   }>;
+  session: Session | null;
 }
 
 export default function View(props: Props) {
   const [submitted, setSubmitted] = useState(false)
-  const { resetPassword } = props
+
+  const { profile, user } = useContext(AuthContext) as TAuthContext
+
+  const { resetPassword, session } = props
+  
+  if (session) {
+    redirect(`/auth/${profile?.user_id}/settings`)
+  }
   
   return (
     <div className='auth-container'>

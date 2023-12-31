@@ -1,12 +1,14 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Session, User } from '@supabase/auth-helpers-nextjs';
 import { AuthError } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
+import { redirect } from 'next/navigation';
 
 interface Props {
   register(email: string, password: string): Promise<{
@@ -19,6 +21,7 @@ interface Props {
     };
     error: AuthError | null;
   }>;
+  session: {} | null;
 }
 
 export default function RegisterForm(props: Props) {
@@ -27,7 +30,16 @@ export default function RegisterForm(props: Props) {
     password: "",
     confirmPassword: ""
   })
+  
   const [submitted, setSubmitted] = useState<boolean>(false)
+
+  const { register, session } = props
+
+  const { profile, user } = useContext(AuthContext) as TAuthContext
+
+  if (session) {
+    redirect(`/auth/${profile?.profile_id}/settings`)
+  }
 
   const handleChange = (e: any) => {
     const { name, value } = e.target
@@ -100,9 +112,11 @@ export default function RegisterForm(props: Props) {
 
     if (error) {
       setSubmitted(false)
+      return
     }
 
     setSubmitted(true)
+    redirect('/auth/login')
   }
 
   return (

@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/supabase'
-import AuthProvider from '@/utils/contexts/Auth'
+import supabase from '@/lib/supabase'
+import AuthProvider from '@/lib/utils/contexts/Auth'
 import React from 'react'
 
 type Props = {
@@ -11,7 +11,7 @@ export default async function AuthWrapper(props: Props) {
   const { data: profile } = await supabase
     .from('profile')
     .select('*')
-    .eq('email', user?.email as string)
+    .eq('user_id', user?.id as string)
     .limit(1)
     .single()
 

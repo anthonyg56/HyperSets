@@ -1,10 +1,27 @@
 "use client"
 
+import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
+import { Session, User } from '@supabase/auth-helpers-nextjs';
+import { redirect, useRouter } from 'next/navigation';
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import errorAlert from '@/lib/utils/ErrorAlert'
+import { AuthError, WeakPassword } from '@supabase/supabase-js';
 
 type Props = {
-  login(): Promise<void>; 
+  login: (email: string, password: string) => Promise<{
+    data: {
+        user: User;
+        session: Session;
+        weakPassword?: WeakPassword | undefined;
+    } | {
+        user: null;
+        session: null;
+        weakPassword?: null | undefined;
+    };
+    error: AuthError | null;
+}>
+  session: Session | null;
 }
 
 export default function LoginForm(props: Props) {
@@ -14,8 +31,14 @@ export default function LoginForm(props: Props) {
     rememberUser: false
   })
   
-  const { login } = props
+  const { login, session } = props
 
+  const { profile, user } = useContext(AuthContext) as TAuthContext
+
+  const router = useRouter()
+
+  if (session) redirect(`/auth/${profile?.profile_id}/settings`)
+  
   const handleChange = (e: any) => {
     const { name, value } = e.target
 
@@ -32,8 +55,16 @@ export default function LoginForm(props: Props) {
     }))
   }
 
+  const handleSubmit = async (e: any) => {
+    const { data,error } = await login(userState.email,userState.password)
+
+    if (errorAlert(data,error)) return
+
+    router.refresh()
+  }
+
   return (
-    <form action={login}>
+    <form action={handleSubmit}>
       <div className='input-container'>
         <label htmlFor="email" className='label-text'>Email</label>
         <input

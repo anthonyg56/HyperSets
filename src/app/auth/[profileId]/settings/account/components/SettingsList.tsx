@@ -1,0 +1,62 @@
+"use client"
+import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth'
+import { faUser, faAngleRight, faAt, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Link from 'next/link'
+import React, { useContext } from 'react'
+
+type Props = {
+  profileId: string;
+}
+
+export default function SettingsList(props: Props) {
+  const {profile, user} = useContext(AuthContext) as TAuthContext
+  const { profileId } = props
+  
+  return (
+    <div className='flex flex-col gap-y-3 w-full pt-[25px]'>
+    <Link className='flex flex-row' href={`/auth/${profileId}/settings/account/change-name`}>
+      <div className='rounded-[100px] bg-hyper-dark-grey w-[30px] h-[28px] flex justify-center items-center '>
+        <FontAwesomeIcon icon={faUser} width={16} height={16} className='text-hyper-white' />
+      </div>
+
+      <div className='flex flex-row w-full ml-3 pb-2 border-b-2 border-hyper-grey'>
+        <h4 className='sub-text my-auto font-medium'>Name</h4>
+        <p className='ml-auto my-auto sub-text-xs-grey'>
+          {profile?.first_name && profile?.last_logon ? `${profile?.last_logon} ${profile?.last_name}` : 'Create a Name'}
+        </p>
+        <FontAwesomeIcon icon={faAngleRight} width={16} height={16} className='ml-1 my-auto text-hyper-grey' />
+      </div>
+    </Link>     
+
+    <Link className='flex flex-row' href={`/auth/${profileId}/settings/account/change-email`}>
+      <div className='rounded-[100px] bg-hyper-dark-grey w-[30px] h-[28px] flex justify-center items-center'>
+        <FontAwesomeIcon icon={faAt} width={16} height={16} className='text-hyper-white' />
+      </div>
+
+      <div className='flex flex-row w-full ml-3 pb-2 border-b-2 border-hyper-grey'>
+        <h4 className='sub-text my-auto font-medium'>Email</h4>
+        <h2 className='ml-auto my-auto sub-text-xs-grey'>{user?.email}</h2>
+        <FontAwesomeIcon icon={faAngleRight} width={16} height={16} className='ml-1 my-auto text-hyper-grey' />
+      </div>
+    </Link>
+
+    <Link className='flex flex-row' href={`/auth/${profileId}/settings/account/change-password`}>
+      <div className='rounded-[100px] bg-hyper-dark-grey w-[30px] h-[28px] flex justify-center items-center'>
+        <FontAwesomeIcon width={16} height={16} icon={faDownload} className='text-hyper-white' />
+      </div>
+
+      <div className='flex flex-row w-full ml-3 pb-1 '>
+        <h4 className='sub-text my-auto font-medium'>Password</h4>
+        <FontAwesomeIcon icon={faAngleRight} width={16} height={16} className='ml-auto my-auto text-hyper-grey' />
+      </div>
+    </Link>
+    {/* <Link href={`/auth/${profileId}/settings/likes`}>
+    <div>
+
+    </div>
+    <h4>Pssword</h4>
+  </Link> */}
+  </div>
+  )
+}

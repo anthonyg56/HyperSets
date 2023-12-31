@@ -1,5 +1,5 @@
 import Title from '@/components/reuseables/Title'
-import { supabase } from '@/lib/supabase'
+import supabase from '@/lib/supabase'
 import { QueryData } from '@supabase/supabase-js'
 import React from 'react'
 import Effects from './components/Effects'
@@ -22,11 +22,10 @@ export default async function page(props: Props) {
 
   const presetQuery = supabase
     .from('presets')
-    .select('*,effects(*),downloads(*),likes(*)')
+    .select('*,effects(*),downloads(*)')
     .eq('preset_id', presetId)
     .eq('downloads.preset_id', presetId)
     .eq('effects.preset_id', presetId)
-    .eq('likes.preset_id', presetId)
     .limit(1)
     .single()
 
@@ -48,7 +47,6 @@ export default async function page(props: Props) {
     downloads,
     hardware,
     last_updated_on,
-    likes,
     photo_url,
     preset_id,
     profile_id,
@@ -82,7 +80,7 @@ export default async function page(props: Props) {
         <Title title={name} sub={description} padding={'pb-[25px]'} />
         <Effects effects={effectsData} title={true} />
         <Hardware hardware={hardware} />
-        <LikesAndDownloads downloads={downloads} likes={likes} userId={user?.id as string} />
+        <LikesAndDownloads downloads={downloads} userId={user?.id as string} />
 
         <div className='text-center'>
           <button className='button-auto'>

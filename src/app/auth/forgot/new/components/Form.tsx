@@ -53,8 +53,9 @@ export default function ResetPasswordForm(props: Props) {
 
     const { data, error} = await resetPassword(userState.password)
 
-    if (error) {
-      alert("There was an error, please try again")
+    if (error || !data) {
+      alert('There was an error, please try agin')
+      console.log(`Resetting password for a user who forgot error: \n\n ${error}`)
       return
     }
 

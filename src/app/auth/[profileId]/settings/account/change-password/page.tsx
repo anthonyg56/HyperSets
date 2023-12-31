@@ -3,7 +3,7 @@ import { faAt, faIdCard, faLock } from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
 import Form from './components/Form'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
+import supabase from '@/lib/supabase'
 
 type Props = {
   params: {

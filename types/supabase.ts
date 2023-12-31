@@ -65,42 +65,9 @@ export interface Database {
           }
         ]
       }
-      likes: {
-        Row: {
-          created_on: number
-          preset_id: number
-          profile_id: number
-        }
-        Insert: {
-          created_on: number
-          preset_id: number
-          profile_id: number
-        }
-        Update: {
-          created_on?: number
-          preset_id?: number
-          profile_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "likes_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "presets"
-            referencedColumns: ["preset_id"]
-          },
-          {
-            foreignKeyName: "likes_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          }
-        ]
-      }
       presets: {
         Row: {
-          created_on: string
+          created_on: string | null
           description: string
           download_url: string
           hardware: Database["public"]["Enums"]["hardware_type"]
@@ -112,7 +79,7 @@ export interface Database {
           youtube_url: string | null
         }
         Insert: {
-          created_on: string
+          created_on?: string | null
           description: string
           download_url: string
           hardware: Database["public"]["Enums"]["hardware_type"]
@@ -124,7 +91,7 @@ export interface Database {
           youtube_url?: string | null
         }
         Update: {
-          created_on?: string
+          created_on?: string | null
           description?: string
           download_url?: string
           hardware?: Database["public"]["Enums"]["hardware_type"]
@@ -149,40 +116,42 @@ export interface Database {
         Row: {
           avatar: string | null
           created_on: string
-          email: string
-          email_confirmed: boolean
-          first_name: string
+          first_name: string | null
           last_logon: string | null
-          last_name: string
-          password: string
+          last_name: string | null
           profile_id: number
+          user_id: string | null
           username: string
         }
         Insert: {
           avatar?: string | null
           created_on: string
-          email: string
-          email_confirmed: boolean
-          first_name: string
+          first_name?: string | null
           last_logon?: string | null
-          last_name: string
-          password: string
+          last_name?: string | null
           profile_id?: number
+          user_id?: string | null
           username: string
         }
         Update: {
           avatar?: string | null
           created_on?: string
-          email?: string
-          email_confirmed?: boolean
-          first_name?: string
+          first_name?: string | null
           last_logon?: string | null
-          last_name?: string
-          password?: string
+          last_name?: string | null
           profile_id?: number
+          user_id?: string | null
           username?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profile_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       ratings: {
         Row: {
@@ -213,29 +182,6 @@ export interface Database {
           },
           {
             foreignKeyName: "ratings_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          }
-        ]
-      }
-      token: {
-        Row: {
-          cookie: string
-          profile_id: number
-        }
-        Insert: {
-          cookie: string
-          profile_id: number
-        }
-        Update: {
-          cookie?: string
-          profile_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "token_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profile"

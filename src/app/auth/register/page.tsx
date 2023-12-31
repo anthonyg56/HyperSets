@@ -1,8 +1,11 @@
 import React from 'react'
 import RegisterForm from './components/RegisterForm'
-import { supabase } from '@/lib/supabase'
+import supabase from '@/lib/supabase'
+import { redirect } from 'next/navigation'
 
-export default function page() {
+export default async function page() {
+  const {data: {session}, error} = await supabase.auth.getSession()
+
   const register = async (email: string, password: string) => {
     "use server"
     const { data, error } = await supabase.auth.signUp({
@@ -15,7 +18,7 @@ export default function page() {
 
   return (
     <div className='auth-container'>
-      <RegisterForm register={register} />
+      <RegisterForm register={register} session={session}/>
     </div>
   )
 }

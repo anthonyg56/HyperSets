@@ -1,8 +1,10 @@
-import { supabase } from '@/lib/supabase'
+import supabase from '@/lib/supabase'
 import React from 'react'
 import View from './components/View'
 
 export default async function page() {
+  const { data: { session }, error } = await supabase.auth.getSession()
+
   const resetPassword = async (email: string) => {
     'use server'
     const { data, error } = await supabase.auth.resetPasswordForEmail(email)
@@ -10,5 +12,5 @@ export default async function page() {
     return { data, error }
   }
   
-  return <View resetPassword={resetPassword}/>
+  return <View session={session} resetPassword={resetPassword}/>
 }
