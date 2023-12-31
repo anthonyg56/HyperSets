@@ -21,7 +21,7 @@ export default function NavBar(props: Props) {
 
   return (
     <div>
-      <div className='fixed flex flex-row px-5 py-4 items-center w-full bg-white z-20'>
+      <div id="nav-bar" className=' fixed flex flex-row px-5 py-4 items-center w-full bg-white z-20'>
         <div className=''>
           <Link href='/' className='text-hyper-dark-grey text-xl font-medium'>HyperSets</Link>
         </div>

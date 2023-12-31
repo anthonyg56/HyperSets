@@ -18,6 +18,11 @@
   label {
     @apply pb-1;
   }
+
+  input[type="file"] {
+    @apply border-none rounded-lg py-[6px] bg-[#F8FCFF] px-2;
+  }
+
 }
 
 @layer components {
@@ -131,6 +136,14 @@
   .icon-container {
     @apply border-[2px] border-hyper-dark-grey w-auto h-auto text-hyper-dark-grey p-2 rounded-[1000px];
   }
+
+  .DropdownMenuTrigger[data-state=open], .dropdown-icon {
+    @apply rotate-[180deg];
+  }
+}
+
+#nav-bar.scrolled {
+  @apply shadow-2xl;
 }
 
 /* :root {

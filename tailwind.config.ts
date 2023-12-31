@@ -26,6 +26,7 @@ const config: Config = {
         "hyper-dark-grey": "#2B2D42",
         "hyper-red": "#D90429",
         "hyper-dark-red": "#EF233C",
+        "hyper-green": "#008000"
       }
     },
   },

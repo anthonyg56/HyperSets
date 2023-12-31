@@ -80,7 +80,7 @@ export default async function page(props: Props) {
       <div className={`container pb-[50px] ${youtube_url && youtube_url.length > 0 ? 'translate-y-[-100px]' : 'pt-[25px]'}`}>
         <YoutubePlayer youtubeUrl={youtube_url} />
         <Title title={name} sub={description} padding={'pb-[25px]'} />
-        <Effects effects={effectsData} />
+        <Effects effects={effectsData} title={true} />
         <Hardware hardware={hardware} />
         <LikesAndDownloads downloads={downloads} likes={likes} userId={user?.id as string} />
 

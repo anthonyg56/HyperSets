@@ -1,5 +1,5 @@
 import React from 'react'
-import { faCloudMoon, faWater, faRightLeft, faHandBackFist, faSun, faWind, faWandMagicSparkles, faDisplay, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faCloudMoon, faWater, faRightLeft, faHandBackFist, faSun, faWind, faWandMagicSparkles, faDisplay, faVideo, IconDefinition, faCircleMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Enums } from '../../../../../../../types/supabase';
 
@@ -7,75 +7,96 @@ type Props = {
   effects: {
     effect: Enums<'effect_type'>;
     count: number;
-  }[]
+  }[];
+  title: boolean;
+  removeEffect?: (effect: Enums<'effect_type'>) => void;
 }
 
 export default function Effects(props: Props) {
-  const { effects } = props
+  const { effects, title, removeEffect } = props
+
+  // const twilightIndex = effects.findIndex(item => item.effect === 'Twilight')
+  // const waveIndex = effects.findIndex(item => item.effect === 'Wave')
+  // const swipeIndex = effects.findIndex(item => item.effect === 'Swipe')
+  // const breathingIndex = effects.findIndex(item => item.effect === 'Breathing')
+  // const solidIndex = effects.findIndex(item => item.effect === 'Solid')
+  // const sunIndex = effects.findIndex(item => item.effect === 'Sun')
+  // const confettiIndex = effects.findIndex(item => item.effect === 'Confetti')
+  // const screenMirroring = effects.findIndex(item => item.effect === 'Screen Mirror')
+  // const videoIndex = effects.findIndex(item => item.effect === 'Video Capture')
+
+  const transformedEffectsData = effects.map((item, index) => {
+    let newItem: {
+      effect: Enums<'effect_type'>;
+      count: number;
+      icon?: IconDefinition;
+    } = item
+
+    switch (item.effect) {
+      case ('Breathing'):
+        newItem.icon = faWind
+        break;
+      case ('Confetti'):
+        newItem.icon = faWandMagicSparkles
+        break;
+      case ('Screen Mirror'):
+        newItem.icon = faDisplay
+        break;
+      case ('Solid'):
+        newItem.icon = faHandBackFist
+        break;
+      case ('Sun'):
+        newItem.icon = faSun
+        break;
+      case ('Swipe'):
+        newItem.icon = faRightLeft
+        break;
+      case ('Twilight'):
+        newItem.icon = faCloudMoon
+        break;
+      case ('Video Capture'):
+        newItem.icon = faVideo
+        break;
+      case ('Wave'):
+        newItem.icon = faWater
+        break;
+      default:
+        break;
+    }
+
+    return newItem as {
+      effect: Enums<'effect_type'>;
+      count: number;
+      icon: IconDefinition;
+    }
+  })
+
+  const effectsComponents = transformedEffectsData.map(effect => {
+    const ammount = effect.count > 1 ? `x${effect.count}` : ``
+
+    return (
+      <div className='flex-col flex justify-center items-center pt-4'>
+        <div className=''>
+          <FontAwesomeIcon icon={effect.icon} width={20} height={20} className='icon-container' />
+        </div>
+
+        <h4 className='title-sm'>{effect.effect} {ammount}</h4>
+        {removeEffect && <FontAwesomeIcon 
+          icon={faCircleMinus} 
+          width={16} 
+          height={16} 
+          className='text-hyper-red pt-1' 
+          onClick={(e: any) => removeEffect(effect.effect)}
+        />}
+      </div>
+    )
+  })
 
   return (
     <div className='text-center pb-[25px]'>
-      <h2 className='title-xl pb-2'>Effects</h2>
-      <div className='flex flex-row justify-center gap-x-3'>
-        {
-          effects.findIndex(item => item.effect === 'Twilight') !== -1 && (
-            <div className='flex-col flex justify-center items-center'>
-              <div className=''>
-                <FontAwesomeIcon icon={faCloudMoon} width={20} height={20} className='icon-container'/>
-              </div>
-              
-              <h4 className='title-sm'>Twilight</h4>
-            </div>
-          )} {/** Twilight */}
-        {effects.findIndex(item => item.effect === 'Wave') !== -1 && (
-          <div className=''>
-            <FontAwesomeIcon icon={faWater} width={20} height={20} className='icon-container'/>
-            <h4 className='title-sm'>Wave</h4>
-          </div>
-        )} {/** Wave */}
-        {effects.findIndex(item => item.effect === 'Swipe') !== -1 && (
-          <div className=''>
-            <FontAwesomeIcon icon={faRightLeft} width={20} height={20} className='icon-container'/>
-            <h4 className='title-sm'>Swipe</h4>
-          </div>
-        )} {/** Swipe */}
-                {effects.findIndex(item => item.effect === 'Breathing') !== -1 && (
-          <div className=''>
-            <FontAwesomeIcon icon={faWind} width={20} height={20} className='icon-container'/>
-            <h4 className='title-sm'>Breathing</h4>
-          </div>
-        )} {/** Breathing */}
-        {effects.findIndex(item => item.effect === 'Solid') !== -1 && (
-          <div className=''>
-            <FontAwesomeIcon icon={faHandBackFist} width={20} height={20} className='icon-container'/>
-            <h4 className='title-sm'>Solid</h4>
-          </div>
-        )} {/** Solid */}
-        {effects.findIndex(item => item.effect === 'Sun') !== -1 && (
-          <div className=''>
-            <FontAwesomeIcon icon={faSun} width={20} height={20} className='icon-container'/>
-            <h4 className='title-sm'>Sun</h4>
-          </div>
-        )} {/** Sun */}
-
-        {effects.findIndex(item => item.effect === 'Confetti') !== -1 && (
-          <div className=''>
-            <FontAwesomeIcon icon={faWandMagicSparkles} width={20} height={20} className='icon-container'/>
-            <h4 className='title-sm'>Confetti</h4>
-          </div>
-        )} {/** Confetti */}
-        {effects.findIndex(item => item.effect === 'Screen Mirror') !== -1 && (
-          <div className=''>
-            <FontAwesomeIcon icon={faDisplay} width={20} height={20} className='icon-container' />
-            <h4 className='title-sm'>Screen Mirror</h4>
-          </div>
-        )} {/** Screen Mirroring */}
-        {effects.findIndex(item => item.effect === 'Video Capture') !== -1 && (
-            <div >
-              <FontAwesomeIcon icon={faVideo} width={20} height={20} className='icon-container'/>
-            <h4 className='title-sm'>Video Capture</h4>
-          </div>
-        )} {/** Video Capture */}
+      {title && <h2 className='title-xl pb-2'>Effects</h2>}
+      <div className={`${!title ? 'pt-4' : ''} grid grid-cols-4 items-start justify-center' gap-x-3`}>
+        {effectsComponents}
       </div>
     </div>
   )

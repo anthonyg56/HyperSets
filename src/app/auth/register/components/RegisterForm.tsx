@@ -28,7 +28,6 @@ export default function RegisterForm(props: Props) {
     confirmPassword: ""
   })
   const [submitted, setSubmitted] = useState<boolean>(false)
-  const [invalid, setInvalid] = useState<boolean>(false)
 
   const handleChange = (e: any) => {
     const { name, value } = e.target
@@ -37,29 +36,6 @@ export default function RegisterForm(props: Props) {
       ...prev,
       [name]: value
     }))
-  }
-
-  const handleSubmit = async () => {
-    const isNotValid =
-      !validate.isEightCharacters() ||
-      !validate.hasUppercase() ||
-      !validate.hasNumbers() ||
-      !validate.hasSpecialCharacter() ||
-      !validate.hasLowerCase() ||
-      !validate.passwordMatch() ||
-      !validate.isValidEmail()
-
-    if (isNotValid) {
-      setInvalid(false)
-    }
-
-    const { data, error } = await props.register(userState.email, userState.password)
-
-    if (error) {
-      setSubmitted(false)
-    }
-
-    setSubmitted(true)
   }
 
   const validate = {
@@ -88,6 +64,47 @@ export default function RegisterForm(props: Props) {
     }
   }
 
+  const isCompliantNoMatch = validate.isEightCharacters() &&
+  validate.hasUppercase() &&
+  validate.hasNumbers() &&
+  validate.hasSpecialCharacter() &&
+  validate.hasLowerCase()
+
+  const isCompliant = validate.isEightCharacters() &&
+  validate.hasUppercase() &&
+  validate.hasNumbers() &&
+  validate.hasSpecialCharacter() &&
+  validate.hasLowerCase() &&
+  validate.passwordMatch()
+
+  const isNotCompliant = !validate.isEightCharacters() ||
+  !validate.hasUppercase() ||
+  !validate.hasNumbers() ||
+  !validate.hasSpecialCharacter() ||
+  !validate.hasLowerCase() ||
+  !validate.passwordMatch()
+
+  const handleSubmit = async () => {
+    if (
+      !validate.hasUppercase() ||
+      !validate.hasNumbers() ||
+      !validate.hasSpecialCharacter() ||
+      !validate.hasLowerCase() ||
+      !validate.passwordMatch() ||
+      !validate.isValidEmail()
+    ) {
+      return
+    }
+
+    const { data, error } = await props.register(userState.email, userState.password)
+
+    if (error) {
+      setSubmitted(false)
+    }
+
+    setSubmitted(true)
+  }
+
   return (
     <div>
       <div className='text-container pb-8'>
@@ -105,8 +122,13 @@ export default function RegisterForm(props: Props) {
             value={userState.email}
             onChange={handleChange}
             placeholder='Email@mail.com'
-            className={`${invalid === true && !validate.isValidEmail && 'border-hyper-red outline-none'}`}
-            onClick={(e) => setInvalid(false)}
+            className={`${
+              userState.email && validate.isValidEmail() ? 
+                'border-hyper-green outline-none' : 
+              userState.email && !validate.isValidEmail ? 
+                'border-hyper-red outline-none' : 
+              ''
+            }`}
           />
         </div>
 
@@ -118,12 +140,13 @@ export default function RegisterForm(props: Props) {
             value={userState.password}
             onChange={handleChange}
             placeholder='********'
-            className={`${invalid === true && !validate.isEightCharacters() ||
-              !validate.hasUppercase() ||
-              !validate.hasNumbers() ||
-              !validate.hasSpecialCharacter() ||
-              !validate.hasLowerCase() && 'border-hyper-red outline-none'
-              }`}
+            className={`${
+              userState.password.length > 0 && isCompliantNoMatch ?
+               'border-hyper-green outline-none' : 
+              userState.password.length > 0 && !isCompliantNoMatch ? 
+                'border-hyper-red outline-none' : 
+              ''
+            }`}
           />
         </div>
 
@@ -135,34 +158,33 @@ export default function RegisterForm(props: Props) {
             value={userState.confirmPassword}
             onChange={handleChange}
             placeholder='********'
-            className={`${invalid === true && !validate.passwordMatch() && 'border-hyper-red outline-none'}`}
-            onClick={(e) => setInvalid(false)}
+            className={`${userState.confirmPassword.length > 0 && isCompliant ? 'border-hyper-green outline-none' : 'border-hyper-red outline-none'}`}
           />
         </div>
 
         <div>
           <div className='flex flex-row pb-2 items-center'>
-            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.isEightCharacters() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
+            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.isEightCharacters() ? "text-hyper-green" : "text-hyper-dark-grey"}`} />
             <h4 className='sub-text-xs pl-1'>Must be at least 8 characters </h4>
           </div>
           <div className='flex flex-row pb-2 items-center'>
-            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasUppercase() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
+            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasUppercase() ? "text-hyper-green" : "text-hyper-dark-grey"}`} />
             <h4 className='sub-text-xs pl-1'>Must contain at least one uppercase character</h4>
           </div>
           <div className='flex flex-row pb-2 items-center'>
-            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasSpecialCharacter() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
+            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasSpecialCharacter() ? "text-hyper-green" : "text-hyper-dark-grey"}`} />
             <h4 className='sub-text-xs pl-1'>Must contain one special characters</h4>
           </div>
           <div className='flex flex-row pb-2 items-center'>
-            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasNumbers() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
+            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasNumbers() ? "text-hyper-green" : "text-hyper-dark-grey"}`} />
             <h4 className='sub-text-xs pl-1'>Must contain one number</h4>
           </div>
           <div className='flex flex-row items-center pb-2'>
-            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasLowerCase() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
+            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasLowerCase() ? "text-hyper-green" : "text-hyper-dark-grey"}`} />
             <h4 className='sub-text-xs pl-1'>Must contain one lowercase character</h4>
           </div>
           <div className='flex flex-row items-center pb-2'>
-            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.passwordMatch() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
+            <FontAwesomeIcon icon={faCircleCheck} className={`${validate.passwordMatch() ? "text-hyper-green" : "text-hyper-dark-grey"}`} />
             <h4 className='sub-text-xs pl-1'>Passwords Match</h4>
           </div>
         </div>
