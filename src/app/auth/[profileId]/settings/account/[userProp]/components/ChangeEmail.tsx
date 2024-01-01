@@ -13,6 +13,7 @@ type Props = {
 
 export default function ChangeEmail(props: Props) {
   const { session, profileId } = props
+  
   const updateEmail = async (email: string) => {
     const { data, error } = await supabase.auth.updateUser({
       email: email,
