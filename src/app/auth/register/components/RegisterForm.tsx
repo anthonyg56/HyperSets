@@ -221,7 +221,7 @@ export default function RegisterForm(props: Props) {
       </div>}
 
       {submitted && (
-        <button className='button-auto w-full text-xs'>Login</button>
+        <button className='button-auto w-full text-xs'><Link href="/auth/login">Login</Link></button>
       )}
     </div>
 
