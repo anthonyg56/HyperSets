@@ -115,33 +115,36 @@ export interface Database {
       profile: {
         Row: {
           avatar: string | null
-          created_on: string
+          created_on: string | null
+          email: string | null
           first_name: string | null
           last_logon: string | null
           last_name: string | null
           profile_id: number
           user_id: string | null
-          username: string
+          username: string | null
         }
         Insert: {
           avatar?: string | null
-          created_on: string
+          created_on?: string | null
+          email?: string | null
           first_name?: string | null
           last_logon?: string | null
           last_name?: string | null
           profile_id?: number
           user_id?: string | null
-          username: string
+          username?: string | null
         }
         Update: {
           avatar?: string | null
-          created_on?: string
+          created_on?: string | null
+          email?: string | null
           first_name?: string | null
           last_logon?: string | null
           last_name?: string | null
           profile_id?: number
           user_id?: string | null
-          username?: string
+          username?: string | null
         }
         Relationships: [
           {
@@ -155,19 +158,19 @@ export interface Database {
       }
       ratings: {
         Row: {
-          created_on: string
+          created_on: string | null
           preset_id: number
           profile_id: number
           rating: number
         }
         Insert: {
-          created_on: string
+          created_on?: string | null
           preset_id: number
           profile_id: number
           rating: number
         }
         Update: {
-          created_on?: string
+          created_on?: string | null
           preset_id?: number
           profile_id?: number
           rating?: number

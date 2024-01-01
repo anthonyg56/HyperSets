@@ -8,31 +8,22 @@ import React from 'react'
 interface Props {
   params: {
     userProp: "email" | "name" | "password";
-    profileId: string;
+    userId: string;
   }
 }
 
 // Figure out how to validate that a user came here from an email invitation (maybe do it in the middle ware?)
 
 export default async function Page(props: Props) {
-  const { params: { profileId, userProp } } = props
+  const { params: { userId, userProp } } = props
 
   const { data: { session }, error } = await supabase.auth.getSession()
 
   if (error || !session) {
     redirect('/auth/login')
   }
-  
-  const { data: profile, error: profileError } = await supabase
-    .from('profile')
-    .select('*')
-    .eq('user_id', session.user.id)
-    .limit(1)
-    .single()
 
-  if (profileError || !profile) redirect('/')
-
-  if (Number(profileId) !== profile.profile_id) redirect(`/auth/${profile.profile_id}/settings/account/${userProp}}`)
+  if (userId !== session.user.id) redirect(`/auth/${session.user.id}/settings/account/${userProp}}`)
   
   const ConfirmEmail = () => {
     return (
@@ -44,7 +35,7 @@ export default async function Page(props: Props) {
           padding='pb-[14px]'
         />
         <h4 className='text-[11px] font-medium tracking-tight text-hyper-dark-grey'>Didn't receive an email? <span className='text-hyper-red'>Click to Resend</span></h4>
-        <Link href={`/auth/${profileId}/settings/account/`} className='block pt-[11px] sub-medium text-center' >Back to Account Settings</Link>
+        <Link href={`/auth/${session.user.id}/settings/account/`} className='block pt-[11px] sub-medium text-center' >Back to Account Settings</Link>
       </div>
     )
   }
@@ -58,7 +49,7 @@ export default async function Page(props: Props) {
           icon={faIdCard}
           padding='pb-[22px]'
         />
-        <Link href={`/auth/${profileId}/settings/account/`} className='block pt-[11px] sub-medium text-center' >Back to Account Settings</Link>
+        <Link href={`/auth/${session.user.id}/settings/account/`} className='block pt-[11px] sub-medium text-center' >Back to Account Settings</Link>
       </div>
     )
   }
@@ -72,7 +63,7 @@ export default async function Page(props: Props) {
           icon={faKey}
           padding='pb-[22px]'
         />
-        <Link href={`/auth/${profileId}/settings/account/`} className='block pt-[11px] sub-medium text-center' >Back to Account Settings</Link>
+        <Link href={`/auth/${session.user.id}/settings/account/`} className='block pt-[11px] sub-medium text-center' >Back to Account Settings</Link>
       </div>
     )
   }
@@ -86,7 +77,7 @@ export default async function Page(props: Props) {
             <ConfirmName /> :
             userProp === "password" ?
               <ConfirmPassword /> :
-              redirect(`/auth/${profile.profile_id}/settings/account}`)
+              redirect(`/auth/${session.user.id}/settings/account}`)
       }
     </div>
   )

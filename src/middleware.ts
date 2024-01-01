@@ -8,8 +8,8 @@ export default async function middleware(req: NextRequest) {
   // Create a Supabase client configured to use cookies
   const supabase = createMiddlewareClient<Database>({ req, res })
 
-  await supabase.auth.getSession()
-
+  const {data: { session }, error } = await supabase.auth.getSession()
+  console.log(`middleware: \n data: ${session} \n error: ${error}`)
   return res
 }
 

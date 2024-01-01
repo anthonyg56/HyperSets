@@ -9,7 +9,7 @@ type Props = {
     first_name: string | null;
     last_name: string | null;
   };
-  profileId: string
+  userId: string
 }
 
 export default function ChangeName(props: Props) {
@@ -17,7 +17,7 @@ export default function ChangeName(props: Props) {
     <div className='container pt-[120px] text-center'>
       <Title title='Change Name' sub='How should we refer to you?' icon={faIdCard} padding='pb-[22px]' />
       <ChangeNameForm profileName={props.profileName} />
-      <Link href={`/auth/${props.profileId}/settings/account/`} className='block pt-[11px] sub-medium text-center' >Back to Account Settings</Link>
+      <Link href={`/auth/${props.userId}/settings/account/`} className='block pt-[11px] sub-medium text-center' >Back to Account Settings</Link>
     </div>
   )
 }

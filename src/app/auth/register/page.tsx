@@ -4,22 +4,11 @@ import supabase from '@/lib/supabase'
 import { redirect } from 'next/navigation'
 
 export default async function page() {
-  const {data: {session}, error} = await supabase.auth.getSession()
-
-  const register = async (email: string, password: string) => {
-    "use server"
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password
-    })
-
-    console.log(error)
-    return { data, error }
-  }
+  const { data: { session }} = await supabase.auth.getSession()
 
   return (
     <div className='auth-container'>
-      <RegisterForm register={register} session={session}/>
+      <RegisterForm  session={session}/>
     </div>
   )
 }

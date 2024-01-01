@@ -8,12 +8,12 @@ import ChangePassword from './components/ChangePassword';
 interface Props {
   params: {
     userProp: 'email' | 'name' | 'password';
-    profileId: string;
+    userId: string;
   }
 }
 
 export default async function Page(props: Props) {
-  const { params: { profileId, userProp } } = props
+  const { params: { userId, userProp } } = props
 
   const { data: { session }, error } = await supabase.auth.getSession()
 
@@ -30,7 +30,7 @@ export default async function Page(props: Props) {
 
   if (profileError || !profile) redirect('/')
 
-  if (Number(profileId) !== profile.profile_id) redirect(`/auth/${profile.profile_id}/settings/account/${userProp}}`)
+  if (userId !== session.user.id) redirect(`/auth/${userId}/settings/account/${userProp}}`)
 
   const profileName = {
     first_name: profile.first_name,
@@ -41,11 +41,11 @@ export default async function Page(props: Props) {
     <div>
       {
         userProp === "email" ?
-          <ChangeEmail profileId={profileId} session={session} /> :
+          <ChangeEmail userId={userId} session={session} /> :
           userProp === "name" ?
-            <ChangeName profileId={profileId} profileName={profileName} /> :
+            <ChangeName userId={userId} profileName={profileName} /> :
             userProp === "password" ?
-              <ChangePassword profileId={profileId} /> :
+              <ChangePassword userId={userId} /> :
               redirect(`/auth/${profile.profile_id}/settings/account}`)
       }
     </div>

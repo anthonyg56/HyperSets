@@ -12,7 +12,7 @@ export default function YoutubePlayer(props: Props) {
     return newUrl
   }
 
-  const newUrl = transformUrl('https://www.youtube.com/watch?v=NTKhPc26B9M')
+  const newUrl = transformUrl(youtubeUrl as string)
 
   return (
     <div>

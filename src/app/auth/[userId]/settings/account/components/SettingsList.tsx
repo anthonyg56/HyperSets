@@ -5,17 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import React, { useContext } from 'react'
 
-type Props = {
-  profileId: string;
-}
-
-export default function SettingsList(props: Props) {
+export default function SettingsList() {
   const { profile, user } = useContext(AuthContext) as TAuthContext
-  const { profileId } = props
 
   return (
     <div className='flex flex-col gap-y-3 w-full pt-[25px]'>
-      <Link className='flex flex-row' href={`/auth/${profileId}/settings/account/name`}>
+      <Link className='flex flex-row' href={`/auth/${user?.id}/settings/account/name`}>
         <div className='rounded-[100px] bg-hyper-dark-grey w-[30px] h-[28px] flex justify-center items-center '>
           <FontAwesomeIcon icon={faUser} width={16} height={16} className='text-hyper-white' />
         </div>
@@ -29,7 +24,7 @@ export default function SettingsList(props: Props) {
         </div>
       </Link>
 
-      <Link className='flex flex-row' href={`/auth/${profileId}/settings/account/email`}>
+      <Link className='flex flex-row' href={`/auth/${user?.id}/settings/account/email`}>
         <div className='rounded-[100px] bg-hyper-dark-grey w-[30px] h-[28px] flex justify-center items-center'>
           <FontAwesomeIcon icon={faAt} width={16} height={16} className='text-hyper-white' />
         </div>
@@ -41,7 +36,7 @@ export default function SettingsList(props: Props) {
         </div>
       </Link>
 
-      <Link className='flex flex-row' href={`/auth/${profileId}/settings/account/password`}>
+      <Link className='flex flex-row' href={`/auth/${user?.id}/settings/account/password`}>
         <div className='rounded-[100px] bg-hyper-dark-grey w-[30px] h-[28px] flex justify-center items-center'>
           <FontAwesomeIcon width={16} height={16} icon={faDownload} className='text-hyper-white' />
         </div>

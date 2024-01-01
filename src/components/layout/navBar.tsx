@@ -1,21 +1,31 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { usePathname } from 'next/navigation';
+import { User, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
-interface Props {
-  isAuthenticated: boolean;
-}
-
-export default function NavBar(props: Props) {
+export default function NavBar() {
   const [isOpen, setOpen] = useState(false)
+  const [user, setUser] = useState<User | undefined>(undefined)
   const pathname = usePathname();
 
-  const { isAuthenticated } = props
+  useEffect(() => {
+    const fetchData = async () => {
+      const supabase = createClientComponentClient()
+      const { data: { session }, error } = await supabase.auth.getSession()
+
+      if(session) {
+        setUser(session.user)
+      }
+    }
+
+    fetchData()
+  }, [])
+  
 
   const handleOpen = (e: any) => setOpen(!isOpen)
 
@@ -41,7 +51,7 @@ export default function NavBar(props: Props) {
             <Link href='/' className=''>Home</Link>
             <Link href='/presets' className=''>Presets</Link>
             <Link href='/about' className=''>About</Link>
-            <Link href={`/auth/${isAuthenticated ? 'settings' : 'login'}`} className=''>{isAuthenticated ? 'Settings' : 'Sign In'}</Link>
+            <Link href={`/auth/${user ? `${user.id}/settings` : 'login'}`} className=''>{user ? 'My Account' : 'Sign In'}</Link>
           </div>
         </div>
       </div>
@@ -69,10 +79,10 @@ export default function NavBar(props: Props) {
               onClick={handleOpen}
             >About</Link>
             <Link
-              href={`/auth/${isAuthenticated ? 'settings' : 'login'}`}
+              href={`/auth/${user ? `${user.id}/settings` : 'login'}`}
               className={`${pathname === '/auth/settings' || pathname === '/auth/login' ? 'text-hyper-red' : ''}`}
               onClick={handleOpen}
-            >{isAuthenticated ? 'Settings' : 'Sign In'}</Link>
+            >{user ? 'My Account' : 'Sign In'}</Link>
           </div>
         </div>
       </div>

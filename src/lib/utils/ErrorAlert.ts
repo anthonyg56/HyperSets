@@ -5,12 +5,13 @@ import React from 'react'
  * @param error - supabase error
  * @param data - supabase data
  * @param callback - Callback is for certain condtion checkings
+ * @param text - String for the console to make reading the error easier
  * @returns 
  */
-export default function(error: any, data: any, callback?: () => boolean) {
+export default function(error: any, data: any, text: string, callback?: () => boolean) {
   if (error || !data) {
     alert('There was an error, please try agin')
-    console.log(`Resetting password for a user who forgot error: \n\n ${error}`)
+    console.log(`${text}: \n\n ${error}`)
     return true
   }
 }

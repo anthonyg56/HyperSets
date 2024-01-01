@@ -4,27 +4,20 @@ import React, { useContext, useState } from 'react';
 
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Session, User } from '@supabase/auth-helpers-nextjs';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { AuthError } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
 import { redirect } from 'next/navigation';
+import ErrorAlert from '@/lib/utils/ErrorAlert';
 
 interface Props {
-  register(email: string, password: string): Promise<{
-    data: {
-      user: User | null;
-      session: Session | null;
-    } | {
-      user: null;
-      session: null;
-    };
-    error: AuthError | null;
-  }>;
   session: {} | null;
 }
 
 export default function RegisterForm(props: Props) {
+  const { session } = props
+
   const [userState, setState] = useState({
     email: "",
     password: "",
@@ -33,13 +26,13 @@ export default function RegisterForm(props: Props) {
   
   const [submitted, setSubmitted] = useState<boolean>(false)
 
-  const { register, session } = props
-
   const { profile, user } = useContext(AuthContext) as TAuthContext
 
   if (session) {
     redirect(`/auth/${profile?.profile_id}/settings`)
   }
+
+  const supabase = createClientComponentClient()
 
   const handleChange = (e: any) => {
     const { name, value } = e.target
@@ -77,24 +70,24 @@ export default function RegisterForm(props: Props) {
   }
 
   const isCompliantNoMatch = validate.isEightCharacters() &&
-  validate.hasUppercase() &&
-  validate.hasNumbers() &&
-  validate.hasSpecialCharacter() &&
-  validate.hasLowerCase()
+    validate.hasUppercase() &&
+    validate.hasNumbers() &&
+    validate.hasSpecialCharacter() &&
+    validate.hasLowerCase()
 
   const isCompliant = validate.isEightCharacters() &&
-  validate.hasUppercase() &&
-  validate.hasNumbers() &&
-  validate.hasSpecialCharacter() &&
-  validate.hasLowerCase() &&
-  validate.passwordMatch()
+    validate.hasUppercase() &&
+    validate.hasNumbers() &&
+    validate.hasSpecialCharacter() &&
+    validate.hasLowerCase() &&
+    validate.passwordMatch()
 
   const isNotCompliant = !validate.isEightCharacters() ||
-  !validate.hasUppercase() ||
-  !validate.hasNumbers() ||
-  !validate.hasSpecialCharacter() ||
-  !validate.hasLowerCase() ||
-  !validate.passwordMatch()
+    !validate.hasUppercase() ||
+    !validate.hasNumbers() ||
+    !validate.hasSpecialCharacter() ||
+    !validate.hasLowerCase() ||
+    !validate.passwordMatch()
 
   const handleSubmit = async () => {
     if (
@@ -108,11 +101,12 @@ export default function RegisterForm(props: Props) {
       return
     }
 
-    const { data, error } = await props.register(userState.email, userState.password)
+    const { data, error } = await supabase.auth.signUp({
+      email: userState.email,
+      password: userState.password
+    })
 
-    if (error) {
-      console.log(error)
-      alert('there was an error, please try again')
+    if (ErrorAlert(error,data,'sign up error')) {
       setSubmitted(false)
       return
     }

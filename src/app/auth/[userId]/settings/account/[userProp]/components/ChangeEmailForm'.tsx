@@ -1,30 +1,28 @@
 "use client"
 
 import ErrorAlert from '@/lib/utils/ErrorAlert';
-import { User } from '@supabase/auth-helpers-nextjs';
+import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
+import { User, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { AuthError } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 type Props = {
   email: string;
-  updateEmail: (email: string) => Promise<{
-    data: {
-        user: User;
-    } | {
-        user: null;
-    };
-    error: AuthError | null;
-  }>
 }
 
 export default function ChangeEmailForm(props: Props) {
   const [email, setEmail] = useState<string>('')
+  
+  const router = useRouter()
 
   useEffect(() => {
     setEmail(props.email ? props.email : '')
   }, [])
 
+  const supabase = createClientComponentClient()
+  
   const isValidEmail = () => {
     return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
   }
@@ -37,11 +35,15 @@ export default function ChangeEmailForm(props: Props) {
       return
     }
 
-    const { data, error } = await props.updateEmail(email)
+    const { data, error } = await supabase.auth.updateUser({
+      email: email
+    })
 
-    if (ErrorAlert(error,data)) return
+    if (ErrorAlert(error,data,'Change Email Eror')) return
 
-    alert('Email updated successfully')
+    console.log(`change email res: \n ${data}`)
+    
+    router.push(`/auth/${data.user?.id}/settings/email/confirm`)
   }
 
   return (

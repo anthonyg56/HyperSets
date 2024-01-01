@@ -3,8 +3,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter, Poppins} from 'next/font/google'
 
-import NavWrapper from '@/components/layout/NavWrapper'
-import AuthWrapper from '@/components/layout/AuthWrapper'
+import AuthProvider from '@/lib/utils/contexts/Auth'
+import NavBar from '@/components/layout/navBar'
 
 const inter = Poppins({ subsets: ['latin'], weight: ["100", "200" , "300" , "400" , "500" , "600" , "700" , "800" , "900"] })
 
@@ -21,10 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-          <AuthWrapper>
-            <NavWrapper />
+          <AuthProvider>
+            <NavBar />
             {children}
-          </AuthWrapper>
+          </AuthProvider>
       </body>
     </html>
   )

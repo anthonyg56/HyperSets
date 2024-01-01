@@ -1,25 +1,13 @@
 "use client"
 
+import ErrorAlert from '@/lib/utils/ErrorAlert';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { User } from '@supabase/auth-helpers-nextjs';
-import { AuthError } from '@supabase/supabase-js';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
-interface Props {
-  resetPassword(password: string): Promise<{
-    user: {
-        user: User;
-    } | {
-        user: null;
-    };
-    error: AuthError | null;
-  }>;
-  profileId: string;
-}
-
-export default function ChangePasswordForm(props: Props) {
+export default function ChangePasswordForm() {
   const [userState, setState] = useState({
     password: "",
     confirmPassword: ""
@@ -29,7 +17,7 @@ export default function ChangePasswordForm(props: Props) {
 
   const router = useRouter()
 
-  const { resetPassword, profileId } = props
+  const supabase = createClientComponentClient()
 
   const handleChange = (e: any) => {
     const { name, value } = e.target
@@ -53,14 +41,15 @@ export default function ChangePasswordForm(props: Props) {
       setInvalid(false)
     }
 
-    const { user, error} = await resetPassword(userState.password)
+    const { data: { user }, error} = await supabase.auth.updateUser({
+      password: userState.password
+    })
 
-    if (error) {
-      alert("There was an error, please try again")
+    if (ErrorAlert(error,user,"Resetting Password Error")) {
       return
     }
 
-    router.push(`/auth/${profileId}/settings/account/password/confirm`)
+    router.push(`/auth/${user?.id}/settings/account/password/confirm`)
   }
 
   const validate = {
