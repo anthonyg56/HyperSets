@@ -57,7 +57,6 @@ function isLAD (lad: LADQueryReturnType | UserPresetsQueryReturnType | DefaultQu
 export default async function Presets(props: Props) {
   const { hardware, limit, table, profile_id } = props
 
-  
   const generateSelectClause = () => {
     const likesAndDownloadSelectClause = `presets(preset_id,name,photo_url,hardware,profile_id),downloads(count)`
 
@@ -87,7 +86,6 @@ export default async function Presets(props: Props) {
   const { data, error } = await query
     .returns<LADQueryReturnType[] | UserPresetsQueryReturnType[] | DefaultQueryReturnType[] | null>()
 
-    console.log(data)
   if (error || !data) {
     return <div>there was an error</div>
   }

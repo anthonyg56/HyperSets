@@ -4,16 +4,18 @@ import React, { useEffect, useState } from 'react'
 
 type Props = {
   profileName: {
-    first_name: string;
-    last_name: string;
+    first_name: string | null;
+    last_name: string | null;
   };
 }
 
-export default function (props: Props) {
+export default function ChangeNameForm(props: Props) {
   const [name, setName] = useState('')
   const { first_name, last_name } = props.profileName
 
   useEffect(() => {
+    if (!first_name && !last_name)
+      setName(`Add a name`)
     setName(`${first_name} ${last_name}`)
   }, [])
   
@@ -28,7 +30,7 @@ export default function (props: Props) {
           name='name'
           value={name}
           onChange={handleChange}
-          placeholder={`${first_name} ${last_name}`}
+          placeholder={name}
         />
       </div>
 

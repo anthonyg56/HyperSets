@@ -3,7 +3,7 @@
 import ErrorAlert from '@/lib/utils/ErrorAlert';
 import { User } from '@supabase/auth-helpers-nextjs';
 import { AuthError } from '@supabase/supabase-js';
-import { redirect } from 'next/navigation';
+
 import React, { useEffect, useState } from 'react'
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
   }>
 }
 
-export default function (props: Props) {
+export default function ChangeEmailForm(props: Props) {
   const [email, setEmail] = useState<string>('')
 
   useEffect(() => {

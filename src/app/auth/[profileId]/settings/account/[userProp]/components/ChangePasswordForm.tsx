@@ -1,10 +1,7 @@
-"use client"
-
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { User } from '@supabase/auth-helpers-nextjs';
 import { AuthError } from '@supabase/supabase-js';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
@@ -20,7 +17,7 @@ interface Props {
   profileId: string;
 }
 
-export default function ResetPasswordForm(props: Props) {
+export default function ChangePasswordForm(props: Props) {
   const [userState, setState] = useState({
     password: "",
     confirmPassword: ""
