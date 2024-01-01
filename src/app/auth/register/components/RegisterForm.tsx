@@ -111,6 +111,8 @@ export default function RegisterForm(props: Props) {
     const { data, error } = await props.register(userState.email, userState.password)
 
     if (error) {
+      console.log(error)
+      alert('there was an error, please try again')
       setSubmitted(false)
       return
     }
@@ -121,8 +123,8 @@ export default function RegisterForm(props: Props) {
 
   return (
     <div>
-      <div className='text-container pb-8'>
-        {submitted && <FontAwesomeIcon icon={faCircleCheck} height={30} width={30} className="text-hyper-red"/>}
+      <div className='text-container text-center pb-8 flex flex-col justify-center'>
+        {submitted && <FontAwesomeIcon icon={faCircleCheck} height={30} width={30} className="w-[30px] h-[30px] text-hyper-red mx-auto pb-[7px]"/>}
         <h1 className='title-2xl-upper'>{submitted ? 'Account Created' : 'Create An Account'}</h1>
         <h4 className='sub-text'>{submitted ? 'Welcome! Happy to have you here. ❣️' : 'Please enter your details.'}</h4>
       </div>
@@ -217,6 +219,10 @@ export default function RegisterForm(props: Props) {
           Already have an account? <Link href={'/auth/login'} className='text-hyper-red'>Login Here!</Link>
         </h5>
       </div>}
+
+      {submitted && (
+        <button className='button-auto w-full text-xs'>Login</button>
+      )}
     </div>
 
   )

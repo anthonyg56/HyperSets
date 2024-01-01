@@ -13,6 +13,7 @@ export default async function page() {
       password: password
     })
 
+    console.log(error)
     return { data, error }
   }
 
