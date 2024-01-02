@@ -1,21 +1,12 @@
 "use state"
 
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { User } from '@supabase/auth-helpers-nextjs';
-import { AuthError } from '@supabase/supabase-js';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 import React, { useState } from 'react'
 
 interface Props {
-  resetPassword(password: string): Promise<{
-    data: {
-        user: User;
-    } | {
-        user: null;
-    };
-    error: AuthError | null;
-  }>;
   setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -24,10 +15,17 @@ export default function ResetPasswordForm(props: Props) {
     password: "",
     confirmPassword: ""
   })
-
   const [invalid, setInvalid] = useState<boolean>(false)
+  const supabase = createClientComponentClient()
+  
+  const { setSubmitted } = props
 
-  const { resetPassword, setSubmitted } = props
+  const resetPassword = async (email: string) => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email)
+
+    return { data, error }
+  }
+  
 
   const handleChange = (e: any) => {
     const { name, value } = e.target

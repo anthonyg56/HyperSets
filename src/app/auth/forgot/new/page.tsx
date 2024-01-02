@@ -9,16 +9,6 @@ export default async function Page() {
   if (!session) {
     redirect(`/auth/forgot`)
   }
-  
-  const resetPassword = async (password: string) => {
-    "use server"
-
-    const { data, error } = await supabase.auth.updateUser({
-      password: password,
-    })
-
-    return { data, error }
-  }
    
-  return <View resetPassword={resetPassword} />
+  return <View />
 }
