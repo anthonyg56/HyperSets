@@ -1,16 +1,14 @@
 import supabase from '@/lib/supabase'
 import React from 'react'
 import View from './components/View'
+import { redirect } from 'next/navigation'
 
 export default async function page() {
   const { data: { session }, error } = await supabase.auth.getSession()
-
-  const resetPassword = async (email: string) => {
-    'use server'
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email)
-
-    return { data, error }
+  
+  if (session) {
+    redirect(`/auth/${session.user.id}/settings`)
   }
   
-  return <View session={session} resetPassword={resetPassword}/>
+  return <View />
 }

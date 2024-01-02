@@ -30,6 +30,7 @@ export default function ChangeNameForm(props: Props) {
     }
 
   }
+  
   return (
     <form className='text-left'>
       <div className='input-container'>

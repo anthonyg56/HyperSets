@@ -1,17 +1,14 @@
-import { AuthError } from '@supabase/supabase-js';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import React, { useState } from 'react'
 
 interface Props {
-  resetPassword(email: string): Promise<{
-    data: {} | null;
-    error: AuthError | null;
-  }>;
   setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Form(props: Props) {
+  const { setSubmit } = props
   const [email, setEmail] = useState("")
-  const { resetPassword, setSubmit } = props
+  const supabase = createClientComponentClient()
 
   const handleChange = (e: any) => setEmail(e.target.value)
   
@@ -26,6 +23,13 @@ export default function Form(props: Props) {
     setSubmit(true)
   }
 
+  const resetPassword = async (email: string) => {
+    'use server'
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email)
+
+    return { data, error }
+  }
+  
   return (
     <form action={handleSubmit}>
       <div className='input-container'>
