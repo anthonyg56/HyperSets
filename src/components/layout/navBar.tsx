@@ -7,15 +7,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { usePathname } from 'next/navigation';
 import { User, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Database } from '../../../types/supabase';
 
 export default function NavBar() {
   const [isOpen, setOpen] = useState(false)
   const [user, setUser] = useState<User | undefined>(undefined)
   const pathname = usePathname();
+  const supabase = createClientComponentClient<Database>()
 
   useEffect(() => {
     const fetchData = async () => {
-      const supabase = createClientComponentClient()
       const { data: { session }, error } = await supabase.auth.getSession()
 
       if(session) {

@@ -1,23 +1,16 @@
 "use client"
 
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { AuthError } from '@supabase/supabase-js';
 import Link from 'next/link';
-import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
 import { redirect } from 'next/navigation';
 import ErrorAlert from '@/lib/utils/ErrorAlert';
 
-interface Props {
-  session: {} | null;
-}
-
-export default function RegisterForm(props: Props) {
-  const { session } = props
-
+export default function RegisterForm() {
   const [userState, setState] = useState({
     email: "",
     password: "",
@@ -26,13 +19,18 @@ export default function RegisterForm(props: Props) {
   
   const [submitted, setSubmitted] = useState<boolean>(false)
 
-  const { profile, user } = useContext(AuthContext) as TAuthContext
-
-  if (session) {
-    redirect(`/auth/${profile?.profile_id}/settings`)
-  }
-
   const supabase = createClientComponentClient()
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession()
+      if (session) {
+        redirect(`/auth/${session.user.id}/settings`)
+      }
+    }
+
+    checkSession()
+  }, [])
 
   const handleChange = (e: any) => {
     const { name, value } = e.target

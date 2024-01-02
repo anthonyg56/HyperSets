@@ -14,21 +14,21 @@ type Props = {
 export default async function page(props: Props) {
   const { userId } = props.params
 
-  // const { data: { session }, error } = await supabase.auth.getSession()
+  const { data: { session }, error } = await supabase.auth.getSession()
 
-  // if (error || !session) {
-  //   redirect('/auth/login')
-  // }
+  if (error || !session) {
+    redirect('/auth/login')
+  }
 
-  // const user = session.user
+  const user = session.user
   
-  // if (userId !== user.id) redirect(`/auth/${user.id}/settings/account}`)
+  if (userId !== user.id) redirect(`/auth/${user.id}/settings/account}`)
 
   return (
     <div className='container pt-[120px] flex flex-col items-center'>
-      <Avatar userId={userId} />
-      <SettingsList />
-      <Link href={`/auth/${userId}/settings`} className='text-sm text-center button-auto w-full mt-[30px]'>Go Back To Settings</Link>
+      <Avatar userId={user.id} />
+      <SettingsList userId={user.id} />
+      <Link href={`/auth/${user.id}/settings`} className='text-sm text-center button-auto w-full mt-[30px]'>Go Back To Settings</Link>
     </div>
   )
 }

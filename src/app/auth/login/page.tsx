@@ -4,9 +4,6 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import LoginForm from './components/form'
 import supabase from '@/lib/supabase'
-import errorAlert from '@/lib/utils/ErrorAlert'
-import { redirect } from 'next/navigation'
-import ErrorAlert from '@/lib/utils/ErrorAlert'
 
 export default async function LoginPage() {
   const { data: { session }, error } = await supabase.auth.getSession()

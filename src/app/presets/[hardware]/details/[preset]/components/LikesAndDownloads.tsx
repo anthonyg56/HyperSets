@@ -1,10 +1,11 @@
 "use client"
 
-import React, { useContext } from 'react'
-import { Tables } from '../../../../../../../types/supabase'
+import React, { useContext, useEffect, useState } from 'react'
+import { Database, Tables } from '../../../../../../../types/supabase'
 import { faDownload, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   userId: string;
@@ -13,9 +14,31 @@ type Props = {
 
 export default function LikesAndDownloads(props: Props) {
   const { userId, downloads } = props
-  const { profile } = useContext(AuthContext) as TAuthContext
 
-  const isDownload = downloads.findIndex(item => item.profile_id === profile?.profile_id)
+  const [profileId, setProfileId] = useState<number | undefined>(undefined)
+
+  const supabase = createClientComponentClient<Database>()
+  
+  useEffect(() => {
+    const getProfile = async () => {
+      const { data: profile, error } = await supabase
+        .from('profile')
+        .select('profile_id')
+        .eq('user_id', userId)
+        .limit(1)
+        .single()
+
+      if (error || !profile) {
+        return
+      }
+
+      setProfileId(profile.profile_id)
+    }
+
+    getProfile
+  }, [])
+
+  const isDownload = downloads.findIndex(item => item.profile_id === profileId)
 
   return (
     <div className='flex flex-row gap-3 justify-center pt-3 pb-[5px]'>

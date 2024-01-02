@@ -22,69 +22,17 @@ export default async function page() {
     redirect('/auth/login')
   }
 
-  const submitCoverPhoto = async (coverPhoto: File, user_id: string) => {
-    "use server"
-    const { data, error } = await supabase
-      .storage
-      .from('images')
-      .upload(`${user_id}/${uuidv4()}`, coverPhoto, {
-        cacheControl: '3600',
-        upsert: false
-      })
-    
-    console.log(`1) Submit Cover Photo Response: \n\n Data: ${data} \n Error: \n ${error}`)
-
-    return {
-      data, error
-    }
-  }
-
-  const submitPreset = async (formData: PresetFormData, profileId: number | undefined) => {
-    "use server"
-    const { data, error } = await supabase
-      .from('presets')
-      .insert([{
-        name: formData.name,
-        description: formData.description,
-        download_url: formData.downloadUrl,
-        hardware: formData.hardware as Enums<'hardware_type'>,
-        profile_id: profileId as number,
-        youtube_url: formData.youtubeUrl,
-        photo_url: formData.photoUrl
-      }])
-      .select()
-    
-    console.log(`2) Submit Preset Response: \n\n Data: ${data} \n Error: \n ${error}`)
-
-    if (!data)
-      return {
-        data,
-        error
-      }
-
-    return {
-      data: {
-        preset_id: data[0].preset_id,
-        name: data[0].name,
-      },
-      error
-    }
-  }
-
-  const submitEffects = async (effects: { preset_id: number, effect: Enums<'effect_type'> }[]) => {
-    "use server"
-    const { data, error } = await supabase
-      .from('effects')
-      .insert(effects)
-    
-    console.log(`3) Submit Effect Response: \n\n Data: ${data} \n Error: \n ${error}`)
-    return { data, error }
-  }
+  const { data } = await supabase
+    .from("profile")
+    .select('profile_id')
+    .eq('user_id', session.user.id)
+    .limit(1)
+    .single()
 
   return (
     <div className='container pt-[120px]'>
       <Title title='Create a Profile' sub='Share your creation with everyone!' />
-      <Form submitEffects={submitEffects} submitPreset={submitPreset} submitCoverPhoto={submitCoverPhoto} />
+      <Form profileId={data?.profile_id as number} user={session.user}/>
     </div>
   )
 }

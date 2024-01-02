@@ -1,16 +1,22 @@
 "use client"
 
-import React, { useContext, useState } from 'react'
-import { Enums, Tables } from '../../../../../types/supabase';
+import React, { useState } from 'react'
+import { Database, Enums } from '../../../../../types/supabase';
 import Dropdown, { TriggerType } from '@/components/reuseables/Dropdown';
 import generateEffects from '@/lib/utils/generateEffects';
 import Effects from '../../[hardware]/details/[preset]/components/Effects';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faImage } from '@fortawesome/free-solid-svg-icons';
-import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
 import { PresetFormData } from '../page';
-import { PostgrestError } from '@supabase/supabase-js';
-import { StorageError } from '@supabase/storage-js'
+import { User } from '@supabase/supabase-js';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from 'next/navigation';
+
+type Props = {
+  user: User;
+  profileId: number;
+}
 
 type InitialState = {
   name: string;
@@ -20,35 +26,10 @@ type InitialState = {
   downloadUrl: string;
 }
 
-type Props = {
-  submitPreset: (formData: PresetFormData, profileId: number) => Promise<{
-    data: null;
-    error: PostgrestError;
-  } | {
-      data: {
-          preset_id: number;
-          name: string;
-      };
-      error: null;
-  }>;
-  submitEffects: (effects: {
-    preset_id: number;
-    effect: Enums<'effect_type'>;
-  }[]) => Promise<{
-      data: null;
-      error: PostgrestError | null;
-  }>
-  submitCoverPhoto: (coverPhoto: File, user_id: string) => Promise<{
-    data: {
-        path: string;
-    } | null;
-    error: StorageError | null;
-  }>;
-}
-
 const CDNURL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/object/sign/images/"
 
 export default function Form(props: Props) {
+  const { profileId, user } = props
   const [formState, setState] = useState<InitialState>({
     name: '',
     description: '',
@@ -61,14 +42,14 @@ export default function Form(props: Props) {
 
   const [coverPhoto, setCoverPhoto] = useState<File | undefined>(undefined)
 
-  const { profile, user } = useContext(AuthContext) as TAuthContext
+  const router = useRouter()
 
-  const { submitCoverPhoto, submitEffects, submitPreset } = props
+  const supabase = createClientComponentClient<Database>()
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
-    if (!profile || !user) return
+    if (!user) return
 
     let tmpState: {
       name: string;
@@ -80,7 +61,7 @@ export default function Form(props: Props) {
     }  = formState
 
     if (coverPhoto) {
-      const coverPhotoRes = await submitCoverPhoto(coverPhoto, user?.id as string)
+      const coverPhotoRes = await submitCoverPhoto(coverPhoto, user.id as string)
 
       if (coverPhotoRes.error && coverPhotoRes.data === null) {
         console.log(coverPhotoRes.error)
@@ -91,23 +72,64 @@ export default function Form(props: Props) {
       tmpState.photoUrl = CDNURL + coverPhotoRes.data?.path
     }
       
-    const presetRes = await submitPreset(tmpState, profile.profile_id)
+    await submitPreset(tmpState, profileId)
       .then(async (res) => {
-        if (res.error)
-          return res
+        if (res.data === null)
+          return alert('There was an error, please try again')
 
-        const transformedData = effects.map(item => ({ effect: item, preset_id: res.data.preset_id }))
-        const effectResponse = await submitEffects(transformedData)
+        const resData = res.data
+        const transformedData = effects.map(item => ({ effect: item, preset_id: resData.preset_id }))
+        const {data, error} = await submitEffects(transformedData)
 
-        return effectResponse
+        if (data)
+          return alert('There was an error, please try again')
+
+        return router.push(`/presets/${resData.hardware}/details/${resData.preset_id}`)
       })
       .catch(error => {
         console.log(error)
         alert('There was an error, please try again')
         return
       })
+  }
+
+  const submitCoverPhoto = async (coverPhoto: File, user_id: string) => {
+    const { data, error } = await supabase
+      .storage
+      .from('images')
+      .upload(`${user_id}/${uuidv4()}`, coverPhoto, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    return { data, error }
+  }
+
+  const submitPreset = async (formData: PresetFormData, profileId: number | undefined) => {
+    const { data, error } = await supabase
+      .from('presets')
+      .insert([{
+        name: formData.name,
+        description: formData.description,
+        download_url: formData.downloadUrl,
+        hardware: formData.hardware as Enums<'hardware_type'>,
+        profile_id: profileId as number,
+        youtube_url: formData.youtubeUrl,
+        photo_url: formData.photoUrl
+      }])
+      .select()
+      .limit(1)
+      .single()
+
+    return { data, error }
+  }
+
+  const submitEffects = async (effects: { preset_id: number, effect: Enums<'effect_type'> }[]) => {
+    const { data, error } = await supabase
+      .from('effects')
+      .insert(effects)
     
-    
+    return { data, error }
   }
 
   const handleChange = (e: any) => {

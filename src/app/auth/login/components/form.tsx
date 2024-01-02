@@ -1,11 +1,9 @@
 "use client"
 
-import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
-import { Session, User, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { redirect, useRouter } from 'next/navigation';
 import Link from 'next/link'
-import React, { useContext, useState } from 'react'
-import { AuthError, WeakPassword } from '@supabase/supabase-js';
+import React, { useState } from 'react'
 import ErrorAlert from '@/lib/utils/ErrorAlert';
 
 type Props = {
@@ -20,8 +18,6 @@ export default function LoginForm(props: Props) {
   })
   
   const { session } = props
-
-  const { profile, user } = useContext(AuthContext) as TAuthContext
 
   const router = useRouter()
 

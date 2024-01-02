@@ -1,12 +1,10 @@
 "use client"
 
 import ErrorAlert from '@/lib/utils/ErrorAlert';
-import { AuthContext, TAuthContext } from '@/lib/utils/contexts/Auth';
-import { User, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { AuthError } from '@supabase/supabase-js';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
   email: string;
