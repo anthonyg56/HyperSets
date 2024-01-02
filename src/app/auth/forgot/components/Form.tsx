@@ -24,7 +24,6 @@ export default function Form(props: Props) {
   }
 
   const resetPassword = async (email: string) => {
-    'use server'
     const { data, error } = await supabase.auth.resetPasswordForEmail(email)
 
     return { data, error }
