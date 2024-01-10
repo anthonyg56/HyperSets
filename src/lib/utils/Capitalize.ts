@@ -7,5 +7,5 @@ export default function capitalizeEachWord(str: string): string {
 }
 
 export function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str && str.charAt(0).toUpperCase() + str.slice(1);
 }
