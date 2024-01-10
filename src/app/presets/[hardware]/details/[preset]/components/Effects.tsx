@@ -4,10 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Enums } from '../../../../../../../types/supabase';
 
 type Props = {
-  effects: {
-    effect: Enums<'effect_type'>;
-    count: number;
-  }[];
+  effects: Enums<'effect_type'>[];
   title: boolean;
   removeEffect?: (effect: Enums<'effect_type'>) => void;
 }
@@ -25,7 +22,28 @@ export default function Effects(props: Props) {
   // const screenMirroring = effects.findIndex(item => item.effect === 'Screen Mirror')
   // const videoIndex = effects.findIndex(item => item.effect === 'Video Capture')
 
-  const transformedEffectsData = effects.map((item, index) => {
+  const addCount = (effects: Enums<'effect_type'>[]) => {
+    let effectsData: { effect: Enums<'effect_type'>, count: number }[] = []
+  
+    // Generate an array of effects and how many are used since its too complex for supabase..
+    effects.forEach(item1 => {
+      const effectPushed = effectsData.findIndex(item2 => item1 === item2.effect && item2.effect !== null)
+  
+      if (effectsData.length === 0 || effectPushed === -1) {
+        effectsData.push({ effect: item1 as Enums<'effect_type'>, count: 1 })
+        return
+      }
+  
+      effectsData[effectPushed].count = effectsData[effectPushed].count + 1
+      return
+    })
+  
+    return effectsData
+  }
+
+  const transformedData = addCount(effects)
+
+  const effectsWithIcons = transformedData.map((item, index) => {
     let newItem: {
       effect: Enums<'effect_type'>;
       count: number;
@@ -71,7 +89,7 @@ export default function Effects(props: Props) {
     }
   })
 
-  const effectsComponents = transformedEffectsData.map(effect => {
+  const effectsComponents = effectsWithIcons.map(effect => {
     const ammount = effect.count > 1 ? `x${effect.count}` : ``
 
     return (

@@ -1,9 +1,8 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Database, Enums } from '../../../../../types/supabase';
 import Dropdown, { TriggerType } from '@/components/reuseables/Dropdown';
-import generateEffects from '@/lib/utils/generateEffects';
 import Effects from '../../[hardware]/details/[preset]/components/Effects';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faImage } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +11,6 @@ import { User } from '@supabase/supabase-js';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/navigation';
-import EffectsDropdown from './EffectsDropdown';
 
 type Props = {
   user: User;
@@ -25,6 +23,7 @@ type InitialState = {
   youtubeUrl: string;
   hardware: Enums<'hardware_type'>;
   downloadUrl: string;
+  effects: Enums<'effect_type'>[];
 }
 
 const CDNURL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/object/sign/images/"
@@ -37,9 +36,10 @@ export default function Form(props: Props) {
     youtubeUrl: '',
     hardware: 'Keyboard',
     downloadUrl: '',
+    effects: [],
   })
 
-  const [effects, setEffects] = useState<Enums<'effect_type'>[]>([])
+  //const [effects, setEffects] = useState<Enums<'effect_type'>[]>([])
 
   const [coverPhoto, setCoverPhoto] = useState<File | undefined>(undefined)
 
@@ -47,6 +47,8 @@ export default function Form(props: Props) {
 
   const supabase = createClientComponentClient<Database>()
 
+  // useEffect(() => {}, [effects])
+  
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
@@ -79,7 +81,7 @@ export default function Form(props: Props) {
           return alert('There was an error, please try again')
 
         const resData = res.data
-        const transformedData = effects.map(item => ({ effect: item, preset_id: resData.preset_id }))
+        const transformedData = formState.effects.map(item => ({ effect: item, preset_id: resData.preset_id }))
         const { data, error } = await submitEffects(transformedData)
 
         if (data)
@@ -150,11 +152,13 @@ export default function Form(props: Props) {
   }
 
   const addEffect = (effect: Enums<'effect_type'>) => {
-    let prevEffectState = effects
+    let prevEffectState = formState.effects
     prevEffectState.push(effect)
 
-    console.log(effect)
-    setEffects(prevEffectState)
+    return setState((prevState) => ({
+      ...prevState,
+      effects: prevEffectState
+    }))
   }
 
   const setHardware = (hardware: Enums<'hardware_type'>) => setState((prevState) => ({
@@ -165,13 +169,16 @@ export default function Form(props: Props) {
   const removeCoverPhoto = (e: any) => setCoverPhoto(undefined)
 
   const removeEffect = (effect: Enums<'effect_type'>) => {
-    let prevEffectState = effects
+    let prevEffectState = formState.effects
     const index = prevEffectState.indexOf(effect)
 
     if (index !== -1) prevEffectState.splice(index, 1)
     if (index === -1) return
 
-    setEffects(prevEffectState)
+    return setState((prevState) => ({
+      ...prevState,
+      effects: prevEffectState
+    }))
   }
 
   const hardwareDropdownItems: {
@@ -195,7 +202,6 @@ export default function Form(props: Props) {
         onClickFunc: () => setHardware("Mouse")
       },
     ]
-  const transformedEffectData = generateEffects(effects)
 
   const effectDropdownItems: {
     label: Enums<'effect_type'>,
@@ -330,9 +336,9 @@ export default function Form(props: Props) {
           trigger={TriggerType.Text}
           triggerLable='Add an effect'
         />
-        {effects.length > 0 && <Effects
+        {formState.effects.length > 0 && <Effects
           removeEffect={removeEffect}
-          effects={transformedEffectData}
+          effects={formState.effects}
           title={false}
         />}
       </div>

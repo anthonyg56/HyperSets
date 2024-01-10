@@ -23,7 +23,7 @@ export default async function page(props: Props) {
 
   const presetQuery = supabase
     .from('presets')
-    .select('*,effects(*),downloads(*)')
+    .select('*,effects(effect),downloads(*)')
     .eq('preset_id', presetId)
     .eq('downloads.preset_id', presetId)
     .eq('effects.preset_id', presetId)
@@ -53,20 +53,10 @@ export default async function page(props: Props) {
     effects,
   } = preset
 
-  let effectsData: { effect: Enums<'effect_type'>, count: number }[] = []
+  let effectsData: Enums<'effect_type'>[] = []
 
   // Generate an array of effects and how many are used since its too complex for supabase..
-  effects.forEach(item => {
-    const effectPushed = effectsData.findIndex((item2) => item2.effect === item.effect && item2.effect !== null)
-
-    if (effectsData.length === 0 || effectPushed === -1) {
-      effectsData.push({ effect: item.effect as Enums<'effect_type'>, count: 1 })
-      return
-    }
-
-    effectsData[effectPushed].count = effectsData[effectPushed].count + 1
-    return
-  })
+  effects.forEach(item => item.effect && effectsData.push(item.effect))
 
   let profileId = null
 
