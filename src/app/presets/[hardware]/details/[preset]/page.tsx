@@ -55,7 +55,6 @@ export default async function page(props: Props) {
 
   let effectsData: Enums<'effect_type'>[] = []
 
-  // Generate an array of effects and how many are used since its too complex for supabase..
   effects.forEach(item => item.effect && effectsData.push(item.effect))
 
   let profileId = null
