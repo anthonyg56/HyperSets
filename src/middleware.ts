@@ -9,7 +9,8 @@ export default async function middleware(req: NextRequest) {
   const supabase = createMiddlewareClient<Database>({ req, res })
 
   const {data: { session }, error } = await supabase.auth.getSession()
-  console.log(`middleware: \n data: ${session} \n error: ${error}`)
+
+  //console.log(`middleware: \n data: ${session} \n error: ${error}`)
   return res
 }
 

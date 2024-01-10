@@ -32,18 +32,13 @@ export default async function Page(props: Props) {
 
   if (userId !== session.user.id) redirect(`/auth/${userId}/settings/account/${userProp}}`)
 
-  const profileName = {
-    first_name: profile.first_name,
-    last_name: profile.last_name
-  }
-
   return (
     <div>
       {
         userProp === "email" ?
           <ChangeEmail userId={userId} session={session} /> :
           userProp === "name" ?
-            <ChangeName userId={userId} profileName={profileName} /> :
+            <ChangeName userId={userId} profileName={profile.name} /> :
             userProp === "password" ?
               <ChangePassword userId={userId} /> :
               redirect(`/auth/${profile.profile_id}/settings/account}`)

@@ -1,7 +1,7 @@
 import supabase from '@/lib/supabase';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import React, { useContext } from 'react'
+import React from 'react'
 import Avatar from './components/avatar';
 import SettingsList from './components/SettingsList';
 
@@ -26,7 +26,7 @@ export default async function page(props: Props) {
 
   return (
     <div className='container pt-[120px] flex flex-col items-center'>
-      <Avatar userId={user.id} />
+      <Avatar userId={user.id} editMode={true} />
       <SettingsList userId={user.id} />
       <Link href={`/auth/${user.id}/settings`} className='text-sm text-center button-auto w-full mt-[30px]'>Go Back To Settings</Link>
     </div>

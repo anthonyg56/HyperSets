@@ -12,6 +12,7 @@ import { User } from '@supabase/supabase-js';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/navigation';
+import EffectsDropdown from './EffectsDropdown';
 
 type Props = {
   user: User;
@@ -58,20 +59,20 @@ export default function Form(props: Props) {
       hardware: Enums<'hardware_type'>;
       downloadUrl: string;
       photoUrl?: string | undefined;
-    }  = formState
+    } = formState
 
     if (coverPhoto) {
       const coverPhotoRes = await submitCoverPhoto(coverPhoto, user.id as string)
 
       if (coverPhotoRes.error && coverPhotoRes.data === null) {
         console.log(coverPhotoRes.error)
-        alert ('There was an error, please try again')
+        alert('There was an error, please try again')
         return
       }
 
       tmpState.photoUrl = CDNURL + coverPhotoRes.data?.path
     }
-      
+
     await submitPreset(tmpState, profileId)
       .then(async (res) => {
         if (res.data === null)
@@ -79,7 +80,7 @@ export default function Form(props: Props) {
 
         const resData = res.data
         const transformedData = effects.map(item => ({ effect: item, preset_id: resData.preset_id }))
-        const {data, error} = await submitEffects(transformedData)
+        const { data, error } = await submitEffects(transformedData)
 
         if (data)
           return alert('There was an error, please try again')
@@ -128,7 +129,7 @@ export default function Form(props: Props) {
     const { data, error } = await supabase
       .from('effects')
       .insert(effects)
-    
+
     return { data, error }
   }
 
@@ -152,6 +153,7 @@ export default function Form(props: Props) {
     let prevEffectState = effects
     prevEffectState.push(effect)
 
+    console.log(effect)
     setEffects(prevEffectState)
   }
 
@@ -172,6 +174,27 @@ export default function Form(props: Props) {
     setEffects(prevEffectState)
   }
 
+  const hardwareDropdownItems: {
+    label: Enums<'hardware_type'>,
+    onClickFunc: () => void
+  }[] = [
+      {
+        label: "Headset",
+        onClickFunc: () => setHardware("Headset")
+      },
+      {
+        label: "Keyboard",
+        onClickFunc: () => setHardware("Keyboard")
+      },
+      {
+        label: "Microphone",
+        onClickFunc: () => setHardware("Microphone")
+      },
+      {
+        label: "Mouse",
+        onClickFunc: () => setHardware("Mouse")
+      },
+    ]
   const transformedEffectData = generateEffects(effects)
 
   const effectDropdownItems: {
@@ -216,35 +239,13 @@ export default function Form(props: Props) {
       }
     ]
 
-  const hardwareDropdownItems: {
-    label: Enums<'hardware_type'>,
-    onClickFunc: () => void
-  }[] = [
-      {
-        label: "Headset",
-        onClickFunc: () => setHardware("Headset")
-      },
-      {
-        label: "Keyboard",
-        onClickFunc: () => setHardware("Keyboard")
-      },
-      {
-        label: "Microphone",
-        onClickFunc: () => setHardware("Microphone")
-      },
-      {
-        label: "Mouse",
-        onClickFunc: () => setHardware("Mouse")
-      },
-    ]
-
   return (
     <form action={handleSubmit}>
       <div>
         <div>
           <h4 className='label-text pb-1'>Cover Photo</h4>
         </div>
-        
+
         <div className='flex flex-row gap-[20px] pb-[22px]'>
           {!coverPhoto ? (
             <div className='min-w-[100px] h-[100px] bg-hyper-grey rounded-[5px] flex justify-center items-center'>
@@ -263,14 +264,14 @@ export default function Form(props: Props) {
               <label htmlFor="coverPhoto" className='border-[1px] border-hyper-red rounded-md px-5 py-[6px]'>
                 {coverPhoto ? 'Change File' : 'Choose File'}
                 <input
-                type="file"
-                id="coverPhoto"
-                name='coverPhoto'
-                value={formState.name}
-                onChange={uploadCoverPhoto}
-                placeholder='My Awesome Preset'
-                className='hidden !w-[0.1] h-[0.1] opacity-0 absolute -z-10'
-              />
+                  type="file"
+                  id="coverPhoto"
+                  name='coverPhoto'
+                  value={formState.name}
+                  onChange={uploadCoverPhoto}
+                  placeholder='My Awesome Preset'
+                  className='hidden !w-[0.1] h-[0.1] opacity-0 absolute -z-10'
+                />
               </label>
 
             </div>
@@ -301,10 +302,10 @@ export default function Form(props: Props) {
       </div>
 
       <div className='input-container'>
-        <label htmlFor="youtubeLink" className='label-text'>Youtube Link*</label>
+        <label htmlFor="youtubeUrl" className='label-text'>Youtube Link*</label>
         <input
           type="text"
-          name='youtubeLink'
+          name='youtubeUrl'
           value={formState.youtubeUrl}
           onChange={handleChange}
           placeholder='Copy and paste the url here'
@@ -335,7 +336,7 @@ export default function Form(props: Props) {
           title={false}
         />}
       </div>
-
+      
       <div className='input-container'>
         <label htmlFor="" className='label-text'>Hardware*:</label>
         <Dropdown

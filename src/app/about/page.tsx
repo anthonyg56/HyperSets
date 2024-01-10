@@ -1,6 +1,8 @@
+import Toast from '@/components/reuseables/toast/Toast'
 import React from 'react'
 
 export default function page() {
+
   return (
     <div >
       <div className='pt-[60px]'>

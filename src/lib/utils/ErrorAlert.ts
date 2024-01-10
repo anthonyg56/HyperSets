@@ -11,7 +11,8 @@ import React from 'react'
 export default function(error: any, data: any, text: string, callback?: () => boolean) {
   if (error || !data) {
     alert('There was an error, please try agin')
-    console.log(`${text}: \n\n ${error}`)
+    console.log(`${text}: \n\n`)
+    console.log(error)
     return true
   }
 }

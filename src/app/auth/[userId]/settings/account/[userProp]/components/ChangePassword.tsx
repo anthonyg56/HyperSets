@@ -1,5 +1,4 @@
 import Title from '@/components/reuseables/Title';
-import supabase from '@/lib/supabase';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import React from 'react'

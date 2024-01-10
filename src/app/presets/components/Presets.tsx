@@ -3,7 +3,6 @@ import { faStar, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PresetTile from './PresetTile'
 import { Enums, Tables } from '../../../../types/supabase'
-import { getMaxListeners } from 'events'
 
 type Props = {
   table: 'downloads' | 'presets'; 

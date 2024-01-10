@@ -1,8 +1,10 @@
 "use state"
 
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PasswordRequirements from '@/components/reuseables/PasswordRequirements';
+import Toast from '@/components/reuseables/toast/Toast';
+import { validate, validateAll, validatePassword } from '@/lib/utils/validate';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import clsx from 'clsx';
 import Link from 'next/link';
 import React, { useState } from 'react'
 
@@ -15,17 +17,21 @@ export default function ResetPasswordForm(props: Props) {
     password: "",
     confirmPassword: ""
   })
-  const [invalid, setInvalid] = useState<boolean>(false)
+  const [toastState, setToast] = useState({
+    description: "",
+    isOpen: false,
+  })
   const supabase = createClientComponentClient()
   
   const { setSubmitted } = props
 
-  const resetPassword = async (email: string) => {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email)
+  // const resetPassword = async (email: string) => {
+  //   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+  //     redirectTo: `${baseURL}/auth/forgot/new`
+  //   })
 
-    return { data, error }
-  }
-  
+  //   return { data, error }
+  // }
 
   const handleChange = (e: any) => {
     const { name, value } = e.target
@@ -37,51 +43,35 @@ export default function ResetPasswordForm(props: Props) {
   }
 
   const handleSubmit = async (e: any) => {
-    const isNotValid =
-      !validate.isEightCharacters() ||
-      !validate.hasUppercase() ||
-      !validate.hasNumbers() ||
-      !validate.hasSpecialCharacter() ||
-      !validate.hasLowerCase() ||
-      !validate.passwordMatch()
+    const notFilled = validateAll(userState.password, userState.confirmPassword)
 
-    if (isNotValid) {
-      setInvalid(false)
+    if (!notFilled) {
+      setToast({
+        description: "Please fill out all the required fields",
+        isOpen: true
+      })
+      return
     }
 
-    const { data, error} = await resetPassword(userState.password)
+    const { data: { user }, error} = await supabase.auth.updateUser({
+      password: userState.password
+    })
 
-    if (error || !data) {
-      alert('There was an error, please try agin')
-      console.log(`Resetting password for a user who forgot error: \n\n ${error}`)
+    if (error || !user) {
+      setToast({
+        description: "There was an error, please try again",
+        isOpen: true
+      })
       return
     }
 
     setSubmitted(true)
   }
 
-  const validate = {
-    isEightCharacters: () => {
-      return userState.password.length >= 8;
-    },
-    hasUppercase: () => {
-      return /[A-Z]/.test(userState.password);
-    },
-    hasNumbers: () => {
-      var regex = /\d/g;
-      return regex.test(userState.password);
-    },
-    hasSpecialCharacter: () => {
-      const regex = /[ -/:-@[-`{-~]/;
-      return regex.test(userState.password);
-    },
-    hasLowerCase: () => {
-      return userState.password.toUpperCase() !== userState.password;
-    },
-    passwordMatch: () => {
-      return userState.password === userState.confirmPassword && userState.password.length > 0 && userState.confirmPassword.length
-    }
-  }
+  const handleToast = (open: boolean) => setToast((prevState) => ({
+    ...prevState,
+    isOpen: open
+  }))
 
   return (
     <form action={handleSubmit}>
@@ -93,12 +83,10 @@ export default function ResetPasswordForm(props: Props) {
           value={userState.password}
           onChange={handleChange}
           placeholder='********'
-          className={`${invalid === true && !validate.isEightCharacters() ||
-            !validate.hasUppercase() ||
-            !validate.hasNumbers() ||
-            !validate.hasSpecialCharacter() ||
-            !validate.hasLowerCase() && 'border-hyper-red outline-none'
-            }`}
+          className={clsx(
+            validatePassword(userState.password) && 'active:border-hyper-green !border-hyper-green outline-none border-[1px]',
+            userState.password.length > 0 && !validatePassword(userState.password) && 'active:border-hyper-red !border-hyper-red outline-none'
+          )}
         />
       </div>
 
@@ -110,38 +98,14 @@ export default function ResetPasswordForm(props: Props) {
           value={userState.confirmPassword}
           onChange={handleChange}
           placeholder='********'
-          className={`${invalid === true && !validate.passwordMatch() && 'border-hyper-red outline-none'}`}
-          onClick={(e) => setInvalid(false)}
+          className={clsx(
+            validate.passwordMatch(userState.password, userState.confirmPassword) && 'active:border-hyper-green !border-hyper-green outline-none border-[1px]',
+            userState.confirmPassword.length > 0 && !validate.passwordMatch(userState.password, userState.confirmPassword) && 'active:border-hyper-red border-hyper-red outline-none',
+          )}
         />
       </div>
 
-      <div>
-        <div className='flex flex-row pb-2 items-center'>
-          <FontAwesomeIcon icon={faCircleCheck} className={`${validate.isEightCharacters() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
-          <h4 className='sub-text-xs pl-1'>Must be at least 8 characters </h4>
-        </div>
-        <div className='flex flex-row pb-2 items-center'>
-          <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasUppercase() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
-          <h4 className='sub-text-xs pl-1'>Must contain at least one uppercase character</h4>
-        </div>
-        <div className='flex flex-row pb-2 items-center'>
-          <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasSpecialCharacter() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
-          <h4 className='sub-text-xs pl-1'>Must contain one special characters</h4>
-        </div>
-        <div className='flex flex-row pb-2 items-center'>
-          <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasNumbers() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
-          <h4 className='sub-text-xs pl-1'>Must contain one number</h4>
-        </div>
-        <div className='flex flex-row items-center pb-2'>
-          <FontAwesomeIcon icon={faCircleCheck} className={`${validate.hasLowerCase() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
-          <h4 className='sub-text-xs pl-1'>Must contain one lowercase character</h4>
-        </div>
-        <div className='flex flex-row items-center pb-2'>
-          <FontAwesomeIcon icon={faCircleCheck} className={`${validate.passwordMatch() ? "text-hyper-red" : "text-hyper-dark-grey"}`} />
-          <h4 className='sub-text-xs pl-1'>Passwords Match</h4>
-        </div>
-      </div>
-
+      <PasswordRequirements password={userState.password} confirmPassword={userState.confirmPassword} />
 
       <div className='flex flex-col'>
         <button className='button-auto text-sm'>Reset Password</button>
@@ -152,6 +116,13 @@ export default function ResetPasswordForm(props: Props) {
           Already have an account? <Link href={'/auth/login'} className='text-hyper-red'>Login Here!</Link>
         </h5>
       </div>
+
+      <Toast
+        title='Error'
+        description={toastState.description}
+        open={toastState.isOpen}
+        setOpen={handleToast}
+      />
     </form>
   )
 }

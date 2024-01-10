@@ -7,6 +7,7 @@ import { Enums } from '../../../../../../types/supabase'
 import Hardware from './components/Hardware'
 import LikesAndDownloads from './components/LikesAndDownloads'
 import YoutubePlayer from './components/YoutubePlayer'
+import DownloadButton from './components/DownloadButton'
 
 type Props = {
   params: {
@@ -32,8 +33,6 @@ export default async function page(props: Props) {
   type Presets = QueryData<typeof presetQuery>
 
   const { data, error } = await presetQuery
-
-  console.log(data)
 
   if (error) throw error
 
@@ -69,6 +68,20 @@ export default async function page(props: Props) {
     return
   })
 
+  let profileId = null
+
+  if (user) {
+    const { data } = await supabase
+      .from('profile')
+      .select('profile_id')
+      .eq('user_id', user.id)
+      .limit(1)
+      .single()
+    
+    if (data)
+      profileId = data.profile_id
+  }
+
   return (
     <div className='pt-[60px]' >
       <div>
@@ -82,11 +95,7 @@ export default async function page(props: Props) {
         <Hardware hardware={hardware} />
         <LikesAndDownloads downloads={downloads} userId={user?.id as string} />
 
-        <div className='text-center'>
-          <button className='button-auto'>
-            <a href={download_url}>Download</a>
-          </button>
-        </div>
+        <DownloadButton downloadUrl={download_url} presetId={preset_id} profileId={profileId}/>
       </div>
     </div>
   )

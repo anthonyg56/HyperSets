@@ -1,4 +1,3 @@
-import supabase from '@/lib/supabase'
 import { Session } from '@supabase/supabase-js'
 import React from 'react'
 import ChangeEmailForm from './ChangeEmailForm\'';
@@ -13,7 +12,6 @@ type Props = {
 
 export default function ChangeEmail(props: Props) {
   const { session, userId } = props
-  
   return (
     <div className='container pt-[120px] text-center'>
       <Title title='Change Email' sub='New Email? Enter and we will confirm it' icon={faAt} padding='pb-[22px]' />

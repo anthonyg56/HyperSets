@@ -11,19 +11,19 @@ export interface Database {
     Tables: {
       downloads: {
         Row: {
-          created_on: string
+          created_on: string | null
           preset_id: number
-          profile_id: number
+          profile_id: number | null
         }
         Insert: {
-          created_on: string
+          created_on?: string | null
           preset_id: number
-          profile_id: number
+          profile_id?: number | null
         }
         Update: {
-          created_on?: string
+          created_on?: string | null
           preset_id?: number
-          profile_id?: number
+          profile_id?: number | null
         }
         Relationships: [
           {
@@ -117,9 +117,8 @@ export interface Database {
           avatar: string | null
           created_on: string | null
           email: string | null
-          first_name: string | null
           last_logon: string | null
-          last_name: string | null
+          name: string | null
           profile_id: number
           user_id: string | null
           username: string | null
@@ -128,9 +127,8 @@ export interface Database {
           avatar?: string | null
           created_on?: string | null
           email?: string | null
-          first_name?: string | null
           last_logon?: string | null
-          last_name?: string | null
+          name?: string | null
           profile_id?: number
           user_id?: string | null
           username?: string | null
@@ -139,9 +137,8 @@ export interface Database {
           avatar?: string | null
           created_on?: string | null
           email?: string | null
-          first_name?: string | null
           last_logon?: string | null
-          last_name?: string | null
+          name?: string | null
           profile_id?: number
           user_id?: string | null
           username?: string | null

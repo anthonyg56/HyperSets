@@ -1,29 +1,32 @@
 "use client"
 
 import { Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import React, { useState } from 'react'
-import ErrorAlert from '@/lib/utils/ErrorAlert';
+import Toast from '@/components/reuseables/toast/Toast';
+import GoogleButton from './GoogleButton';
 
 type Props = {
   session: Session | null;
 }
 
 export default function LoginForm(props: Props) {
+  const { session } = props
   const [userState, setState] = useState({
     email: "",
     password: "",
     rememberUser: false
   })
-  
-  const { session } = props
-
+  const [toastState, setToast] = useState({
+    open: false,
+    description: "There was an error, please try again", // Will change if a user trys to sign in but there is no account
+    login: false
+  })
   const router = useRouter()
-
   const supabase = createClientComponentClient()
   
-  if (session) redirect(`/auth/${session.user.id}/settings`)
+  if (session) router.push(`/auth/${session.user.id}/settings`)
   
   const handleChange = (e: any) => {
     const { name, value } = e.target
@@ -48,11 +51,23 @@ export default function LoginForm(props: Props) {
     })
 
     if (error || !data) {
-      ErrorAlert(error,data,'Sign in Error')
+      // ErrorAlert(error,data,'Sign in Error') <- For Dev
+      setToast((prevState) => ({
+        ...prevState,
+        open: true,
+        description: "Invalid login credentials"
+      }))
       return
     } 
     
     router.refresh()
+  }
+
+  const setToastOpen = (open: boolean, message?: string) => {
+    setToast((prevState) => ({
+      ...prevState,
+      open
+    }))
   }
 
   return (
@@ -92,10 +107,19 @@ export default function LoginForm(props: Props) {
 
       <div className='flex flex-col'>
         <button className='button-auto text-sm'>Sign In</button>
-        <button className='flex flex-row justify-center items-center mt-[11px] mb-[15px] border-[##C4C4C4] rounded-xl py-[7px] border-[2px] text-sm font-medium tracking-wide'>
-          <img className="pr-1" src="/Assets/gmail.png" alt="sign in with good" height={30} width={30} /> Sign In With Google
-        </button>
+        <GoogleButton setToastOpen={setToastOpen}/>
       </div>
+
+      <Toast 
+        description={toastState.description}
+        title='Error'
+        open={toastState.open}
+        setOpen={setToastOpen}
+        action={toastState.login ? {
+          text: "Login",
+          fn: (e: any) => router.push('/auth/login')
+        } : undefined}
+      />
     </form>
   )
 }

@@ -1,5 +1,7 @@
 import React from 'react'
 import HardwareTile from './components/HardwareTile'
+import supabase from '@/lib/supabase'
+import CreateAPresetTile from './components/CreateAPresetTile'
 
 const hardware = {
   keyboard: {
@@ -54,7 +56,8 @@ const hardware = {
   }
 }
 
-export default function page() {
+export default async function page() {
+  const {data: {session}, error} = await supabase.auth.getSession()
 
   return (
     <div className='container pt-[120px]'>
@@ -87,12 +90,7 @@ export default function page() {
         photo={hardware.headset.photo}
         name='Cloud Alpha II'
       />
-      <HardwareTile
-        url='/presets/new'
-        gradient={hardware.new.gradient}
-        photo={hardware.new.photo}
-        name='Create a Preset'
-      />
+      <CreateAPresetTile session={session} />
     </div>
   )
 }

@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Enums } from '../../../types/supabase';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 export enum TriggerType {
@@ -44,19 +43,17 @@ export default function Dropdown(props: Props) {
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content side='bottom' className='bg-hyper-white border-2 border-[##C4C4C4] rounded-md'>
+        <DropdownMenu.Content className='bg-hyper-white border-2 border-[##C4C4C4] rounded-md'>
           <DropdownMenu.Group >
             { items.map(item => (
-              <div>
                 <DropdownMenu.Item 
                   onSelect={item.onClickFunc}
                   className='px-3'
                 >
                   <p className='py-[10px]  text-hyper-dark-grey'>{item.label}</p>
-                  
+                  <DropdownMenu.Separator className='bg-[#C4C4C4] w-[100%] h-[1px] mx-auto'/>
                 </DropdownMenu.Item>     
-                <DropdownMenu.Separator className='bg-[#C4C4C4] w-[100%] h-[1px] mx-auto'/>    
-              </div>
+                
             ))}
           </DropdownMenu.Group>
 
