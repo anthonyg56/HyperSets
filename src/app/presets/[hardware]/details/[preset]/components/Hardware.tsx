@@ -9,7 +9,7 @@ export default function Hardware(props: Props) {
   const { hardware } = props
   return (
     <div className='text-center pb-[20x]'>
-      <h2 className='title-xl pb-1'>Supported hardware</h2>
+      <h2 className='title-xl pb-3'>Supported hardware</h2>
       {hardware === "Keyboard" && (
         <div className='pb-[10px]'>
           <h3 className='title-sm pb-1'>Keyboards</h3>

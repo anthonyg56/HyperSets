@@ -5,6 +5,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import clsx, { ClassValue } from 'clsx';
 
 export enum TriggerType {
   'Text',
@@ -12,6 +13,7 @@ export enum TriggerType {
 } 
 
 type Props = {
+  lableClsx?: ClassValue[];
   trigger: TriggerType,
   triggerIcon?: IconProp;
   triggerLable?: string,
@@ -22,23 +24,30 @@ type Props = {
 }
 
 export default function Dropdown(props: Props) {
-  const { items, trigger, triggerIcon, triggerLable, } = props
+  const { items, trigger, triggerIcon, triggerLable, lableClsx } = props
   const [isOpen,setOpen] = useState(false)
 
   console.log(isOpen)
 
   const handleOpen = (e: any) => setOpen(!isOpen)
 
+  let lableClass = lableClsx ? lableClsx : []
+  lableClass.push('DropdownMenuTrigger flex label-text w-full text-hyper-grey font-normal text-left border-[##C4C4C4] rounded-lg border-[2px] py-[9px] pl-[6px]')
+
   const label = (
-    <div onClick={handleOpen} className='DropdownMenuTrigger flex label-text w-full text-hyper-grey font-normal text-left border-[##C4C4C4] rounded-lg border-[2px] py-[9px] pl-[6px]'>
+    <div onClick={handleOpen} className={clsx(lableClass)}>
       {triggerLable}
       <FontAwesomeIcon icon={faChevronDown} width={16} height={16} className={`dropdown-icon ml-auto my-auto mr-1 ${isOpen ? 'rotate-[180deg]' : ''}`}/>
     </div>
   )
 
+
+
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger className={`${label ? 'w-full' : ''}`}  >
+      <DropdownMenu.Trigger className={clsx([
+        label && 'w-full',
+      ])}  >
         {trigger === TriggerType.Icon && triggerIcon ? <FontAwesomeIcon icon={triggerIcon} /> : label}
       </DropdownMenu.Trigger>
 

@@ -16,7 +16,7 @@ export default function YoutubePlayer(props: Props) {
 
   return (
     <div>
-      {youtubeUrl && youtubeUrl.length > 0 && <div className='pb-[50px]'>
+      {youtubeUrl && youtubeUrl.length > 0 && <div className='pb-[25px]'>
         <iframe
           className="w-full h-[200px] rounded-lg"
           width="0"

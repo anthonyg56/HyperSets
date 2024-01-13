@@ -23,6 +23,10 @@ export const validate = {
 
 export const validateEmail = (email: string) => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)
 
+export const validateYoutubeURL = (url: string) => /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\/)?(?:(?:watch|embed)(?:\?v=|\/)?|list=(?:\w+&)?)([\w\-]+))(?:\S+)?$/.test(url)
+
+export const validateDownloadURL = (url: string) => /^(https:\/\/)?(www\.)?(dropbox\.com|drive\.google\.com|onedrive\.live\.com)\/[^\s]+$/.test(url)
+
 export const validatePassword = (password: string) => 
   validate.isEightCharacters(password) &&
   validate.hasUppercase(password) &&

@@ -41,7 +41,7 @@ export default function LikesAndDownloads(props: Props) {
   const isDownload = downloads.findIndex(item => item.profile_id === profileId)
 
   return (
-    <div className='flex flex-row gap-3 justify-center pt-3 pb-[5px]'>
+    <div className='flex flex-row gap-3 justify-center pt-4 pb-[5px]'>
       {/* <div className='flex flex-row items-center gap-1'>
         <FontAwesomeIcon icon={faHeart} className={`w-[20px] h-[20px] ${isLiked === -1 ? 'text-hyper-dark-grey' : 'text-hyper-red' }`} />
         <h4>{likes.length} likes</h4>

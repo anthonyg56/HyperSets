@@ -8,6 +8,8 @@ import Hardware from './components/Hardware'
 import LikesAndDownloads from './components/LikesAndDownloads'
 import YoutubePlayer from './components/YoutubePlayer'
 import DownloadButton from './components/DownloadButton'
+import DeleteButton from './components/DeleteButton'
+import EditButton from './components/EditButton'
 
 type Props = {
   params: {
@@ -18,7 +20,6 @@ type Props = {
 
 export default async function page(props: Props) {
   const { preset: presetId } = props.params
-
   const { data: { user } } = await supabase.auth.getUser()
 
   const presetQuery = supabase
@@ -48,7 +49,7 @@ export default async function page(props: Props) {
     last_updated_on,
     photo_url,
     preset_id,
-    profile_id,
+    profile_id: preset_profile_id,
     youtube_url,
     effects,
   } = preset
@@ -57,18 +58,19 @@ export default async function page(props: Props) {
 
   effects.forEach(item => item.effect && effectsData.push(item.effect))
 
-  let profileId = null
+  let profileId: number | null = null
 
   if (user) {
     const { data } = await supabase
       .from('profile')
-      .select('profile_id')
+      .select('profile_id,user_id')
       .eq('user_id', user.id)
       .limit(1)
       .single()
     
-    if (data)
+    if (data) {
       profileId = data.profile_id
+    }
   }
 
   return (
@@ -77,15 +79,21 @@ export default async function page(props: Props) {
         <img src={photo_url !== null && photo_url.length ? photo_url : "https://www.msi-viking.com/sca-dev-2023-1-0/img/no_image_available.jpeg"} alt={'Preset cover photo'} />
       </div>
 
-      <div className={`container pb-[50px] ${youtube_url && youtube_url.length > 0 ? 'translate-y-[-100px]' : 'pt-[25px]'}`}>
+      <div className={`container pb-[50px]`}>
+        <Title title={name} sub={description} padding={'pb-[25px] pt-[25px]'} />
         <YoutubePlayer youtubeUrl={youtube_url} />
-        <Title title={name} sub={description} padding={'pb-[25px]'} />
         <Effects effects={effectsData} title={true} />
         <Hardware hardware={hardware} />
         <LikesAndDownloads downloads={downloads} userId={user?.id as string} />
 
         <DownloadButton downloadUrl={download_url} presetId={preset_id} profileId={profileId}/>
+        {user && profileId && profileId === preset_profile_id && <div className='flex flex-row w-full gap-2 pt-[25px]'>
+        <DeleteButton presetId={preset_id} presetProfileId={preset_profile_id} userProfileId={profileId as number} />
+        <EditButton presetId={preset_id} hardware={hardware} />
+      </div>}
       </div>
+
+
     </div>
   )
 }

@@ -26,9 +26,9 @@ export default function DownloadButton(props: Props) {
 
   return (
     <div className='text-center'>
-    <button className='button-auto' onClick={addDownload}>
-      <a href={downloadUrl}>Download</a>
-    </button>
-  </div>
+      <button className='button-auto w-full' onClick={addDownload}>
+        <a href={downloadUrl}>Download</a>
+      </button>
+    </div>
   )
 }
