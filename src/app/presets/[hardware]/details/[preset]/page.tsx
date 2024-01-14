@@ -24,7 +24,7 @@ export default async function page(props: Props) {
 
   const presetQuery = supabase
     .from('presets')
-    .select('*,effects(effect),downloads(*)')
+    .select('*,effects(*),downloads(*)')
     .eq('preset_id', presetId)
     .eq('downloads.preset_id', presetId)
     .eq('effects.preset_id', presetId)
@@ -54,22 +54,18 @@ export default async function page(props: Props) {
     effects,
   } = preset
 
-  let effectsData: Enums<'effect_type'>[] = []
-
-  effects.forEach(item => item.effect && effectsData.push(item.effect))
-
   let profileId: number | null = null
 
   if (user) {
-    const { data } = await supabase
+    const { data: profile } = await supabase
       .from('profile')
       .select('profile_id,user_id')
       .eq('user_id', user.id)
       .limit(1)
       .single()
     
-    if (data) {
-      profileId = data.profile_id
+    if (profile) {
+      profileId = profile.profile_id
     }
   }
 
@@ -82,7 +78,7 @@ export default async function page(props: Props) {
       <div className={`container pb-[50px]`}>
         <Title title={name} sub={description} padding={'pb-[25px] pt-[25px]'} />
         <YoutubePlayer youtubeUrl={youtube_url} />
-        <Effects effects={effectsData} title={true} />
+        <Effects effects={effects} title={true} />
         <Hardware hardware={hardware} />
         <LikesAndDownloads downloads={downloads} userId={user?.id as string} />
 

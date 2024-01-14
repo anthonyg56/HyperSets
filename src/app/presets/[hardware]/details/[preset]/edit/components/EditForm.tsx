@@ -1,5 +1,5 @@
 "use client"
-import { PresetFormData } from '@/app/presets/new/page'
+
 import Dropdown, { TriggerType } from '@/components/reuseables/Dropdown'
 import { faImage, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -19,28 +19,38 @@ type InitialState = {
   youtubeUrl: string;
   hardware: Enums<'hardware_type'>;
   downloadUrl: string;
-  effects: Enums<'effect_type'>[];
   coverPhotoUrl: string | null;
+}
+
+type InitalEffectsState = {
+  current: Partial<Tables<'effects'>>[];
+  added: Omit<Tables<'effects'>, 'effect_id'>[];
+  removed: Tables<'effects'>[];
 }
 
 type Props = {
   preset: Tables<'presets'>
   hardware: string;
-  effects: Enums<'effect_type'>[];
+  effects: Tables<'effects'>[];
+  userId: string;
 }
 
 const CDNURL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/object/sign/images/"
 
 export default function Form(props: Props) {
-  const { effects, hardware, preset } = props
+  const { effects, hardware, preset, userId } = props
   const [formState, setState] = useState<InitialState>({
     name: '',
     description: '',
     youtubeUrl: '',
     hardware: 'Keyboard',
     downloadUrl: '',
-    effects: [],
     coverPhotoUrl: ''
+  })
+  const [effectsState, setEffects] = useState<InitalEffectsState>({
+    current: [],
+    added: [],
+    removed: []
   })
   const [toastState, setToast] = useState({
     isOpen: false,
@@ -55,14 +65,18 @@ export default function Form(props: Props) {
 
   useEffect(() => {
     function setData() {
-      setState((prevState) => ({
+      setState({
         name: preset.name,
         description: preset.description,
         downloadUrl: preset.download_url,
         hardware: preset.hardware,
         youtubeUrl: preset.youtube_url ? preset.youtube_url : "",
         coverPhotoUrl: preset.photo_url,
-        effects: effects
+      })
+
+      setEffects((prevState) => ({
+        ...prevState,
+        current: props.effects
       }))
     }
 
@@ -142,44 +156,68 @@ export default function Form(props: Props) {
   // }
 
   const handleUpdate = async (e: any) => {
+    let tmpData: Partial<Tables<'presets'>> = {}
 
-  
-  }
+    if (preset.name !== formState.name && formState.name.length > 7) { tmpData.name = formState.name }
+    if (preset.description !== formState.description && formState.description.length > 7) { tmpData.description = formState.description }
+    if (preset.youtube_url !== formState.youtubeUrl && validateYoutubeURL(formState.youtubeUrl)) { tmpData.youtube_url = formState.youtubeUrl }
+    if (preset.download_url !== formState.downloadUrl && validateDownloadURL(formState.downloadUrl)) { tmpData.download_url = formState.downloadUrl }
+    if (preset.hardware !== formState.hardware) { tmpData.hardware = formState.hardware}
 
-  const submitCoverPhoto = async (coverPhoto: File, user_id: string) => {
-    const { data, error } = await supabase
-      .storage
-      .from('images')
-      .upload(`${user_id}/${uuidv4()}`, coverPhoto, {
-        cacheControl: '3600',
-        upsert: false
-      })
+    if (tmpCoverPhoto) {
+      const { data: photo, error: photoError } = await supabase
+        .storage
+        .from('images')
+        .upload(`${userId}/${uuidv4()}`, tmpCoverPhoto, {
+          cacheControl: '3600',
+          upsert: false
+        })
 
-    return { data, error }
-  }
 
-  const updateCoverPhoto = async (coverPhoto: File, user_id: string) => {
+      if (photoError && photo === null) {
+        console.log(photoError)
+        setToast({
+          isOpen: true,
+          description: "There was an error, please try again"
+        })
+        return
+      }
 
-  }
+      tmpData.photo_url = CDNURL + photo.path
+    }
 
-  const updatePreset = async (formData: PresetFormData, profileId: number | undefined) => {
-    const { data, error } = await supabase
+    const { data: presetData, error: presetError } = await supabase
       .from('presets')
-      .update({
-        name: formState.name,
-        description: formState.description,
-        download_url: formState.downloadUrl,
-        hardware: formState.hardware as Enums<'hardware_type'>,
-        profile_id: profileId as number,
-        youtube_url: formState.youtubeUrl,
-        photo_url: formState.coverPhotoUrl
-      })
-      .eq('some_column', 'someValue')
+      .update(tmpData)
+      .eq('reset_id', preset.preset_id)
       .select()
-  }
+      .limit(1)
+      .single()
+    
+    if (!presetData || presetError) return setToast((prevState) => ({
+      ...prevState,
+      isOpen: true,
+      description: "There was an error uploading your preset. Please try again"
+    }))
 
-  const updateEffects = async () => {
+    if (effectsState.added.length > 0) {
+      const { data, error } = await supabase
+        .from('effects')
+        .insert(effectsState.added)
 
+      
+    }
+
+    if (effectsState.removed.length > 0) {
+
+      const { error } = await supabase
+        .from('effects')
+        .delete()
+        .eq('some_column', 'someValue')
+    
+    }
+
+    router.push(`/presets/${presetData.hardware}/details/${presetData.preset_id}`)
   }
 
   const handleChange = (e: any) => {
@@ -199,13 +237,30 @@ export default function Form(props: Props) {
   }
 
   const addEffect = (effect: Enums<'effect_type'>) => {
-    let prevEffectState = formState.effects
-    prevEffectState.push(effect)
+    let tmpCurrent = effectsState.current
+    let tmpAdded = effectsState.added
+    let tmpRemoved = effectsState.removed
 
-    return setState((prevState) => ({
-      ...prevState,
-      effects: prevEffectState
-    }))
+    tmpCurrent.push({
+      effect: effect,
+      preset_id: preset.preset_id
+    })
+
+    tmpAdded.push({
+      effect: effect,
+      preset_id: preset.preset_id
+    })
+
+    const index = effectsState.removed.findIndex((item) => item.effect === effect)
+
+    if (index !== -1) {
+      tmpRemoved.splice(index, 1)
+    }
+    
+    // return setState((prevState) => ({
+    //   ...prevState,
+    //   effects: prevEffectState
+    // }))
   }
 
   const setHardware = (hardware: Enums<'hardware_type'>) => setState((prevState) => ({
@@ -216,16 +271,18 @@ export default function Form(props: Props) {
   const removeCoverPhoto = (e: any) => setCoverPhoto(undefined)
 
   const removeEffect = (effect: Enums<'effect_type'>) => {
-    let prevEffectState = formState.effects
-    const index = prevEffectState.indexOf(effect)
+    let tmpCurrent = effectsState.current
+    let tmpAdded = effectsState.added
+    let tmpRemoved = effectsState.removed
+    // const index = prevEffectState.indexOf(effect)
 
-    if (index !== -1) prevEffectState.splice(index, 1)
-    if (index === -1) return
+    // if (index !== -1) prevEffectState.splice(index, 1)
+    // if (index === -1) return
 
-    return setState((prevState) => ({
-      ...prevState,
-      effects: prevEffectState
-    }))
+    // return setState((prevState) => ({
+    //   ...prevState,
+    //   effects: prevEffectState
+    // }))
   }
 
   const handleToast = (open: boolean) => setToast((prevState) => ({
@@ -395,8 +452,8 @@ export default function Form(props: Props) {
           onChange={handleChange}
           placeholder='Dropbox, Mega, Google Drive...'
           className={clsx([
-            preset.download_url !== formState.downloadUrl && formState.downloadUrl.length > 7 && 'active:border-hyper-green !border-hyper-green border-[1px]',
-            preset.download_url !== formState.downloadUrl && formState.downloadUrl.length < 7 &&  formState.downloadUrl.length > 0 && validateDownloadURL(formState.downloadUrl) && 'active:border-hyper-red border-hyper-red outline-none'
+            preset.download_url !== formState.downloadUrl && formState.downloadUrl.length > 7 && validateDownloadURL(formState.downloadUrl) && 'active:border-hyper-green !border-hyper-green border-[1px]',
+            preset.download_url !== formState.downloadUrl && formState.downloadUrl.length < 7 &&  formState.downloadUrl.length > 0 && !validateDownloadURL(formState.downloadUrl) && 'active:border-hyper-red border-hyper-red outline-none'
           ])}
         />
       </div>
@@ -408,9 +465,9 @@ export default function Form(props: Props) {
           trigger={TriggerType.Text}
           triggerLable='Add an effect'
         />
-        {formState.effects.length > 0 && <Effects
+        {effectsState.current.length > 0 && <Effects
           removeEffect={removeEffect}
-          effects={formState.effects}
+          effects={effectsState.current}
           title={false}
         />}
       </div>

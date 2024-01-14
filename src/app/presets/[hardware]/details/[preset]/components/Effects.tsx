@@ -1,36 +1,42 @@
 import React from 'react'
 import { faCloudMoon, faWater, faRightLeft, faHandBackFist, faSun, faWind, faWandMagicSparkles, faDisplay, faVideo, IconDefinition, faCircleMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Enums } from '../../../../../../../types/supabase';
+import { Enums, Tables } from '../../../../../../../types/supabase';
 
 type Props = {
-  effects: Enums<'effect_type'>[];
+  effects: Partial<Tables<'effects'>>[];
   title: boolean;
   removeEffect?: (effect: Enums<'effect_type'>) => void;
 }
 
+// let effectsData: Enums<'effect_type'>[] = []
+
+// effects.forEach(item => item.effect && effectsData.push(item.effect))
+
 export default function Effects(props: Props) {
   const { effects, title, removeEffect } = props
 
-  // const twilightIndex = effects.findIndex(item => item.effect === 'Twilight')
-  // const waveIndex = effects.findIndex(item => item.effect === 'Wave')
-  // const swipeIndex = effects.findIndex(item => item.effect === 'Swipe')
-  // const breathingIndex = effects.findIndex(item => item.effect === 'Breathing')
-  // const solidIndex = effects.findIndex(item => item.effect === 'Solid')
-  // const sunIndex = effects.findIndex(item => item.effect === 'Sun')
-  // const confettiIndex = effects.findIndex(item => item.effect === 'Confetti')
-  // const screenMirroring = effects.findIndex(item => item.effect === 'Screen Mirror')
-  // const videoIndex = effects.findIndex(item => item.effect === 'Video Capture')
+  const indexes = {
+    twilight: effects.findIndex(item => item.effect === 'Twilight'),
+    wave: effects.findIndex(item => item.effect === 'Wave'),
+    swipe: effects.findIndex(item => item.effect === 'Swipe'),
+    breathing: effects.findIndex(item => item.effect === 'Breathing'),
+    solid: effects.findIndex(item => item.effect === 'Solid'),
+    sun: effects.findIndex(item => item.effect === 'Sun'),
+    confetti: effects.findIndex(item => item.effect === 'Confetti'),
+    screenMirroring: effects.findIndex(item => item.effect === 'Screen Mirror'),
+    videoIndex: effects.findIndex(item => item.effect === 'Video Capture'),
+  }
 
-  const addCount = (effects: Enums<'effect_type'>[]) => {
+  const addCount = (effects: Partial<Tables<'effects'>>[]) => {
     let effectsData: { effect: Enums<'effect_type'>, count: number }[] = []
   
     // Generate an array of effects and how many are used since its too complex for supabase..
     effects.forEach(item1 => {
-      const effectPushed = effectsData.findIndex(item2 => item1 === item2.effect && item2.effect !== null)
+      const effectPushed = effectsData.findIndex(item2 => item1.effect === item2.effect && item2.effect !== null)
   
       if (effectsData.length === 0 || effectPushed === -1) {
-        effectsData.push({ effect: item1 as Enums<'effect_type'>, count: 1 })
+        effectsData.push({ effect: item1.effect as Enums<'effect_type'>, count: 1 })
         return
       }
   

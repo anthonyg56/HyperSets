@@ -45,14 +45,17 @@ export interface Database {
       effects: {
         Row: {
           effect: Database["public"]["Enums"]["effect_type"] | null
+          effect_id: number
           preset_id: number
         }
         Insert: {
           effect?: Database["public"]["Enums"]["effect_type"] | null
+          effect_id?: number
           preset_id: number
         }
         Update: {
           effect?: Database["public"]["Enums"]["effect_type"] | null
+          effect_id?: number
           preset_id?: number
         }
         Relationships: [

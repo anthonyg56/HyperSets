@@ -3,7 +3,6 @@ import React from 'react'
 import supabase from '@/lib/supabase'
 import { redirect } from 'next/navigation'
 import { Enums } from '../../../../../../../types/supabase'
-import Form from '@/app/presets/new/components/Form'
 import EditForm from './components/EditForm'
 
 type PresetFormData = {
@@ -56,17 +55,12 @@ export default async function page(props: Props) {
     redirect(`/presets/${props.params.hardware}`)
   } else if (!profile || profile.profile_id !== preset.profile_id){
     redirect(`/presets/${props.params.hardware}/details/${presetId}`)
-  } 
-
-  let tmpEffects: Enums<'effect_type'>[] = []
-
-  effects.forEach(item => item.effect !== null && tmpEffects.push(item.effect))
-
+  }
 
   return (
     <div className='container pt-[120px]'>
       <Title title='Edit Preset' sub='Share your creation with everyone!' />
-      <EditForm hardware={props.params.hardware} effects={tmpEffects} preset={preset} />
+      <EditForm hardware={props.params.hardware} effects={effects} preset={preset} userId={session.user.id} />
     </div>
   )
 }

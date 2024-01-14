@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import Toast from '@/components/reuseables/toast/Toast';
 import clsx from 'clsx';
 import { validateDownloadURL, validateYoutubeURL } from '@/lib/utils/validate';
+import { CDNURL } from '@/lib/utils/constants';
 
 type Props = {
   user: User;
@@ -28,10 +29,10 @@ type InitialState = {
   youtubeUrl: string;
   hardware: Enums<'hardware_type'>;
   downloadUrl: string;
-  effects: Enums<'effect_type'>[];
+  effects: {
+    effect: Enums<'effect_type'>;
+  }[];
 }
-
-const CDNURL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/object/sign/images/"
 
 export default function Form(props: Props) {
   const { profileId, user } = props
@@ -110,7 +111,7 @@ export default function Form(props: Props) {
           })
 
         const resData = res.data
-        const transformedData = formState.effects.map(item => ({ effect: item, preset_id: resData.preset_id }))
+        const transformedData = formState.effects.map(item => ({ effect: item.effect, preset_id: resData.preset_id }))
         const { data, error } = await submitEffects(transformedData)
 
         if (!data)
@@ -188,7 +189,7 @@ export default function Form(props: Props) {
 
   const addEffect = (effect: Enums<'effect_type'>) => {
     let prevEffectState = formState.effects
-    prevEffectState.push(effect)
+    prevEffectState.push({effect})
 
     return setState((prevState) => ({
       ...prevState,
@@ -205,7 +206,7 @@ export default function Form(props: Props) {
 
   const removeEffect = (effect: Enums<'effect_type'>) => {
     let prevEffectState = formState.effects
-    const index = prevEffectState.indexOf(effect)
+    const index = prevEffectState.indexOf({effect})
 
     if (index !== -1) prevEffectState.splice(index, 1)
     if (index === -1) return
