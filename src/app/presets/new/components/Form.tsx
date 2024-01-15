@@ -49,7 +49,6 @@ export default function Form(props: Props) {
     description: ""
   })
   const [dummyData, setData] = useState<string>('') // For the hiden input elment to upload an image
-  //const [effects, setEffects] = useState<Enums<'effect_type'>[]>([])
   const [dropDownErrors, setErrors] = useState({
     effects: false,
     hardware: false
@@ -112,9 +111,9 @@ export default function Form(props: Props) {
 
         const resData = res.data
         const transformedData = formState.effects.map(item => ({ effect: item.effect, preset_id: resData.preset_id }))
-        const { data, error } = await submitEffects(transformedData)
+        const { error } = await submitEffects(transformedData)
 
-        if (!data)
+        if (error)
           return setToast({
             isOpen: true,
             description: "There was an error, please try again"
@@ -206,7 +205,7 @@ export default function Form(props: Props) {
 
   const removeEffect = (effect: Enums<'effect_type'>) => {
     let prevEffectState = formState.effects
-    const index = prevEffectState.indexOf({effect})
+    const index = prevEffectState.findIndex(item => item.effect === effect)
 
     if (index !== -1) prevEffectState.splice(index, 1)
     if (index === -1) return

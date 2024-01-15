@@ -38,7 +38,7 @@ type Props = {
 const CDNURL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/object/sign/images/"
 
 export default function Form(props: Props) {
-  const { effects, hardware, preset, userId } = props
+  const { effects, preset, userId } = props
   const [formState, setState] = useState<InitialState>({
     name: '',
     description: '',
@@ -76,84 +76,12 @@ export default function Form(props: Props) {
 
       setEffects((prevState) => ({
         ...prevState,
-        current: props.effects
+        current: effects
       }))
     }
 
     setData()
   }, [])
-  
-  // const handleSubmit = async (e: any) => {
-  //   e.preventDefault()
-
-  //   const isNotFilledOut = !formState.name ||
-  //     !formState.description ||
-  //     !formState.youtubeUrl ||
-  //     !formState.hardware ||
-  //     !formState.downloadUrl ||
-  //     formState.effects.length < 1
-
-  //   if (!user || isNotFilledOut) {
-  //     setToast({
-  //       isOpen: true,
-  //       description: "Please fill out the required fields and try again"
-  //     })
-  //     return
-  //   }
-
-  //   let tmpState: {
-  //     name: string;
-  //     description: string;
-  //     youtubeUrl: string;
-  //     hardware: Enums<'hardware_type'>;
-  //     downloadUrl: string;
-  //     photoUrl?: string | undefined;
-  //   } = formState
-
-  //   if (tmpCoverPhoto) {
-  //     const coverPhotoRes = await submitCoverPhoto(tmpCoverPhoto, user.id as string)
-
-  //     if (coverPhotoRes.error && coverPhotoRes.data === null) {
-  //       console.log(coverPhotoRes.error)
-  //       setToast({
-  //         isOpen: true,
-  //         description: "There was an error, please try again"
-  //       })
-  //       return
-  //     }
-
-  //     tmpState.photoUrl = CDNURL + coverPhotoRes.data?.path
-  //   }
-
-  //   await submitPreset(tmpState, profileId)
-  //     .then(async (res) => {
-  //       if (res.data === null)
-  //         return setToast({
-  //           isOpen: true,
-  //           description: "There was an error, please try again"
-  //         })
-
-  //       const resData = res.data
-  //       const transformedData = formState.effects.map(item => ({ effect: item, preset_id: resData.preset_id }))
-  //       const { data, error } = await submitEffects(transformedData)
-
-  //       if (!data)
-  //         return setToast({
-  //           isOpen: true,
-  //           description: "There was an error, please try again"
-  //         })
-
-  //       return router.push(`/presets/${resData.hardware}/details/${resData.preset_id}`)
-  //     })
-  //     .catch(error => {
-  //       console.log(error)
-  //       setToast({
-  //         isOpen: true,
-  //         description: "There was an error, please try again"
-  //       })
-  //       return
-  //     })
-  // }
 
   const handleUpdate = async (e: any) => {
     let tmpData: Partial<Tables<'presets'>> = {}
@@ -209,11 +137,11 @@ export default function Form(props: Props) {
     }
 
     if (effectsState.removed.length > 0) {
-
+      let values = effectsState.removed.map(({ effect_id }) => effect_id)
       const { error } = await supabase
         .from('effects')
         .delete()
-        .eq('some_column', 'someValue')
+        .in('effect_id', values)
     
     }
 
@@ -241,6 +169,21 @@ export default function Form(props: Props) {
     let tmpAdded = effectsState.added
     let tmpRemoved = effectsState.removed
 
+    const index = tmpRemoved.findIndex((item) => item.effect === effect)
+
+    if (index !== -1) {
+      tmpCurrent.push(tmpRemoved[index])
+      tmpRemoved.splice(index, 1)
+      
+      setEffects((prevStae) => ({
+        ...prevStae,
+        current: tmpCurrent,
+        removed: tmpRemoved
+      }))
+
+      return
+    }
+
     tmpCurrent.push({
       effect: effect,
       preset_id: preset.preset_id
@@ -251,16 +194,47 @@ export default function Form(props: Props) {
       preset_id: preset.preset_id
     })
 
-    const index = effectsState.removed.findIndex((item) => item.effect === effect)
+    setEffects((prevState) => ({
+      ...prevState,
+      added: tmpAdded,
+      current: tmpCurrent
+    }))
+  }
 
-    if (index !== -1) {
-      tmpRemoved.splice(index, 1)
-    }
+  const removeEffect = (effect: Enums<'effect_type'>) => {
+    let tmpCurrent = effectsState.current
+    let tmpAdded = effectsState.added
+    let tmpRemoved = effectsState.removed
+
+    // Check if theres an effect thats been recently added first before remove one from the database
+    const addedIndex = tmpAdded.findIndex(({ effect: item }) => item === effect)
+
+    if (addedIndex !== -1) {
+      tmpAdded.splice(addedIndex, 1)
+
+      // Grab index of the effect thats been most recently pushed by the user
+      const currentIndex = tmpCurrent.findIndex(({ effect: item, effect_id }) => item === effect && !effect_id)
+      tmpCurrent.splice(currentIndex, 1)
+
+      setEffects((prevState) => ({
+        ...prevState,
+        current: tmpCurrent,
+        added: tmpAdded,
+      }))
+
+      return
+    } 
+
+    const currentIndex = tmpCurrent.findIndex(({ effect: item, effect_id }) => item === effect && effect_id)
     
-    // return setState((prevState) => ({
-    //   ...prevState,
-    //   effects: prevEffectState
-    // }))
+    tmpRemoved.push(tmpCurrent[currentIndex] as Tables<'effects'>)
+    tmpCurrent.splice(currentIndex,1)
+
+    setEffects((prevState) => ({
+      ...prevState,
+      current: tmpCurrent,
+      removed: tmpRemoved,
+    }))
   }
 
   const setHardware = (hardware: Enums<'hardware_type'>) => setState((prevState) => ({
@@ -270,20 +244,7 @@ export default function Form(props: Props) {
 
   const removeCoverPhoto = (e: any) => setCoverPhoto(undefined)
 
-  const removeEffect = (effect: Enums<'effect_type'>) => {
-    let tmpCurrent = effectsState.current
-    let tmpAdded = effectsState.added
-    let tmpRemoved = effectsState.removed
-    // const index = prevEffectState.indexOf(effect)
 
-    // if (index !== -1) prevEffectState.splice(index, 1)
-    // if (index === -1) return
-
-    // return setState((prevState) => ({
-    //   ...prevState,
-    //   effects: prevEffectState
-    // }))
-  }
 
   const handleToast = (open: boolean) => setToast((prevState) => ({
     ...prevState,
@@ -355,7 +316,7 @@ export default function Form(props: Props) {
     ]
 
   return (
-    <form>
+    <form action={handleUpdate}>
       <div>
         <div>
           <h4 className='label-text pb-1'>Cover Photo</h4>
