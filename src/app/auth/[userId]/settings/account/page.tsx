@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { createSupabaseServerClient, fetchProfileByUserId, validateRouteUuid } from '@/lib/supabase/server';
+
 // import Avatar from '../../../../../components/misc/avatar';
 import { capitalizeEachWord } from '../../../../../lib/utils/capitalize';
+import { createSupabaseServerClient, fetchProfileByUserId, validateRouteUuid } from '@/lib/supabase/server';
 import { faUser, faAngleRight, faAt, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { redirect } from 'next/navigation';
