@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tables } from '../../../../types/supabase'
 import Link from 'next/link'
-import { capitalizeFirstLetter } from '@/lib/utils/capitalize';
+import { capitalizeFirstLetter } from '../../../lib/utils/capitalize';
 
 interface Props {
   preset: Tables<'presets'> | Pick<Tables<'presets'>, 'hardware' | 'name' | 'photo_url' | 'preset_id' | 'profile_id'>;

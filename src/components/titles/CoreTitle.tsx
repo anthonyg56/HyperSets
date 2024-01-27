@@ -1,7 +1,7 @@
 import { ClassNameValue } from 'tailwind-merge';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { capitalizeEachWord } from '@/lib/utils/capitalize';
+import { capitalizeEachWord } from '../../lib/utils/capitalize';
 import cn from '@/lib/utils/cn';
 import { ClassValue } from 'clsx';
 

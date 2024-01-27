@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Database, Tables } from '../../../types/supabase';
-import ErrorAlert from '@/lib/utils/errorAlert';
+// import ErrorAlert from '@/lib/utils/errorAlert';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -41,7 +41,7 @@ export default function Avatar({ userId, editMode }: Props) {
         .limit(1)
         .single()
 
-      if (ErrorAlert(error, data, 'Fetching profile error')) return
+      // if (ErrorAlert(error, data, 'Fetching profile error')) return
 
       setProfile(data)
     }
@@ -64,11 +64,11 @@ export default function Avatar({ userId, editMode }: Props) {
       .from('images')
       .upload(`${userId}/${uuidv4()}`, tmpAvatar)
 
-    const checkFile = ErrorAlert(error, data, "Submit Avatar Error")
+    // const checkFile = ErrorAlert(error, data, "Submit Avatar Error")
 
-    if (checkFile) {
-      return
-    }
+    // if (checkFile) {
+    //   return
+    // }
 
     const avatarUrl = CDNURL + data?.path
 
@@ -90,11 +90,11 @@ export default function Avatar({ userId, editMode }: Props) {
       .eq('user_id', userId)
       .select()
 
-    const checkFile = ErrorAlert(error, data, "Submit Avatar Error")
+    // const checkFile = ErrorAlert(error, data, "Submit Avatar Error")
 
-    if (checkFile) {
-      return
-    }
+    // if (checkFile) {
+    //   return
+    // }
 
     router.refresh()
   }
