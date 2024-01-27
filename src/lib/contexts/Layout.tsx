@@ -4,7 +4,7 @@ import React, { createContext, useState } from "react"
 import Toast from "../../components/radix-primitives/Toast"
 import { usePathname } from "next/navigation"
 import MobileNavDrawer from "@/components/layout/MobileNavDrawer"
-import Navbar from "@/components/layout/Navbar"
+import NavBar from "@/components/layout/Navbar"
 
 export type TLayoutContext = {
   isOpen: boolean,
@@ -68,7 +68,7 @@ function LayoutProvider({ children }: Props) {
       handleMobileNavOpen,
       updateToast
     }}>
-      <Navbar handleOpen={handleMobileNavOpen} pathname={pathname} />
+      <NavBar handleOpen={handleMobileNavOpen} pathname={pathname} />
       {children}
       <Toast
         title={toastState.title}

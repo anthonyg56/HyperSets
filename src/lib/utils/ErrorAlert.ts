@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * Used in development to track errors
  * 
