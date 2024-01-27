@@ -1,15 +1,15 @@
-import Title from '@/components/reuseables/Title'
-import supabase from '@/lib/supabase'
+import Title from '@/components/titles/CoreTitle'
 import { QueryData } from '@supabase/supabase-js'
 import React from 'react'
-import Effects from './components/Effects'
+import Effects from '../../../../../components/Presets/Effects'
 import { Enums } from '../../../../../../types/supabase'
-import Hardware from './components/Hardware'
-import LikesAndDownloads from './components/LikesAndDownloads'
-import YoutubePlayer from './components/YoutubePlayer'
-import DownloadButton from './components/DownloadButton'
-import DeleteButton from './components/DeleteButton'
-import EditButton from './components/EditButton'
+import Hardware from '../../../../../components/Presets/Hardware'
+import LikesAndDownloads from '../../../../../components/Presets/LikesAndDownloads'
+import YoutubePlayer from '../../../../../components/Presets/YoutubePlayer'
+import DownloadButton from '../../../../../components/buttons/DownloadPreset'
+import DeleteButton from '../../../../../components/dropdowns/DeletePreset'
+import EditButton from '../../../../../components/buttons/EditPreset'
+import { createSupabaseServerClient } from '@/lib/supabase/server'
 
 type Props = {
   params: {
@@ -18,8 +18,8 @@ type Props = {
   }
 }
 
-export default async function page(props: Props) {
-  const { preset: presetId } = props.params
+export default async function page({ params: { preset: presetId }}: Props) {
+  const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   const presetQuery = supabase
@@ -76,7 +76,7 @@ export default async function page(props: Props) {
       </div>
 
       <div className={`container pb-[50px]`}>
-        <Title title={name} sub={description} padding={'pb-[25px] pt-[25px]'} />
+        <Title title={name} subTitle={description} bottomPadding={'pb-[25px] pt-[25px]'} />
         <YoutubePlayer youtubeUrl={youtube_url} />
         <Effects effects={effects} title={true} />
         <Hardware hardware={hardware} />

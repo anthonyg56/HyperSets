@@ -1,7 +1,8 @@
 import React from 'react'
 
 /**
- * Use in client components when submitting data to supabase
+ * Used in development to track errors
+ * 
  * @param error - supabase error
  * @param data - supabase data
  * @param callback - Callback is for certain condtion checkings

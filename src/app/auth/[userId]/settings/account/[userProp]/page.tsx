@@ -1,9 +1,9 @@
-import supabase from '@/lib/supabase';
-import { redirect } from 'next/navigation';
 import React from 'react'
-import ChangeEmail from './components/ChangeEmail';
-import ChangeName from './components/ChangeName';
-import ChangePassword from './components/ChangePassword';
+import { redirect } from 'next/navigation';
+import { createSupabaseServerClient, validateRouteUuid } from '@/lib/supabase/server';
+import ChangeName from '../../../../../../components/views/ChangeName';
+import ChangeEmail from '../../../../../../components/views/ChangeEmail';
+import ChangePassword from '../../../../../../components/views/ChangePassword';
 
 interface Props {
   params: {
@@ -13,36 +13,33 @@ interface Props {
 }
 
 export default async function Page(props: Props) {
+  const supabase = await createSupabaseServerClient()
+  const { data: { session }} = await supabase.auth.getSession()
   const { params: { userId, userProp } } = props
 
-  const { data: { session }, error } = await supabase.auth.getSession()
-
-  if (error || !session) {
+  if (!session) {
     redirect('/auth/login')
   }
 
-  const { data: profile, error: profileError } = await supabase
-    .from('profile')
-    .select('*')
-    .eq('user_id', session.user.id)
-    .limit(1)
-    .single()
-
-  if (profileError || !profile) redirect('/')
-
-  if (userId !== session.user.id) redirect(`/auth/${userId}/settings/account/${userProp}}`)
+  validateRouteUuid({ 
+    routeUuid: userId,
+    userId: session.user.id 
+  }, { 
+    path: 'account',
+    userProp: userProp,
+  })
 
   return (
-    <div>
+    <>
       {
         userProp === "email" ?
-          <ChangeEmail userId={userId} session={session} /> :
+          <ChangeEmail userId={userId} userProp={userProp} /> :
           userProp === "name" ?
-            <ChangeName userId={userId} profileName={profile.name} /> :
+            <ChangeName userId={userId} userProp={userProp} /> :
             userProp === "password" ?
               <ChangePassword userId={userId} /> :
-              redirect(`/auth/${profile.profile_id}/settings/account}`)
+              redirect(`/auth/${userId}/settings/account}`)
       }
-    </div>
+    </>
   )
 }

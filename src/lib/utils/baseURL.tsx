@@ -1,1 +1,0 @@
-export const baseURL = process.env.NODE_ENV === "development" ? "localhost:3000" : "https://www.hyper-sets.com"

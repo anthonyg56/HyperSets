@@ -1,18 +1,9 @@
-import Title from '@/components/reuseables/Title'
 import React from 'react'
-import supabase from '@/lib/supabase'
+import { validatePresetIdRoute } from '@/lib/utils/schemas'
+import { createSupabaseServerClient, fetchPresetsFormData,  } from '@/lib/supabase/server'
+import CreateAPresetForm from '@/components/forms/CreateAPreset'
+import Title from '@/components/titles/CoreTitle'
 import { redirect } from 'next/navigation'
-import { Enums } from '../../../../../../../types/supabase'
-import EditForm from './components/EditForm'
-
-type PresetFormData = {
-  name: string;
-  description: string;
-  youtubeUrl: string;
-  hardware: Enums<'hardware_type'> | undefined;
-  downloadUrl: string;
-  photoUrl?: string | undefined;
-}
 
 type Props = {
   params: {
@@ -21,46 +12,25 @@ type Props = {
   }
 }
 
-export default async function page(props: Props) {
-  const {data: {session}, error} = await supabase.auth.getSession()
-  
-  if (error || !session) {
-    redirect('/auth/login')
-  }
+export default async function page({params: { preset, hardware}}: Props) {
+  const supabase = await createSupabaseServerClient()
+  const { data: { session }} = await supabase.auth.getSession()
 
-  const presetId = Number(props.params.preset)
-
-  const { data: profile } = await supabase
-    .from("profile")
-    .select('profile_id')
-    .eq('user_id', session.user.id)
-    .limit(1)
-    .single()
-
-  const { data: preset } = await supabase
-    .from("presets")
-    .select('*')
-    .eq('preset_id', presetId)
-    .limit(1)
-    .single()
-
-  const { data: effects } = await supabase
-    .from("effects")
-    .select('*')
-    .eq('preset_id', presetId)
-
-  if (!effects) {
+  if (!session) {
     redirect('/presets')
-  } else if (!preset) {
-    redirect(`/presets/${props.params.hardware}`)
-  } else if (!profile || profile.profile_id !== preset.profile_id){
-    redirect(`/presets/${props.params.hardware}/details/${presetId}`)
   }
+
+  const presetId = Number(preset)
+
+  // Strictly for validating the data passed in the url
+  validatePresetIdRoute(session.user.id, presetId, hardware)
+
+  const formData = await fetchPresetsFormData(session.user.id, presetId, hardware)
 
   return (
     <div className='container pt-[120px]'>
-      <Title title='Edit Preset' sub='Share your creation with everyone!' />
-      <EditForm hardware={props.params.hardware} effects={effects} preset={preset} userId={session.user.id} />
+      <Title title='Edit Preset' subTitle='Share your creation with everyone!' />
+      <CreateAPresetForm edit={true} hardware={hardware} effects={formData.effects} preset={formData.preset} />
     </div>
   )
 }

@@ -123,7 +123,7 @@ export interface Database {
           last_logon: string | null
           name: string | null
           profile_id: number
-          user_id: string | null
+          user_id: string
           username: string | null
         }
         Insert: {
@@ -133,7 +133,7 @@ export interface Database {
           last_logon?: string | null
           name?: string | null
           profile_id?: number
-          user_id?: string | null
+          user_id: string
           username?: string | null
         }
         Update: {
@@ -143,7 +143,7 @@ export interface Database {
           last_logon?: string | null
           name?: string | null
           profile_id?: number
-          user_id?: string | null
+          user_id?: string
           username?: string | null
         }
         Relationships: [

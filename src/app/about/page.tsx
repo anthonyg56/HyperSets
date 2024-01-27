@@ -1,8 +1,4 @@
-import Toast from '@/components/reuseables/toast/Toast'
-import React from 'react'
-
-export default function page() {
-
+export default function Page() {
   return (
     <div >
       <div className='pt-[60px]'>

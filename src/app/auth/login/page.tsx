@@ -1,12 +1,18 @@
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Link from 'next/link'
-import React, { useState } from 'react'
-import LoginForm from './components/form'
-import supabase from '@/lib/supabase'
+import { createSupabaseServerClient } from '@/lib/supabase/server'
+import LoginForm from '@/components/forms/LoginForm'
+
 
 export default async function LoginPage() {
-  const { data: { session }, error } = await supabase.auth.getSession()
+  const supabase = await createSupabaseServerClient()
+  const { data: { session }} = await supabase.auth.getSession()
+  
+  if (session) {
+    redirect(`/auth/${session.user.id}/settings`)
+  }
 
   return (
     <div className='auth-container'>
@@ -14,7 +20,7 @@ export default async function LoginPage() {
         <h1 className='title-2xl-upper'>Welcome Back</h1>
         <h4 className='sub-text'>Welcome back! Please enter your details.</h4>
       </div>
-      <LoginForm session={session} />
+      <LoginForm />
       <div className='text-center'>
         <div>
           <h5 className='text-hyper-dark-grey text-[12px] font-medium tracking-tight'>Dont have an account? <Link href={'/auth/register'} className='text-hyper-red'>Sign up for free!</Link></h5>

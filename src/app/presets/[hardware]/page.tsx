@@ -1,5 +1,5 @@
 import React from 'react'
-import Presets from '../components/Presets'
+import Presets from '../../../components/Presets/PresetsList'
 import { Enums } from '../../../../types/supabase'
 
 type Props = {

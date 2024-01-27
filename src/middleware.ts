@@ -1,17 +1,80 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+
 import { NextResponse, type NextRequest } from 'next/server'
 import { Database } from '../types/supabase'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 
-export default async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
+export default async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
-  // Create a Supabase client configured to use cookies
-  const supabase = createMiddlewareClient<Database>({ req, res })
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+        },
+      },
+    }
+  )
 
-  const {data: { session }, error } = await supabase.auth.getSession()
+  await supabase.auth.getUser()
 
-  //console.log(`middleware: \n data: ${session} \n error: ${error}`)
-  return res
+  // const { data: { session }} = await supabase.auth.getSession()
+
+  // function handleRouting() {
+  //   const url = request.nextUrl.clone()
+    
+  //   if (session && url.pathname === '/auth/login' || '/auth/confirm' || '/auth/register' || '/auth/forgot') {
+
+  //   } else if (!session && url.pathname ==='/preset/new' || '/preset/') {
+
+  //   } else if (!session && url.pathname.startsWith('/auth/')) {
+
+  //   }
+  // }
+//console.log(`middleware: \n data: ${session} \n error: ${error}`)
+
+  return response
+  
 }
 
 export const config = {

@@ -1,10 +1,9 @@
-import Title from '@/components/reuseables/Title'
 import React from 'react'
-import Form from './components/Form'
-import supabase from '@/lib/supabase'
+import {  createSupabaseServerClient, fetchProfileByUserId  } from '@/lib/supabase/server'
+import Title from '@/components/titles/CoreTitle'
 import { Enums } from '../../../../types/supabase'
-import { v4 as uuidv4 } from 'uuid'
 import { redirect } from 'next/navigation'
+import CreateAPresetForm from '@/components/forms/CreateAPreset'
 
 export type PresetFormData = {
   name: string;
@@ -16,23 +15,17 @@ export type PresetFormData = {
 }
 
 export default async function page() {
-  const {data: {session}, error} = await supabase.auth.getSession()
+  const supabase = await createSupabaseServerClient()
+  const { data: { session }} = await supabase.auth.getSession()
 
-  if (error || !session) {
-    redirect('/auth/login')
+  if (!session) {
+    redirect('/presets')
   }
-
-  const { data } = await supabase
-    .from("profile")
-    .select('profile_id')
-    .eq('user_id', session.user.id)
-    .limit(1)
-    .single()
 
   return (
     <div className='container pt-[120px]'>
-      <Title title='Create a Profile' sub='Share your creation with everyone!' />
-      <Form profileId={data?.profile_id as number} user={session.user}/>
+      <Title title='Create a Profile' subTitle='Share your creation with everyone!' />
+      <CreateAPresetForm />
     </div>
   )
 }

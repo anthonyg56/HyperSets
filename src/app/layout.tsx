@@ -1,11 +1,14 @@
 import './globals.css'
 
 import type { Metadata } from 'next'
-import { Inter, Poppins} from 'next/font/google'
+import { Inter, Poppins } from 'next/font/google'
 
-import NavBar from '@/components/layout/navBar'
+import NavBar from '@/components/layout/MobileNavDrawer'
+import UserSessionProvider from '@/lib/contexts/UserSession'
+import { ToastProvider } from '@radix-ui/react-toast'
+import LayoutProvider from '@/lib/contexts/Layout'
 
-const inter = Poppins({ subsets: ['latin'], weight: ["100", "200" , "300" , "400" , "500" , "600" , "700" , "800" , "900"] })
+const inter = Poppins({ subsets: ['latin'], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
 
 export const metadata: Metadata = {
   title: 'HyperSets',
@@ -20,8 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NavBar />
-        {children}
+        <UserSessionProvider>
+          <LayoutProvider>
+            {children}
+          </LayoutProvider>
+        </UserSessionProvider>
       </body>
     </html>
   )

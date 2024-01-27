@@ -1,15 +1,20 @@
-import supabase from '@/lib/supabase'
+
 import React from 'react'
-import View from './components/View'
-// import { redirect } from 'next/navigation'
+import { createSupabaseServerClient } from '@/lib/supabase/server'
+import RecoverPasswordForm from '@/components/forms/RecoverPassword'
+import { redirect } from 'next/navigation'
 
 export default async function Page() {
+  const supabase = await createSupabaseServerClient()
   const { data: { session }, error } = await supabase.auth.getSession()
-
-  // console.log(session)
-  // if (!session) {
-  //   redirect(`/auth/forgot`)
-  // }
-   
-  return <View />
+  
+  if (!session) {
+    redirect('/auth/forgot')
+  }
+  
+  return (
+    <>
+      <RecoverPasswordForm />
+    </>
+  )
 }
