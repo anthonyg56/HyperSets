@@ -23,7 +23,7 @@ export default async function page({params: { preset, hardware}}: Props) {
   const presetId = Number(preset)
 
   // Strictly for validating the data passed in the url
-  validatePresetIdRoute(session.user.id, presetId, hardware)
+  // validatePresetIdRoute(session.user.id, presetId, hardware)
 
   const formData = await fetchPresetsFormData(session.user.id, presetId, hardware)
 
