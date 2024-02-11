@@ -1,5 +1,7 @@
+'use client'
 import { cn } from "@/lib/utils"
 import { ClassValue } from "clsx"
+import { HTMLAttributes } from "react"
 
 export function H1({ children, classNames }: { children: React.ReactNode, classNames?: ClassValue }) {
   return (
@@ -11,7 +13,7 @@ export function H1({ children, classNames }: { children: React.ReactNode, classN
 
 export function H2({ children, classNames }: { children: React.ReactNode, classNames?: ClassValue }) {
   return (
-    <h2 className={cn(["scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0", classNames])}>
+    <h2 className={cn(["scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0", classNames])}>
       {children}
     </h2>
   )
@@ -63,9 +65,9 @@ export function Large({ children, classNames }: { children: React.ReactNode, cla
   return <div className={cn(["text-lg font-semibold", classNames])}>{children}</div>
 }
 
-export function Small({ children, classNames }: { children: React.ReactNode, classNames?: ClassValue }) {
+export function Small({ children, classNames, props }: { children: React.ReactNode, classNames?: ClassValue, props?: HTMLAttributes<HTMLElement>}) {
   return (
-    <small className={cn(["text-sm font-medium leading-none", classNames])}>{children}</small>
+    <small className={cn(["text-sm font-medium leading-none", classNames])} {...props}>{children}</small>
   )
 }
 

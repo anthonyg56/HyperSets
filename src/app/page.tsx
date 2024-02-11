@@ -1,3 +1,4 @@
+"use client"
 import PresetCard from "@/components/cards/preset";
 import { CardDemo } from "@/components/cards/test";
 import { Button } from "@/components/ui/button";
@@ -6,14 +7,21 @@ import { H1, H2, H3, Lead, P, Small } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import HeroImage from '../../public/alloys-origin-hero.png'
-import { FilterPResetsDropdownMenu } from "@/components/dropdown/filter-presets";
+import { FilterPresetsDropdownMenu } from "@/components/dropdown/filter-presets";
 import Title from "@/components/titles/core";
 import Link from "next/link";
+import { useState } from "react";
+import { Filter } from "./presets/page";
 
 export default function Home() {
+  const [filter, setFilter] = useState<Filter>('Most Popular')
   return (
     <>
-      <div className="container min-h-[calc(100vh_-_57px)] flex items-center relative">
+      <div className={cn([
+        "min-h-[calc(85svh_-_57px)] items-end container flex relative overflow-hidden",
+        " md:items-center ",
+        "lg:overflow-visible"
+        ])}>
           <Image
             src={HeroImage}
             alt="Alloys orgiins hero"
@@ -24,18 +32,18 @@ export default function Home() {
               'lg:top-[-50px] lg:right-[-550px]'
             ])}
           />
-        <div className="flex flex-col gap-[10px]">
+        <div className="flex flex-col gap-[10px] pb-40 md:pb-0">
           <H1>Hyper Sets</H1>
-          <Lead>A community collection of HyperX NGenuity RGB presets</Lead>
+          <Lead>A community collection of HyperX NGenuity <span className="rainbowText">RGB</span> presets</Lead>
           <Button className="self-start">Explore Our Presets</Button>
         </div>
       </div>
 
-      <div className="container flex flex-col justify-center mb-[196px]">
+      <div className=" container flex flex-col justify-center mb-[196px]">
         <H2 classNames="text-center border-b-0">Featured Presets</H2>
-        <FilterPResetsDropdownMenu />
+        <FilterPresetsDropdownMenu setFilter={setFilter} filter={filter} />
         <div className={cn([
-          "grid grid-cols-3 gap-4"
+          "flex flex-col md:flex-none md:grid md:grid-cols-12 gap-4"
         ])}>
           <PresetCard />
           <PresetCard />

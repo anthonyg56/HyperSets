@@ -60,3 +60,30 @@
     @apply bg-background text-foreground overflow-x-hidden;
   }
 }
+
+
+
+@layer components {
+  .rainbow-text-animated {
+    @apply text-transparent bg-[length:400%_100%];
+    background: linear-gradient(
+      to right,
+      #6666ff,
+      #0099ff,
+      #00ff00,
+      #ff3399,
+      #6666ff
+    );
+    -webkit-background-clip: text;
+    @apply bg-clip-text;
+  }
+  .rainbowText {
+    @apply text-[20px] font-extrabold bg-[linear-gradient(to_right,red,orange,yellow,green,blue,indigo,violet)] animate-move;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gloss {
+    @apply bg-white bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg;
+  }
+}

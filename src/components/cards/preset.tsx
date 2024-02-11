@@ -40,7 +40,7 @@ export default function PresetCard() {
   
   return (
     <Card 
-      className="overflow-hidden hover:cursor-pointer hover:scale-110 hover:z-10"
+      className="col-span-3 overflow-hidden hover:cursor-pointer hover:scale-110 hover:z-10"
       onMouseEnter={() => handleDisplay("video")}
       onMouseLeave={() => handleDisplay("image")}
     >
@@ -54,7 +54,7 @@ export default function PresetCard() {
       <CardHeader>
         <CardTitle>{capitalizeFirstLetter('War Presets')}</CardTitle>
         <CardDescription>This preset will have you feeling immersed in war</CardDescription>
-        <div className="flex flex-row gap-2 pt-1">
+        <div className="flex flex-row gap-2 pt-1 flex-wrap">
           <Badge>Keyboard</Badge>
           <Badge variant="secondary">5 Effects</Badge>
           <Badge variant="secondary">78 Downloads</Badge>

@@ -12,30 +12,47 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Small } from "../ui/typography"
+import { Button } from "../ui/button"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
+import { cn } from "@/lib/utils"
+import { Filter } from "@/app/presets/page"
 
-export function FilterPResetsDropdownMenu() {
-  const [filter, setFilter] = React.useState("Most Popular")
+type Props = {
+  filter: Filter;
+  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
+}
+export function FilterPresetsDropdownMenu({ filter, setFilter }: Props) {
+  const [imageDirection, setImageDirection] = React.useState<"up" | "down">("up")
+
+  function handleImageDirection(e: any) {
+    e.preventDefault()
+    setImageDirection(imageDirection === "up" ? "down" : "up")
+  }
 
   return (
-    <div className="flex flex-col justify-end mb-2 w-full">
-      <div className="flex flex-row ml-auto">
-        <Small>{filter}</Small>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <img src="/filter-solid.svg" width={16} height={16} className="ml-1 hover:cursor-pointer" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Filter By</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuRadioGroup value={filter} onValueChange={setFilter}>
-              <DropdownMenuRadioItem value="Most Popular">Most Popular</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="Most Recent">Most Recent</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="Most Downloads">Most Downloads</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+    <div className="flex flex-row ml-auto items-center">
+      <Small classNames="mr-2">Sort By</Small>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={'outline'} onClick={handleImageDirection}>
+            {filter} <FontAwesomeIcon icon={faChevronDown} className={cn([
+              {
+                "transform rotate-180": imageDirection === "up",
+              }
+            ])} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>Filter By</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuRadioGroup value={filter} onValueChange={(value: Filter) => setFilter}>
+            <DropdownMenuRadioItem value="Most Popular">Most Popular</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="Most Recent">Most Recent</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="Most Downloads">Most Downloads</DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
-
   )
 }

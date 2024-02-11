@@ -69,10 +69,28 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "rainbow-cycle": {
+          from: { color: "#6666ff" },
+          '10%': { color: "#0099ff" },
+          '50%': { color: "#00ff00" },
+          '75%': { color: "#ff3399" },
+          '100%': { color: "#6666ff" },
+        },
+        "rainbow-animation": {
+          '10%': { backgroundPosition: "0% 0%" },
+          '50%': { backgroundPosition: "100% 0%" },
+          '100%': { backgroundPosition: "0% 0%" },
+        },
+        "move": {
+          to: { backgroundPosition: "4500vh" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "rainbow-cycle": "rainbow-cycle 6s linear 0s infinite",
+        "rainbow-animation": "rainbow-animation 1s ease-in-out infinite",
+        "move": "move 1500s linear infinite"
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
