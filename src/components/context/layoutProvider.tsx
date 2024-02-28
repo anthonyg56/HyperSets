@@ -1,8 +1,9 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { createContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import Navbar from "../layout/navbar"
+import { TUserSessionContext, UserSessionContext } from "./userProvider"
 
 export type TLayoutContext = {
   isOpen: boolean,
@@ -16,11 +17,11 @@ type Props = {
 export const LayoutContext = createContext<Partial<TLayoutContext>>({})
 
 export default function LayoutProvider({ children }: Props) {
-  const pathname = usePathname()
-
-  const [currentPath, setPath] = useState<string | undefined>(undefined)
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
 
+  const { profile } = useContext(UserSessionContext) as TUserSessionContext
+  const pathname = usePathname()
+  
   useEffect(() => {
       setMobileNavOpen(false)
   }, [pathname])
@@ -30,7 +31,7 @@ export default function LayoutProvider({ children }: Props) {
       isOpen: isMobileNavOpen,
       setMobileNavOpen,
     }}>
-      <Navbar pathname={pathname} />
+      <Navbar pathname={pathname} profile={profile} />
       {children}
     </LayoutContext.Provider>
   )

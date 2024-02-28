@@ -94,7 +94,7 @@ export const passwordRules = [
   'Passwords Match',
 ]
 
-export enum Hardware {
+export enum EHardware {
   Keyboard = "Keyboard",
   Headset = "Headset",
   Microphone = "Microphone",
@@ -102,13 +102,16 @@ export enum Hardware {
 }
 
 export enum Effects {
+  Twilight = "Twilight",
+  VideoCapture = "Video Capture",
+  Sun = "Sun",
   Breathing = "Breathing",
   Confetti = "Confetti",
   Swipe = "Swipe",
   Solid = "Solid",
-  Twilight = "Twilight",
   Wave = "Wave",
-  Sun = "Sun",
   ScreenMirror = "Screen Mirror",
-  VideoCapture = "Video Capture",
+
 }
+
+export const effectsVals = Object.values(Effects)

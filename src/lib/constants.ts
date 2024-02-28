@@ -15,5 +15,5 @@ export const CDNURL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/objec
 export const baseURL = getURL()
 
 export const MAX_UPLOAD_SIZE = 1024 * 1024 * 30
-
+export const MAX_IMAGE_FILE_SIZE = 26214400; 
 export const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpeg', 'image/jpg']

@@ -24,6 +24,8 @@
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 72.2% 50.6%;
+    --success: #28a745; /* idk how to convert this to hsl */
+    --success-foreground: #1E7E34;/* idk how to convert this to hsl */
     --radius: 0.75rem;
   }
 
@@ -44,6 +46,8 @@
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
+    --success: #28a745; /* idk how to convert this to hsl */
+    --success-foreground: #1E7E34;/* idk how to convert this to hsl */
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 72.2% 50.6%;
@@ -61,8 +65,24 @@
   }
 }
 
+/* Components */
+@layer components {
+  .gloss {
+    @apply bg-white bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg;
+  }
+  .redborder {
+    @apply focus-visible:ring-primary dark:focus-visible:ring-primary;
+  }
+}
 
+/* Data Attributes */
+@layer components{
+  .Dropdown[data-orientation="vertical"] {
+    @apply flex-col w-full;
+  }
+}
 
+/* Animations and Keyframes */
 @layer components {
   .rainbow-text-animated {
     @apply text-transparent bg-[length:400%_100%];
@@ -81,9 +101,5 @@
     @apply text-[20px] font-extrabold bg-[linear-gradient(to_right,red,orange,yellow,green,blue,indigo,violet)] animate-move;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-  }
-
-  .gloss {
-    @apply bg-white bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg;
   }
 }

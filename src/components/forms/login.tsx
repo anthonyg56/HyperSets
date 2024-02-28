@@ -1,6 +1,5 @@
 "use client"
 
-import { loginFormSchema, presetSchema } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
@@ -11,22 +10,23 @@ import GoogleButton from "../buttons/google"
 import { H3, Muted, Small } from "../ui/typography"
 import { Checkbox } from "@radix-ui/react-checkbox"
 import Link from "next/link"
+import { LoginSchema, loginSchema } from "@/lib/schemas"
 
 export default function LoginForm() {
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(presetSchema),
+  const form = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     }
   })
 
-  function onSubmit(data: z.infer<typeof loginFormSchema>) {
+  function onSubmit(data: LoginSchema) {
 
   }
 
   const val = form.getValues()
-  console.log(val)
+
   return (
     <div className="mx-auto flex flex-col md:mx-0 md:px-20">
       <Form {...form}>

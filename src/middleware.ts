@@ -71,7 +71,7 @@ export default async function middleware(request: NextRequest) {
 
   //   }
   // }
-//console.log(`middleware: \n data: ${session} \n error: ${error}`)
+
 
   return response
   

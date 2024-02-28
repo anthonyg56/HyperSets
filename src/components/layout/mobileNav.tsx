@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useContext } from "react";
 import { LayoutContext, TLayoutContext } from "../context/layoutProvider";
+import NotificationSheet from "../sheets/notifications";
 
 type Props = {
   pathname: string,
@@ -31,7 +32,7 @@ export default function MobleNav({ pathname }: Props) {
       <DrawerContent>
         <NavigationMenu className="mx-auto py-6">
           <NavigationMenuList className="flex flex-col">
-          <NavigationMenuItem>
+            <NavigationMenuItem>
               <Link href={'/'} legacyBehavior passHref>
                 <NavigationMenuLink active={isActive('/')} className={cn([
                   navigationMenuTriggerStyle(),
@@ -58,6 +59,7 @@ export default function MobleNav({ pathname }: Props) {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
+            <NotificationSheet />
             <NavigationMenuItem>
               <Link href={'/login'} legacyBehavior passHref>
                 <NavigationMenuLink active={isActiveSub("/auth")} className={cn([

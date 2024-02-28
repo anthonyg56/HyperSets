@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import { z } from "zod"
 import { cn } from "@/lib/utils"
@@ -11,19 +11,28 @@ import { Button } from "../ui/button"
 import { Small } from "../ui/typography"
 
 import Ratings from "../misc/ratings"
+import { createSupbaseClient } from "@/lib/supabase/client"
+import { TUserSessionContext, UserSessionContext } from "../context/userProvider"
+import { useRouter } from "next/navigation"
 
 const commentSchema = z.string().max(256, 'Must be 256 characters or less')
 const ratingSchema = z.number().int().min(0).max(5)
 
 type Props = {
   rating: number | null;
+  preset_id: number;
 }
 
-export function CommentTextArea({ rating: initalRating }: Props) {
+export function CommentTextArea({ rating: initalRating, preset_id }: Props) {
   const [rating, setRating] = useState(initalRating)
   const [comment, setComment] = useState<string>('')
   const [error, setError] = useState<string | 'too long'>('')
   const [view, setView] = useState<'Comment' | 'Rating'>('Comment')
+  const [loading, setLoading] = useState(false)
+
+  const { profile } = useContext(UserSessionContext) as TUserSessionContext
+  const router = useRouter();
+  const supabase = createSupbaseClient()
 
   useEffect(() => {
     if (initalRating !== null && initalRating > 5) 
@@ -35,6 +44,8 @@ export function CommentTextArea({ rating: initalRating }: Props) {
   async function handleSubmit(e: any) { 
     e.preventDefault()
 
+    setLoading(true)
+
     if (view === 'Comment') 
       submitComment()
     else 
@@ -42,18 +53,37 @@ export function CommentTextArea({ rating: initalRating }: Props) {
   }
 
   async function submitComment() {
+    if (!profile) return setError('must be logged in')
+
     try {
-      commentSchema.parse(comment)
+      const results = commentSchema.parse(comment)
+      await supabase
+        .from('comments')
+        .insert({ text: results, profile_id: profile.profile_id } ) // Change to profile_id in Supabase
+
+      setComment('')
       setError('')
+      setLoading(false)
+
+      router.refresh()
     } catch (err) {
       setError('too long')
+      setLoading(false)
     }
   }
 
   async function submitRating() {
+    if (!profile) return setError('must be logged in')
     try {
-      ratingSchema.parse(rating)
+      const results = ratingSchema.parse(rating)
+      await supabase
+        .from('ratings')
+        .insert({ rating: results, profile_id: profile.profile_id, preset_id })
+
       setError('')
+      setLoading(false)
+
+      router.refresh()
     } catch (err) {
       setError('invalid rating')
     }
@@ -79,7 +109,7 @@ export function CommentTextArea({ rating: initalRating }: Props) {
           props={{
             onClick: (e) => {
               e.preventDefault()
-              console.log(view)
+
               setView(view === 'Comment' ? 'Rating' : 'Comment')
             }
           }}

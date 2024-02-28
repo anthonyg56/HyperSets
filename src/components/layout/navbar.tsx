@@ -1,24 +1,21 @@
+"use client"
+
 import Link from "next/link";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "../ui/navigation-menu";
+import { ListItem, NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "../ui/navigation-menu";
 import { Large } from "../ui/typography";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "../ui/modeToggle";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import MobleNav from "./mobileNav";
-
-const navItems = [
-  {
-    title: "",
-    href: "",
-
-  }
-]
+import NotificationSheet from "../sheets/notifications";
+import Avatar from "../misc/avatar";
+import { Tables } from "../../../types/supabase";
 
 type Props = {
   pathname: string,
+  profile: Tables<'profile'> | null | undefined
 }
 
-export default function Navbar({ pathname }: Props) {
+export default function Navbar({ pathname, profile }: Props) {
   function isActive(path: '/' | '/about') {
     return path === pathname
   }
@@ -26,6 +23,8 @@ export default function Navbar({ pathname }: Props) {
   function isActiveSub(path: '/auth' | '/presets') {
     return pathname.startsWith(path)
   }
+
+  if (profile === undefined) return
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -36,6 +35,7 @@ export default function Navbar({ pathname }: Props) {
           </Large>
         </div>
         <ModeToggle />
+
         <MobleNav pathname={pathname} />
         <NavigationMenu className="hidden md:table-cell">
           <NavigationMenuList>
@@ -47,6 +47,7 @@ export default function Navbar({ pathname }: Props) {
                   Home
                 </NavigationMenuLink>
               </Link>
+
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href={'/presets'} legacyBehavior passHref>
@@ -66,7 +67,7 @@ export default function Navbar({ pathname }: Props) {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
-            <NavigationMenuItem>
+            {profile === null && <NavigationMenuItem>
               <Link href={'/login'} legacyBehavior passHref>
                 <NavigationMenuLink active={isActiveSub("/auth")} className={cn([
                   navigationMenuTriggerStyle(),
@@ -74,9 +75,30 @@ export default function Navbar({ pathname }: Props) {
                   Sign In
                 </NavigationMenuLink>
               </Link>
-            </NavigationMenuItem>
+            </NavigationMenuItem>}
+            {profile !== null && (
+              <NavigationMenuItem>
+                  <NavigationMenuTrigger>
+                    <Avatar
+                      avatar={profile.avatar}
+                      name={profile.name}
+                      username={profile.username}
+                      classNames="w-[30px] h-[30px] mr-2"
+                    />{profile.name ? profile.name : "Mystery User"}</NavigationMenuTrigger>
+                  <NavigationMenuContent className="" >
+                    <ul>
+                      <li>
+                        <ListItem href={`/profile/${profile.profile_id}`} title="My Profile"></ListItem>
+                      </li>
+                      <li>
+                        <ListItem href="/settings" title="Settings" />
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+              </NavigationMenuItem>)}
           </NavigationMenuList>
         </NavigationMenu>
+        {profile !== null && <NotificationSheet profile_id={profile.profile_id} />}
       </div>
     </header>
   )

@@ -1,10 +1,12 @@
-import CommentSheet from "@/components/sheets/page";
+import CommentSheet from "@/components/sheets/comment";
 import PresetTooltip from "@/components/tooltips/presetTooltip";
 import { Button } from "@/components/ui/button";
 import { H1, H2, H4, Large, Lead, P, Small } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import Test from '@public/cozy-setup.jpg'
 import Image from "next/image";
+import { Tables } from "../../../../types/supabase";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type Props = {
   params: {
@@ -13,7 +15,41 @@ type Props = {
   }
 }
 
-export default function PresetDetailsPage({ params: { hardware, presetId }}: Props) {
+type PresetProfileData = {
+  profile: Pick<Tables<'profile'>, 'avatar' | 'banner' | 'name' | 'profile_id' | 'username'>
+}
+
+interface PresetData extends Omit<Tables<'presets'>, 'profile_id'>, PresetProfileData {}
+
+export default async function PresetDetailsPage({ params: { hardware, presetId }}: Props) {
+  const supabase = await createSupabaseServerClient()
+  const preset_id = parseInt(presetId)
+
+  if (isNaN(preset_id)) {
+    return <div>Invalid preset id</div>
+  }
+
+  const { data: preset, error: presetError } = await supabase
+    .from('presets')
+    .select('*, profile:profile_id(avatar, banner, name, profile_id, username)')
+    .eq('preset_id', preset_id)
+    .returns<PresetData>()
+    .single<PresetData>()
+
+  if (presetError || !preset) {
+    console.error(presetError)
+    return <div>There was an error</div>
+  }
+  
+  const { count: downloadCount } = await supabase
+    .from('downloads')
+    .select('*',  { count: 'exact', head: true })
+    .eq('preset_id', preset_id)
+
+  // Edit Effects Table, Games Table, and Ratings Table:
+  // - Effects should just be a row with all effects name and a boolean for whether it's included
+  // - Games should be a row with all games name and a boolean for whether it's included
+  // - Ratings should be a sum for the average of all ratings
 
   return (
     <div className="relative">
@@ -35,15 +71,15 @@ export default function PresetDetailsPage({ params: { hardware, presetId }}: Pro
         ])}>
           <div className="col-span-6 justify-center flex flex-col space-y-3">
             <div>
-            <H1>War Presets</H1>
-            <Small classNames="text-muted-foreground">By Mystery</Small>
+            <H1>{preset.name}</H1>
+            <Small classNames="text-muted-foreground">{preset.profile.name}</Small>
             </div>
 
-            <H4>This preset will have you feeling immersed in war</H4>
+            <H4>{preset.description}</H4>
             <div className="space-x-5">
               <Button variant={"default"}>Download</Button>
               <Button variant={"secondary"}>Watch Demo</Button>
-              <CommentSheet />
+              <CommentSheet preset_id={preset_id}/>
               {/* <Button variant={"secondary"}>Edit</Button> */}
             </div>
           </div>
@@ -52,11 +88,11 @@ export default function PresetDetailsPage({ params: { hardware, presetId }}: Pro
             <div className="grid grid-cols-2 self-start pb-10">
               <div>
                 <P>Downloads</P>
-                <H2>78</H2>
+                <H2>{downloadCount ?? 0}</H2>
               </div>
               <div>
                 <P>Views</P>
-                <H2>1000</H2>
+                <H2>{preset.views}</H2>
               </div>
             </div>
 
@@ -67,7 +103,7 @@ export default function PresetDetailsPage({ params: { hardware, presetId }}: Pro
               </div>
               <div>
                 <P>Hardware <PresetTooltip message="Allows Origin" /></P>
-                <H2>Keyboard</H2>
+                <H2>{preset.hardware}</H2>
               </div>
             </div>
 

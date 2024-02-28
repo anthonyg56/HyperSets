@@ -1,112 +1,55 @@
-"use client"
 import Image from "next/image";
-import MySetupPic from '@public/cozy-setup.jpg'
-
-// import Link from "next/link";
-import { H1, H4, Large, Lead, Small } from "@/components/ui/typography";
-import { useState } from "react";
-import { Enums } from "../../../types/supabase";
-import { Badge } from "@/components/ui/badge";
-import { FilterPresetsDropdownMenu } from "@/components/dropdown/filter-presets";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Card } from "@/components/ui/card";
-import PresetCard from "@/components/cards/preset";
 import { cn } from "@/lib/utils";
-// import { hardware } from "@/lib/data";
-// import HardwareCard from "@/components/cards/hardware";
-// import Title from "@/components/titles/core";
+import MySetupPic from '@public/cozy-setup.jpg';
+import { H4, Small } from "@/components/ui/typography";
+import PresetCardList from "@/components/cards/preset-list";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import HandleToast from "@/components/misc/handleToast";
+type Props = {
+  searchParams?: { 
+    code: string | string[] | undefined 
+  };
+}
+// Todo: Add a hero section to this page
+// - Make hero component a carousel
+// - Wrap Hero component in links
+// Finish create a preset card
+export default async function Page({ searchParams }: Props) {
+  const supabase = await createSupabaseServerClient()
+  const { data: { session }, error } = await supabase.auth.getSession()
 
-export type Filter = "Most Popular" | "Most Recent" | "Most Downloads" | string;
+  let isRedirected = false
 
-export default function Page() {
-  // const cardList = hardware.map((item) => <HardwareCard hardware={item} key={item.name} />)
-  const [hardware, setHardware] = useState<Enums<'hardware_type'>[]>(['Headset', "Keyboard", "Microphone", 'Mouse'])
-  const [filter, setFilter] = useState<Filter>('Most Popular')
+  if (session && session.user && searchParams?.code) {
+    isRedirected = true
+  }
 
-  function CreateAPresetTile() {
-    return (
-      <Card className="col-span-3 w-full max-h-full flex flex-col justify-center items-center relative overflow-hidden hover:cursor-pointer hover:scale-110 hover:z-10">
+  console.log(isRedirected)
+
+  return (
+    <div className="min-h-[calc(100vh_-_57px)] flex flex-col">
+      <HandleToast  trigger={isRedirected} toastProps={{
+        title: "Success!",
+        description: "Thanks for joining us! You're account is created and now logged in.",
+      }}/>
+      <div className="container max-w-screen-2xl w-full relative rounded-lg overflow-hidden py-8">
         <Image
           src={MySetupPic}
           alt="Alloys orgiins hero"
-          fill
+          sizes="100vw 100%"
           quality={100}
           className={cn([
-            'absolute object-cover object-center',
+            'object-contain object-center rounded-lg asbsolute',
             '',
             ''
           ])}
         />
-        <div className="rounded-[1000px] p-3 gloss z-10">
-          <FontAwesomeIcon icon={faPlus} width={90} height={90} className="w-[90px] h-[90px]" />
-        </div>
-        <H4 classNames="z-10">Create a new preset</H4>
-      </Card>
-    )
-  }
-
-  function updateHardware(e: any, newHardware: Enums<'hardware_type'> | 'all') {
-    e.preventDefault()
-
-    if (newHardware === 'all')
-      setHardware(['Headset', "Microphone", 'Mouse', 'Keyboard'])
-    else if (hardware.includes(newHardware))
-      setHardware(hardware.filter((item) => item !== newHardware))
-    else
-      setHardware([...hardware, newHardware])
-  }
-
-  function setVariant(newHardware: Enums<'hardware_type'> | 'all') {
-    let variant: "default" | "secondary" | "destructive" | "outline" | null | undefined = undefined;
-
-    if (hardware.length === 4 && newHardware === 'all') {
-      variant = 'default';
-      return variant;
-    } else if (hardware.length === 4 && newHardware !== 'all') {
-      variant = 'secondary';
-      return variant
-    }
-
-    variant = hardware.includes(newHardware as Enums<'hardware_type'>) ? 'default' : 'secondary';
-    return variant
-  }
-
-  return (
-    <div className="min-h-[calc(100vh_-_57px)] flex flex-col">
-      <div className="container max-w-screen-2xl w-full flex flex-col justify-start">
-        <H1>Presets</H1>
-        <Lead>Find the perfect preset for your hardware</Lead>
-        <div className="flex flex-row items-center">
-          <div className="flex flex-row gap-x-4">
-            <Badge variant={setVariant('all')} onClick={(e) => updateHardware(e, 'all')} className="hover:cursor-pointer self-start">All</Badge>
-            <Badge variant={setVariant('Headset')} onClick={(e) => updateHardware(e, 'Headset')} className="hover:cursor-pointer self-start">Headset</Badge>
-            <Badge variant={setVariant('Microphone')} onClick={(e) => updateHardware(e, 'Microphone')} className="hover:cursor-pointer self-start">Microphone</Badge>
-            <Badge variant={setVariant('Mouse')} onClick={(e) => updateHardware(e, 'Mouse')} className="hover:cursor-pointer self-start">Mouse</Badge>
-            <Badge variant={setVariant('Keyboard')} onClick={(e) => updateHardware(e, 'Keyboard')} className="hover:cursor-pointer self-start">Keyboard</Badge>
-          </div>
-          <FilterPresetsDropdownMenu filter={filter} setFilter={setFilter} />
+        <div className="flex flex-row items-center absolute right-12 bottom-12">
+          <H4>Vaporwave</H4>
+          <Small classNames="text-muted-foreground ml-2">By Anthony Gayflor</Small>
         </div>
       </div>
-
-      <div className="container max-w-screen-2xl w-full relative">
-        <div className={cn([
-          "flex flex-col md:flex-none md:grid md:grid-cols-12 gap-4"
-        ])}>
-          <CreateAPresetTile />
-          <PresetCard />
-          <PresetCard />
-          <PresetCard />
-        </div>
-        <div className="absolute">
-          {/* Filter on screen eventually */}
-        </div>
-      </div>
-
-      {/* <div className="grid grid-cols-12 grid-rows-3 max-h-[1000px] gap-4"> */}
-      {/* {cardList} */}
-      {/* <CreateAPresetTile /> */}
-      {/* </div> */}
+      <PresetCardList page="Preset" trigger={isRedirected} />
     </div>
   )
 }

@@ -16,37 +16,40 @@ import { Button } from "../ui/button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import { cn } from "@/lib/utils"
-import { Filter } from "@/app/presets/page"
+import { PresetCardListSort } from "../cards/preset-list"
+import { useEffect } from "react"
 
 type Props = {
-  filter: Filter;
-  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
+  sort: PresetCardListSort;
+  setSort: React.Dispatch<React.SetStateAction<PresetCardListSort>>;
 }
-export function FilterPresetsDropdownMenu({ filter, setFilter }: Props) {
-  const [imageDirection, setImageDirection] = React.useState<"up" | "down">("up")
+export function SortPresetsDropdownMenu({ sort, setSort }: Props) {
+  const [open, setOpen] = React.useState<boolean>(false)
 
+  // useEffect(() => {}, [imageDirection])
+  
   function handleImageDirection(e: any) {
     e.preventDefault()
-    setImageDirection(imageDirection === "up" ? "down" : "up")
+    setOpen(!!open)
   }
+
 
   return (
     <div className="flex flex-row ml-auto items-center">
       <Small classNames="mr-2">Sort By</Small>
-      <DropdownMenu>
+      <DropdownMenu defaultOpen={open} open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant={'outline'} onClick={handleImageDirection}>
-            {filter} <FontAwesomeIcon icon={faChevronDown} className={cn([
+            {sort} <FontAwesomeIcon icon={faChevronDown} className={cn([
+              "ml-2 w-4 h-4",
               {
-                "transform rotate-180": imageDirection === "up",
+                "rotate-180": open === true,
               }
             ])} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>Filter By</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup value={filter} onValueChange={(value: Filter) => setFilter}>
+          <DropdownMenuRadioGroup value={sort} onValueChange={(value: PresetCardListSort) => setSort}>
             <DropdownMenuRadioItem value="Most Popular">Most Popular</DropdownMenuRadioItem>
             <DropdownMenuRadioItem value="Most Recent">Most Recent</DropdownMenuRadioItem>
             <DropdownMenuRadioItem value="Most Downloads">Most Downloads</DropdownMenuRadioItem>

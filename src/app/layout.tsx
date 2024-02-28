@@ -4,6 +4,8 @@ import { cn } from '@/lib/utils'
 import "./globals.css";
 import { ThemeProvider } from "@/components/context/themeProvider";
 import LayoutProvider from "@/components/context/layoutProvider";
+import UserSessionProvider from "@/components/context/userProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -32,10 +34,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LayoutProvider>
-            {children}
-          </LayoutProvider>
+          <UserSessionProvider>
+            <LayoutProvider>
+                {children}
+              </LayoutProvider>
+          </UserSessionProvider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

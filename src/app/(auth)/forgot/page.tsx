@@ -1,7 +1,5 @@
-import PresetCard from "@/components/cards/preset";
-import CoreTitle from "@/components/titles/core";
+import ForgotPasswordForm from "@/components/forms/onboard/forgot";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { cn } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
@@ -9,17 +7,13 @@ export default async function Page() {
   const { data: { session }, error } = await supabase.auth.getSession()
 
   if (session) {
-    redirect(`/account/${session.user.id}`)
+    redirect(`/settings`)
   }
-  return (
-    <div className="container">
-      <CoreTitle
-        title='Forgot Password?'
-        subTitle='No worries, we’ll send you reset instruction?'
-        classNames={'pb-8'}
-      />
 
-      
+  return (
+    <div className="container max-w-[400px] min-h-[calc(100vh_-_57px)] flex flex-col justify-center items center h-full">
+      <ForgotPasswordForm />
     </div>
   )
 }
+

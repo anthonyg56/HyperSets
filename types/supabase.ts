@@ -6,9 +6,41 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
+      comments: {
+        Row: {
+          comment_id: number
+          created_at: string
+          last_updated: string | null
+          profile_id: number
+          text: string
+        }
+        Insert: {
+          comment_id?: number
+          created_at?: string
+          last_updated?: string | null
+          profile_id: number
+          text?: string
+        }
+        Update: {
+          comment_id?: number
+          created_at?: string
+          last_updated?: string | null
+          profile_id?: number
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["profile_id"]
+          }
+        ]
+      }
       downloads: {
         Row: {
           created_on: string | null
@@ -44,19 +76,43 @@ export interface Database {
       }
       effects: {
         Row: {
-          effect: Database["public"]["Enums"]["effect_type"] | null
+          breathing: boolean
+          confetti: boolean
           effect_id: number
           preset_id: number
+          screen_mirror: boolean
+          solid: boolean
+          sun: boolean
+          swipe: boolean
+          twilight: boolean
+          video_capture: boolean
+          wave: boolean
         }
         Insert: {
-          effect?: Database["public"]["Enums"]["effect_type"] | null
+          breathing?: boolean
+          confetti?: boolean
           effect_id?: number
           preset_id: number
+          screen_mirror?: boolean
+          solid?: boolean
+          sun?: boolean
+          swipe?: boolean
+          twilight?: boolean
+          video_capture?: boolean
+          wave?: boolean
         }
         Update: {
-          effect?: Database["public"]["Enums"]["effect_type"] | null
+          breathing?: boolean
+          confetti?: boolean
           effect_id?: number
           preset_id?: number
+          screen_mirror?: boolean
+          solid?: boolean
+          sun?: boolean
+          swipe?: boolean
+          twilight?: boolean
+          video_capture?: boolean
+          wave?: boolean
         }
         Relationships: [
           {
@@ -65,6 +121,194 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "presets"
             referencedColumns: ["preset_id"]
+          }
+        ]
+      }
+      likes: {
+        Row: {
+          comment_id: number
+          created_at: string
+          id: number
+          profile_id: number
+        }
+        Insert: {
+          comment_id: number
+          created_at?: string
+          id?: number
+          profile_id: number
+        }
+        Update: {
+          comment_id?: number
+          created_at?: string
+          id?: number
+          profile_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "likes_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["profile_id"]
+          }
+        ]
+      }
+      muted_presets: {
+        Row: {
+          created_at: string
+          id: number
+          preset_id: number
+          profile_id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          preset_id: number
+          profile_id: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          preset_id?: number
+          profile_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_muted_presets_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "presets"
+            referencedColumns: ["preset_id"]
+          },
+          {
+            foreignKeyName: "public_muted_presets_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["profile_id"]
+          }
+        ]
+      }
+      notifications: {
+        Row: {
+          comment_id: number | null
+          created_at: string
+          id: number
+          last_updated: string | null
+          like_id: number | null
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          preset_id: number
+          retriver_id: number
+          sender_id: number
+          unread: boolean
+        }
+        Insert: {
+          comment_id?: number | null
+          created_at?: string
+          id?: number
+          last_updated?: string | null
+          like_id?: number | null
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          preset_id: number
+          retriver_id: number
+          sender_id: number
+          unread?: boolean
+        }
+        Update: {
+          comment_id?: number | null
+          created_at?: string
+          id?: number
+          last_updated?: string | null
+          like_id?: number | null
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          preset_id?: number
+          retriver_id?: number
+          sender_id?: number
+          unread?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "notifications_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "presets"
+            referencedColumns: ["preset_id"]
+          },
+          {
+            foreignKeyName: "notifications_retriver_id_fkey"
+            columns: ["retriver_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "notifications_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "public_notifications_like_id_fkey"
+            columns: ["like_id"]
+            isOneToOne: false
+            referencedRelation: "likes"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      notifications_prefrences: {
+        Row: {
+          comment_notifications: boolean
+          created_at: string
+          download_notifications: boolean
+          email_notifications: boolean
+          id: number
+          like_notifications: boolean
+          push_notifications: boolean
+          user_id: string | null
+        }
+        Insert: {
+          comment_notifications?: boolean
+          created_at?: string
+          download_notifications?: boolean
+          email_notifications?: boolean
+          id?: number
+          like_notifications?: boolean
+          push_notifications?: boolean
+          user_id?: string | null
+        }
+        Update: {
+          comment_notifications?: boolean
+          created_at?: string
+          download_notifications?: boolean
+          email_notifications?: boolean
+          id?: number
+          like_notifications?: boolean
+          push_notifications?: boolean
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_notifications_prefrences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -79,7 +323,8 @@ export interface Database {
           photo_url: string | null
           preset_id: number
           profile_id: number
-          youtube_url: string | null
+          views: number
+          youtube_id: string | null
         }
         Insert: {
           created_on?: string | null
@@ -91,7 +336,8 @@ export interface Database {
           photo_url?: string | null
           preset_id?: number
           profile_id: number
-          youtube_url?: string | null
+          views?: number
+          youtube_id?: string | null
         }
         Update: {
           created_on?: string | null
@@ -103,7 +349,8 @@ export interface Database {
           photo_url?: string | null
           preset_id?: number
           profile_id?: number
-          youtube_url?: string | null
+          views?: number
+          youtube_id?: string | null
         }
         Relationships: [
           {
@@ -118,6 +365,8 @@ export interface Database {
       profile: {
         Row: {
           avatar: string | null
+          banner: string | null
+          bio: string | null
           created_on: string | null
           email: string | null
           last_logon: string | null
@@ -128,6 +377,8 @@ export interface Database {
         }
         Insert: {
           avatar?: string | null
+          banner?: string | null
+          bio?: string | null
           created_on?: string | null
           email?: string | null
           last_logon?: string | null
@@ -138,6 +389,8 @@ export interface Database {
         }
         Update: {
           avatar?: string | null
+          banner?: string | null
+          bio?: string | null
           created_on?: string | null
           email?: string | null
           last_logon?: string | null
@@ -211,6 +464,7 @@ export interface Database {
         | "Screen Mirror"
         | "Video Capture"
       hardware_type: "Keyboard" | "Mouse" | "Microphone" | "Headset"
+      notification_type: "Download" | "Rate" | "Comment" | "Like"
     }
     CompositeTypes: {
       [_ in never]: never
