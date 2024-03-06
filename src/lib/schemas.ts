@@ -99,6 +99,16 @@ export const hardwareSchema = createAPresetSchema
 
 // <-------------------------------------- Authentication Schemas -------------------------------------->
 
+export const usernameSchema = z
+  .string({
+    required_error: "Username is required",
+    invalid_type_error: "Please enter a valid string"
+  })
+  .min(5, "Username must be at least 5 characters long")
+  .max(35, "Username must be less than 35 characters long")
+  .regex(/^[a-zA-Z0-9_]*$/, "Username can only contain letters, numbers, and underscores")
+  .optional()
+
 export const emailSchema = z
   .string({
     required_error: "Email is required",
@@ -136,11 +146,44 @@ export const loginSchema = z.object({
   password: z.string(),
 })
 
+export const profileFormSchema = z.object({
+  name: z
+    .string({
+      required_error: "First name is required",
+      invalid_type_error: "Please enter a valid string"
+    })
+    .min(2, "First name must be at least 2 characters long")
+    .max(50, "First name must be less than 50 characters long")
+    .optional(),
+  username: usernameSchema,
+  // Make sure to validate username and email uniqueness
+  // email: z
+  //   .string()
+  //   .email("Please enter a valid email"),
+  avatar: z
+    .any()
+    .optional()
+    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 5MB.")
+    .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
+    .optional(),
+  bio: z
+    .string()
+    .max(160, "Bio must be less than 160 characters long")
+    .optional(),
+  banner: z    
+    .any()
+    .optional()
+    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 5MB.")
+    .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
+    .optional(),
+})
+
 export const signupSchemna = z.object({
   email: emailSchema,
   password: passwordSchema,
-  confirm: passwordSchema
+  confirm: passwordSchema,
 })
+.merge(profileFormSchema.omit({ avatar: true, banner: true }))
 .refine((data) => data.password === data.confirm, {
   message: "Passwords don't match",
   path: ["confirm"], // path of error
@@ -153,14 +196,7 @@ export const regiserFormSchema = loginSchema.extend({
 
 // <-------------------------------------- Settings Schemas -------------------------------------->
 
-export const usernameSchema = z
-  .string({
-    required_error: "Username is required",
-    invalid_type_error: "Please enter a valid string"
-  })
-  .min(5, "Username must be at least 5 characters long")
-  .max(35, "Username must be less than 35 characters long")
-  .regex(/^[a-zA-Z0-9_]*$/, "Username can only contain letters, numbers, and underscores")
+
 
 export const securityFormSchema = z.object({
   password: passwordSchema,
@@ -190,37 +226,7 @@ export const NotificationsFormSchema = z.object({
   muted: z.array(z.string()),
 })
 
-export const profileFormSchema = z.object({
-  name: z
-    .string({
-      required_error: "First name is required",
-      invalid_type_error: "Please enter a valid string"
-    })
-    .min(2, "First name must be at least 2 characters long")
-    .max(50, "First name must be less than 50 characters long"),
-  username: usernameSchema,
-  // Make sure to validate username and email uniqueness
-  // email: z
-  //   .string()
-  //   .email("Please enter a valid email"),
-  avatar: z
-    .any()
-    .optional()
-    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 5MB.")
-    .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
-    .optional(),
-  bio: z
-    .string()
-    .max(160, "Bio must be less than 160 characters long")
-    .optional()
-    .default("This user hasn't written their bio yet."),
-  banner: z    
-    .any()
-    .optional()
-    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 5MB.")
-    .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
-    .optional(),
-})
+
 
 // <-------------------------------------- UI Schemas (may delete later) -------------------------------------->
 
@@ -264,6 +270,7 @@ export const fileSchema = z
 // <-------------------------------------- Schemas Types -------------------------------------->
 
 export type LoginSchema = z.infer<typeof loginSchema>
+export type SignupSchema = z.infer<typeof signupSchemna>
 export type CreateAPresetSchema = z.infer<typeof createAPresetSchema>
 export type EmailSchema = z.infer<typeof emailSchema>
 export type EffectSchema = z.infer<typeof effectSchema>

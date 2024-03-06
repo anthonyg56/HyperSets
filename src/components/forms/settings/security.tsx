@@ -172,7 +172,7 @@ export default function SecuritySection() {
               </FormDescription>
             </div>
           </div>
-          <FormField
+          {user !== undefined && <FormField
             control={form.control}
             name="connectedAccounts"
             render={({ field }) => {
@@ -234,7 +234,7 @@ export default function SecuritySection() {
                 </FormItem>
               )
             }}
-          />
+          />}
         </div>
 
       </form>

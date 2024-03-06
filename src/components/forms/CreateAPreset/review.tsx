@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { H3, Muted, H4, Small } from "@/components/ui/typography"
+import { H3, Muted, H4 } from "@/components/ui/typography"
 import { CreateAPresetSchema } from "@/lib/schemas"
 import { UseFormReturn } from "react-hook-form"
 import { Views } from "."
@@ -31,42 +31,41 @@ export function Review({ form, setView, setPreviousView }: Props) {
         <H3>Review</H3>
         <Muted>Review your preset before submitting</Muted>
       </div>
-      <div className="space-y-2 py-4 flex flex-wrap flex-col">
+      <div className="space-y-6 py-4 flex flex-wrap flex-col">
         <div>
           <H4>Name</H4>
-          <Small>{name}</Small>
+          <Muted>{name}</Muted>
         </div>
         <div>
           <H4>Description</H4>
-          <Small>{description}</Small>
+          <Muted>{description}</Muted>
         </div>
         <div>
           <H4>Hardware</H4>
-          <Small>{hardware}</Small>
+          <Muted>{hardware}</Muted>
         </div>
-        <div>
-          <H4>Youtube ID</H4>
-          <Small>{youtubeId}</Small>
-        </div>
-        <div>
+        {youtubeId && <div>
+          <H4>Youtube Url</H4>
+          <Muted>{youtubeId}</Muted>
+        </div>}
+        {photoUrl && <div>
           <H4>Photo Url</H4>
-          <Small>{photoUrl}</Small>
-        </div>
+          <Muted>{photoUrl}</Muted>
+        </div>}
         <div>
           <H4>Download Url</H4>
-          <Small>{downloadUrl}</Small>
+          <Muted>{downloadUrl}</Muted>
         </div>
         <div>
           <H4>Effects</H4>
-          <Small>{effects}</Small>
+          <div className="space-x-4 flex flex-row">
+            {effects.map((effect) => <Muted>{effect}</Muted>)}
+          </div>
         </div>
         {/* <div>
           <H4>Games</H4>
-          <Small>{games}</Small>
+          <Muted>{games}</Muted>
         </div> */}
-      </div>
-      <div className="flex justify-between">
-        <Button type="submit" className="w-full">Submit</Button>
       </div>
     </div>
   )

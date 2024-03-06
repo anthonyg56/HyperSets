@@ -1,17 +1,20 @@
-import { UseFormReturn, useForm } from "react-hook-form"
-import { z } from "zod"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { CreateAPresetSchema, Form, youtubeUrlSchema } from "@/lib/schemas"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Separator } from "@radix-ui/react-dropdown-menu"
-import { H3, Muted, Small } from "@/components/ui/typography"
-import { extractYouTubeVideoId } from "@/lib/utils"
-import YoutubeThumbnailDisplay from "./image-display"
-import { SeparatorWithText } from "@/components/misc/separators"
 import { Views } from "."
+
+import { 
+  FormControl, 
+  FormDescription, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { UseFormReturn } from "react-hook-form"
 import { Button } from "@/components/ui/button"
-import { use, useEffect } from "react"
+import { Textarea } from "@/components/ui/textarea"
+import { CreateAPresetSchema } from "@/lib/schemas"
+import { useToast } from "@/components/ui/use-toast"
+import { H3, Muted } from "@/components/ui/typography"
 import EffectsToggleGroup from "./effects-toggle-group"
 
 type Props = {
@@ -21,11 +24,28 @@ type Props = {
 }
 
 export default function AddGeneralDetailsForms({ form, setView, setPreviousView }: Props) {
-  const nameFieldState = form.getFieldState('name')
-  const descriptionFieldState = form.getFieldState('description')
-  const downloadUrlFieldState = form.getFieldState('downloadUrl')
+  const { toast } = useToast()
 
-  const isDisabled = nameFieldState.invalid === true || descriptionFieldState.invalid === true || downloadUrlFieldState.invalid === true
+  async function handleViewChange(e: any) {
+    e.preventDefault()
+
+    const nameCheck = await form.trigger('name')
+    const descriptionCheck = await form.trigger('description')
+    const downloadUrlCheck = await form.trigger('downloadUrl')
+    const effectsCheck = await form.trigger('effects')
+
+    if (!nameCheck || !descriptionCheck || !downloadUrlCheck || !effectsCheck) {
+      toast({
+        title: 'Error',
+        description: 'Please fill out the required fields',
+      })
+      return
+    }
+
+    form.clearErrors(['name', 'description', 'downloadUrl', 'effects'])
+
+    setView(Views.Review)
+  }
 
   return (
     <div >
@@ -90,9 +110,9 @@ export default function AddGeneralDetailsForms({ form, setView, setPreviousView 
             )
           }}
         />
-        <EffectsToggleGroup form={form} setView={setView} />
+        <EffectsToggleGroup form={form} />
       </div>
-      <Button onClick={() => setView(Views.AddSpecificDetails)} className="w-full" disabled={isDisabled}>
+      <Button onClick={handleViewChange} className="w-full">
         Next
       </Button>
     </div>

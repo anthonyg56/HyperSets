@@ -22,7 +22,7 @@ export default function OnboardingOauth() {
   }
 
   return (
-    <div className="flex flex-row w-full gap-x-4 pb-3 pt-2">
+    <div className="flex flex-row w-full gap-x-4 pt-2">
       <Button variant="outline" size="icon" className="w-full">
         <FontAwesomeIcon icon={faTwitter} onClick={(e) => handleOAuthSignIn(e, 'twitter')} />
       </Button>

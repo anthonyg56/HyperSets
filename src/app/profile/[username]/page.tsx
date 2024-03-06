@@ -27,19 +27,15 @@ type Props = {
 export default async function Page({ params: { username } }: Props) {
   const supabase = await createSupabaseServerClient()
   const { data: user, error: userError } = await supabase.auth.getUser()
-  const results = usernameSchema.safeParse(username)
-  
-  if (!results.success) {
-    // In the future, redirect to a user not found page
-    redirect('/presets')
-  }
 
   const { data: profile, error } = await supabase
-    .from('profiles')
-    .select('*, downloads(count), presets(count), ')
-    .eq('username', results.data)
+    .from('profile')
+    .select('*, downloads(count), presets(count)')
+    .eq('username', username)
     .returns<ProfileQueryData>()
 
+ console.log(profile?.downloads)
+ console.log(error)
 
   if (!profile || error) {
     // In the future, redirect to a user not found page
@@ -71,7 +67,7 @@ export default async function Page({ params: { username } }: Props) {
               <div className="col-span-2">
                 {/* # of Downloads */}
                 <P>Downloads</P>
-                <H2>{profile.downloads[0].count}</H2>
+                <H2>{profile.downloads !== undefined ? profile.downloads[0].count : 0}</H2>
               </div>
               <div className="col-span-2">
                 {/* Average Rating */}
@@ -81,7 +77,7 @@ export default async function Page({ params: { username } }: Props) {
               <div className="col-span-2">
                 {/* # of Presets Made */}
                 <P>Presets Made</P>
-                <H2>{profile.presets[0].count}</H2>
+                <H2>{profile.presets !== undefined ? profile.presets[0].count : 0}</H2>
               </div>
             </div>
           </div>

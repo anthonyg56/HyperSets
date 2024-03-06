@@ -25,13 +25,16 @@ import { TUserSessionContext, UserSessionContext } from "@/components/context/us
 import { useToast } from "@/components/ui/use-toast";
 import CreateAPresetTile from "./create-a-preset";
 import { createSupbaseClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Tables } from "../../../../types/supabase";
+import { useRouter } from "next/navigation";
 
 // Views Needs to be an enum in order to display the step in the dialog
 export enum Views {
   SelectHardware,
   AddVisuals,
   AddGeneralDetails,
-  AddSpecificDetails,
+  // AddSpecificDetails,
   Review,
 }
 
@@ -48,6 +51,7 @@ export default function CreateAPresetForm({ presetId }: Props) {
   const { profile, session } = useContext(UserSessionContext) as TUserSessionContext
   const supabase = createSupbaseClient()
   const { toast } = useToast()
+  const router = useRouter()
 
   const form = useForm<CreateAPresetSchema>({
     resolver: zodResolver(createAPresetSchema),
@@ -83,9 +87,10 @@ export default function CreateAPresetForm({ presetId }: Props) {
         toast({
           title: "There was an error fetching your preset",
         })
+        return
       }
 
-      if (effects == null || presets == null) {
+      if (effects === null || presets === null) {
         return
       }
 
@@ -105,6 +110,7 @@ export default function CreateAPresetForm({ presetId }: Props) {
       });
     }
 
+    // If the presetId is defined and the profile is defined, this means were at the users preset section in settings, fetch the preset
     if (presetId !== undefined && profile?.profile_id !== undefined) {
       fetchPresets(presetId)
     }
@@ -120,9 +126,78 @@ export default function CreateAPresetForm({ presetId }: Props) {
 
   const trigger = presetId ? "Edit preset" : <CreateAPresetTile /> 
 
-  function onSubmit(values: CreateAPresetSchema) {
+  async function onSubmit(values: CreateAPresetSchema) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    if (profile === null || profile === undefined || session === null || session === undefined || session.user.email_confirmed_at === undefined || profile.profile_id === undefined) {
+      toast({
+        title: "You need to have a profile to create a preset",
+      })
+      return
+    }
+
+    const newPreset = {
+      name: values.name,
+      description: values.description,
+      hardware: values.hardware ?? "Keyboard",
+      youtube_id: values.youtubeId ?? null,
+      photo_url: values.photoUrl ?? null,
+      download_url: values.downloadUrl,
+      views: 0,
+      profile_id: profile.profile_id,
+    }
+
+    const { data: preset, error } = await supabase
+      .from('presets')
+      .insert(newPreset)
+      .select()
+      .single()
+
+    if (error || preset === null) {
+      toast({
+        title: "There was an error creating your preset",
+      })
+      return
+    }
+
+    const effects = {
+      preset_id: preset.preset_id,
+      breathing: values.effects?.includes("Breathing") ?? false,
+      confetti: values.effects?.includes("Confetti") ?? false,
+      swipe: values.effects?.includes("Swipe") ?? false,
+      solid: values.effects?.includes("Solid") ?? false,
+      twilight: values.effects?.includes("Twilight") ?? false,
+      wave: values.effects?.includes("Wave") ?? false,
+      sun: values.effects?.includes("Sun") ?? false,
+      screen_mirror: values.effects?.includes("Screen Mirror") ?? false,
+      video_capture: values.effects?.includes("Video Capture") ?? false,
+    }
+
+    const { error: effectsError } = await supabase
+      .from('effects')
+      .insert(effects)
+      .select() 
+
+    if (effectsError) {
+      toast({
+        title: "There was an error creating your preset",
+      })
+
+      // Delete the preset if the effects failed to insert
+      await supabase
+        .from('presets')
+        .delete()
+        .eq('preset_id', preset.preset_id)
+        
+      return
+    }
+
+    setIsOpen(false)
+    toast({
+      title: "Success! Preset created",
+    })
+
+    router.push(`/presets/${preset.preset_id}`)
   }
 
   function handleOpen(open: boolean) {
@@ -176,6 +251,11 @@ export default function CreateAPresetForm({ presetId }: Props) {
             {currentView === Views.AddGeneralDetails && <AddGeneralDetailsForms form={form} setView={setView} setPreviousView={setPreviousView} />}
             {/* {currentView === Views.AddSpecificDetails && <AddEffect form={form} setView={setView} />} */}
             {currentView === Views.Review && <Review form={form} setView={setView} setPreviousView={setPreviousView} />}
+            {currentView === Views.Review && (
+              <div className="flex justify-between">
+                <Button type="submit" className="w-full">Submit</Button>
+              </div>
+            )}
           </form>
         </Form>
       </DialogContent>

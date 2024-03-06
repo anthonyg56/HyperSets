@@ -88,7 +88,7 @@ export default function Navbar({ pathname, profile }: Props) {
                   <NavigationMenuContent className="" >
                     <ul>
                       <li>
-                        <ListItem href={`/profile/${profile.profile_id}`} title="My Profile"></ListItem>
+                        <ListItem href={`/profile/${profile.username}`} title="My Profile"></ListItem>
                       </li>
                       <li>
                         <ListItem href="/settings" title="Settings" />

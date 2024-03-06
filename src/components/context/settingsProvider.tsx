@@ -1,7 +1,7 @@
 "use client"
 import { createContext, useContext } from "react"
 import SettingsNavMenu from "../layout/settingsNav"
-import Image from "next/image"
+import Image, { StaticImageData } from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { capitalizeEachWord, cn } from "@/lib/utils"
 import { Button } from "../ui/button"
@@ -15,19 +15,24 @@ import Link from "next/link"
 import { createSupbaseClient } from "@/lib/supabase/client"
 import { useTheme } from "next-themes"
 
+import LightBannerPhoto from "../../../public/defaults/default-profile-bg-light.jpg"
+import DarkBannerPhoto from "../../../public/defaults/default-profile-bg-dark.jpg"
+
 type TSettingsContext = {}
 
 export const SettingsContext = createContext<Partial<TSettingsContext>>({})
 
 export default function SettingsProvider({ children }: { children: React.ReactNode }) {
   const { profile } = useContext(UserSessionContext) as TUserSessionContext
-  const {theme} = useTheme()
+  const { resolvedTheme } = useTheme()
   const router = useRouter()
   
-  // Dont render page until the profile is checked
+  console.log(useTheme())
+  // Dont render page until an attempt to fetch the profile is made
   if (profile === undefined) {
     return
-  // If the profile is null then its been checked, redirect to login
+
+  // If the profile is null then an attempt has been made, redirect to login
   } else if (profile === null) {
     router.push('/login')
     return
@@ -38,33 +43,37 @@ export default function SettingsProvider({ children }: { children: React.ReactNo
   const capitalized = capitalizeEachWord(name);
   const initials = extractFirstLetters(capitalized);
 
+
   function extractFirstLetters(input: string | null): string {
     if (!input) return '';
     return input.split(' ').map(word => word[0]).join('');
   }
 
-
+  const UserBanner = ({ src }: { src: string | StaticImageData }) => (
+    <>
+    <div className="w-full h-full bg-black/45 z-10 absolute hidden group-hover:table-cell"></div>
+    <Button size="lg" variant='outline' className="-translate-y-1 ml-2 absolute top-[45%] right-[40%] z-20 hidden group-hover:table-cell">Edit Banner <FontAwesomeIcon icon={faPencil} /></Button>
+    <Image
+      src={src}
+      alt={`Banner for ${username}`}
+      sizes="100vw"
+      objectPosition="center center"
+      quality={100}
+      className={cn([
+        'object-cover object-center',
+        '',
+        ''
+      ])}
+    />
+    </>
+  )
+  
   return (
     <SettingsContext.Provider value={{}}>
       <div className="container max-w-screen-2xl">
         <div className="h-[250px] overflow-hidden relative w-full group">
-          {banner && (
-            <>
-            <div className="w-full h-full bg-black/45 z-10 absolute hidden group-hover:table-cell"></div>
-            <Button size="lg" variant='outline' className="-translate-y-1 ml-2 absolute top-[45%] right-[40%] z-20 hidden group-hover:table-cell">Edit Banner <FontAwesomeIcon icon={faPencil} /></Button>
-            <Image
-              src={banner}
-              alt={`Banner for ${username}`}
-              sizes="100vw"
-              objectPosition="center center"
-              quality={100}
-              className={cn([
-                'object-cover object-center',
-                '',
-                ''
-              ])}
-            />
-         </> )}
+          {banner !== null && <UserBanner src={banner} />}
+          {banner === null && <UserBanner src={resolvedTheme === "dark" ? DarkBannerPhoto : LightBannerPhoto} />}
         </div>
         <div>
           <div className="flex flex-row p-4">
@@ -99,3 +108,5 @@ export default function SettingsProvider({ children }: { children: React.ReactNo
     </SettingsContext.Provider>
   )
 }
+
+

@@ -11,6 +11,7 @@ import { H3, Muted } from "@/components/ui/typography"
 import { Input } from "@/components/ui/input"
 import YoutubeThumbnailDisplay from './image-display'
 import { SeparatorWithText } from '@/components/misc/separators'
+import { useToast } from '@/components/ui/use-toast'
 
 type Props = {
   setView: (view: number) => void,
@@ -19,19 +20,24 @@ type Props = {
 }
 
 export default function AddVisuals({ form, setView, setPreviousView }: Props) {
-  const photoUrlFieldState = form.getFieldState('photoUrl')
-  const videoIdFieldState = form.getFieldState('youtubeId')
+  const {toast} = useToast()
 
-  console.log(videoIdFieldState)
-
-  let isDisabled = true 
-
-  if (photoUrlFieldState.invalid === false || videoIdFieldState.invalid === false) 
-    isDisabled = false
-
-  function updateView(e: any) {
+  async function updateView(e: any) {
     e.preventDefault()
 
+    const photoUrlCheck = await form.trigger('photoUrl')
+    const youtubeIdCheck = await form.trigger('youtubeId')
+
+    if (!photoUrlCheck && !youtubeIdCheck) {
+      toast({
+        title: 'Error',
+        description: 'Please enter a valid photo url or youtube id',
+      })
+      return
+    }
+
+    form.clearErrors(['photoUrl', 'youtubeId'])
+    
     setView(Views.AddGeneralDetails)
   }
 
@@ -61,7 +67,7 @@ export default function AddVisuals({ form, setView, setPreviousView }: Props) {
           }}
         />
       </div>
-      <Button onClick={updateView} className="w-full" disabled={isDisabled}>Next</Button>
+      <Button onClick={updateView} className="w-full">Next</Button>
     </div>
   )
     
