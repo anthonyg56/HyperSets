@@ -1,5 +1,5 @@
 "use client"
-import PasswordResetConfirmationDisplay from "@/components/displays/password-reset-confirmation";
+import PasswordResetConfirmationDisplay from "@/components/displays/passwordResetEmailConfirmation";
 import InfoTooltip from "@/components/tooltips/info-tooltip";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { passwordRules } from "@/lib/data";
 import { recoverPasswordSchema } from "@/lib/schemas";
-import { createSupbaseClient } from "@/lib/supabase/client";
+import { createSupabaseClient } from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,7 +18,7 @@ export default function RecoverPasswordForm() {
   const [submitted, setSubmitted] = useState(false)
 
   const { toast } = useToast()
-  const supabase = createSupbaseClient()
+  const supabase = createSupabaseClient()
   
   const form = useForm<z.infer<typeof recoverPasswordSchema>>({
     resolver: zodResolver(recoverPasswordSchema),

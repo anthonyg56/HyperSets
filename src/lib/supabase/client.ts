@@ -4,7 +4,8 @@ import { Database } from "../../../types/supabase";
 import { baseURL } from "@/lib/constants";
 // import { ToastState } from "../contexts/Layout";
 
-export function createSupbaseClient() {
+export type SupabaseClient = ReturnType<typeof createSupabaseClient>
+export function createSupabaseClient() {
   return createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -12,7 +13,7 @@ export function createSupbaseClient() {
 }
 
 export async function resendConfirmationEmail(email: string) {
-  const supabase = createSupbaseClient()
+  const supabase = createSupabaseClient()
   const { error } = await supabase.auth.resend({
     type: 'signup',
     email: email,

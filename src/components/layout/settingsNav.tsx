@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket, faExclamation, faShieldHalved, faSliders, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { TUserSessionContext, UserSessionContext } from "../context/userProvider";
+import { TUserSessionContext, UserSessionContext } from "../../lib/context/sessionProvider";
 import { useContext } from "react";
-import { createSupbaseClient } from "@/lib/supabase/client";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 export type TSettingsSections = 'profile' | 'profile' | 'presets' | 'notifications' | 'security' 
 
@@ -36,7 +36,7 @@ const sections = [
 
 export default function SettingsNavMenu() {
   const params = useSearchParams();
-  const supabase = createSupbaseClient()
+  const supabase = createSupabaseClient()
   const router = useRouter()
 
   const section = params.get('section') as TSettingsSections

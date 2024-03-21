@@ -115,3 +115,124 @@ export enum Effects {
 }
 
 export const effectsVals = Object.values(Effects)
+
+export const effectsAndMoreData = [
+  {
+    hardware: EHardware.Keyboard,
+    effectsAndMore: [
+      {
+        name: "Game Compadiability" as const,
+        type: "Select",
+      },
+      // {
+      //   name: "Target Keys (Keybinds)",
+      //   type: "Select",
+      // },
+      // {
+      //   name: "Target Keys (RGB)",
+      //   type: "Select",
+      // },
+      // {
+      //   name: "Game Mode",
+      //   type: "Toggle",
+      // },
+      // {
+      //   name: "RGB Opacity",
+      //   type: "Slider",
+      // },
+      {
+        name: "Effects" as const,
+        type: "Select",
+      },
+    ]
+  },
+  {
+    hardware: EHardware.Microphone,
+    effectsAndMore: [
+      // {
+      //   name: "Mic gain",
+      //   type: "Slider",
+      // },
+      // {
+      //   name: "Mic pattern",
+      //   type: "Select",
+      // },
+      // {
+      //   name: "Mic Volume",
+      //   type: "Slider",
+      // },
+      // {
+      //   name: "Mic monitoring",
+      //   type: "Slider",
+      // },
+      // {
+      //   name: "RGB Opacity",
+      //   type: "Slider",
+      // },
+      {
+        name: "Effects" as const,
+        type: "Select",
+      },
+    ]
+  },
+  {
+    hardware: EHardware.Mouse,
+    effectsAndMore: [
+      // {
+      //   name: "DPI Sensitivity",
+      //   type: "Slider",
+      // },
+      // {
+      //   name: "Polling rate",
+      //   type: "Select",
+      // },
+      // {
+      //   name: "RGB Opacity",
+      //   type: "Slider",
+      // },
+      // {
+      //   name: "Keybinds",
+      //   type: "Select",
+      // },
+      {
+        name: "Game Compadiability" as const,
+        type: "Select",
+      },
+      {
+        name: "Effects" as const,
+        type: "Select",
+      },
+    ]
+  },
+  {
+    hardware: EHardware.Headset,
+    effectsAndMore: [
+      // {
+      //   name: "Mic gain",
+      //   type: "Slider",
+      // },
+      // {
+      //   name: "Mic pattern",
+      //   type: "Select",
+      // },
+      // {
+      //   name: "Mic Volume",
+      //   type: "Slider",
+      // },
+      // {
+      //   name: "Mic monitoring",
+      //   type: "Slider",
+      // },
+      // {
+      //   name: "RGB Opacity",
+      //   type: "Slider",
+      // },
+      {
+        name: "Effects" as const,
+        type: "Select",
+      },
+    ]
+  },
+]
+
+export type EffectsAndMoreData = typeof effectsAndMoreData

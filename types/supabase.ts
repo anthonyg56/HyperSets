@@ -14,6 +14,8 @@ export type Database = {
           comment_id: number
           created_at: string
           last_updated: string | null
+          likes: number
+          preset_id: number | null
           profile_id: number
           text: string
         }
@@ -21,6 +23,8 @@ export type Database = {
           comment_id?: number
           created_at?: string
           last_updated?: string | null
+          likes?: number
+          preset_id?: number | null
           profile_id: number
           text?: string
         }
@@ -28,6 +32,8 @@ export type Database = {
           comment_id?: number
           created_at?: string
           last_updated?: string | null
+          likes?: number
+          preset_id?: number | null
           profile_id?: number
           text?: string
         }
@@ -36,28 +42,66 @@ export type Database = {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
-          }
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "public_comments_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["preset_id"]
+          },
+          {
+            foreignKeyName: "public_comments_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "presets"
+            referencedColumns: ["preset_id"]
+          },
         ]
       }
       downloads: {
         Row: {
           created_on: string | null
+          download_id: number
           preset_id: number
           profile_id: number | null
         }
         Insert: {
           created_on?: string | null
+          download_id?: number
           preset_id: number
           profile_id?: number | null
         }
         Update: {
           created_on?: string | null
+          download_id?: number
           preset_id?: number
           profile_id?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "downloads_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["preset_id"]
+          },
           {
             foreignKeyName: "downloads_preset_id_fkey"
             columns: ["preset_id"]
@@ -69,9 +113,23 @@ export type Database = {
             foreignKeyName: "downloads_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "downloads_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
-          }
+          },
+          {
+            foreignKeyName: "downloads_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["profile_id"]
+          },
         ]
       }
       effects: {
@@ -119,10 +177,38 @@ export type Database = {
             foreignKeyName: "effects_preset_id_fkey"
             columns: ["preset_id"]
             isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["preset_id"]
+          },
+          {
+            foreignKeyName: "effects_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
             referencedRelation: "presets"
             referencedColumns: ["preset_id"]
-          }
+          },
         ]
+      }
+      games: {
+        Row: {
+          franchise: string
+          game_id: number
+          game_name: string
+          publisher: string
+        }
+        Insert: {
+          franchise: string
+          game_id?: number
+          game_name: string
+          publisher: string
+        }
+        Update: {
+          franchise?: string
+          game_id?: number
+          game_name?: string
+          publisher?: string
+        }
+        Relationships: []
       }
       likes: {
         Row: {
@@ -152,12 +238,33 @@ export type Database = {
             referencedColumns: ["comment_id"]
           },
           {
+            foreignKeyName: "likes_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "likes_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "likes_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
-          }
+          },
+          {
+            foreignKeyName: "likes_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["profile_id"]
+          },
         ]
       }
       muted_presets: {
@@ -184,6 +291,13 @@ export type Database = {
             foreignKeyName: "public_muted_presets_preset_id_fkey"
             columns: ["preset_id"]
             isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["preset_id"]
+          },
+          {
+            foreignKeyName: "public_muted_presets_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
             referencedRelation: "presets"
             referencedColumns: ["preset_id"]
           },
@@ -191,62 +305,63 @@ export type Database = {
             foreignKeyName: "public_muted_presets_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "public_muted_presets_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
-          }
+          },
+          {
+            foreignKeyName: "public_muted_presets_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["profile_id"]
+          },
         ]
       }
       notifications: {
         Row: {
           comment_id: number | null
           created_at: string
+          download_id: number | null
           id: number
           last_updated: string | null
           like_id: number | null
-          notification_type: Database["public"]["Enums"]["notification_type"]
-          preset_id: number
           retriver_id: number
-          sender_id: number
           unread: boolean
         }
         Insert: {
           comment_id?: number | null
           created_at?: string
+          download_id?: number | null
           id?: number
           last_updated?: string | null
           like_id?: number | null
-          notification_type?: Database["public"]["Enums"]["notification_type"]
-          preset_id: number
           retriver_id: number
-          sender_id: number
           unread?: boolean
         }
         Update: {
           comment_id?: number | null
           created_at?: string
+          download_id?: number | null
           id?: number
           last_updated?: string | null
           like_id?: number | null
-          notification_type?: Database["public"]["Enums"]["notification_type"]
-          preset_id?: number
           retriver_id?: number
-          sender_id?: number
           unread?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "notifications_comment_id_fkey"
-            columns: ["comment_id"]
+            foreignKeyName: "notifications_retriver_id_fkey"
+            columns: ["retriver_id"]
             isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["comment_id"]
-          },
-          {
-            foreignKeyName: "notifications_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "presets"
-            referencedColumns: ["preset_id"]
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "notifications_retriver_id_fkey"
@@ -256,11 +371,32 @@ export type Database = {
             referencedColumns: ["profile_id"]
           },
           {
-            foreignKeyName: "notifications_sender_id_fkey"
-            columns: ["sender_id"]
+            foreignKeyName: "notifications_retriver_id_fkey"
+            columns: ["retriver_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "top_comments"
             referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "public_notifications_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "public_notifications_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "public_notifications_download_id_fkey"
+            columns: ["download_id"]
+            isOneToOne: false
+            referencedRelation: "downloads"
+            referencedColumns: ["download_id"]
           },
           {
             foreignKeyName: "public_notifications_like_id_fkey"
@@ -268,7 +404,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "likes"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       notifications_prefrences: {
@@ -309,7 +445,50 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
-          }
+          },
+        ]
+      }
+      preset_games: {
+        Row: {
+          created_at: string
+          game_id: number
+          id: number
+          preset_id: number
+        }
+        Insert: {
+          created_at?: string
+          game_id: number
+          id?: number
+          preset_id: number
+        }
+        Update: {
+          created_at?: string
+          game_id?: number
+          id?: number
+          preset_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_preset_games_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["game_id"]
+          },
+          {
+            foreignKeyName: "public_preset_games_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["preset_id"]
+          },
+          {
+            foreignKeyName: "public_preset_games_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "presets"
+            referencedColumns: ["preset_id"]
+          },
         ]
       }
       presets: {
@@ -317,12 +496,14 @@ export type Database = {
           created_on: string | null
           description: string
           download_url: string
+          downloads: number
+          featured: boolean
           hardware: Database["public"]["Enums"]["hardware_type"]
           last_updated_on: string | null
           name: string
           photo_url: string | null
           preset_id: number
-          profile_id: number
+          profile_id: number | null
           views: number
           youtube_id: string | null
         }
@@ -330,12 +511,14 @@ export type Database = {
           created_on?: string | null
           description: string
           download_url: string
+          downloads?: number
+          featured?: boolean
           hardware: Database["public"]["Enums"]["hardware_type"]
           last_updated_on?: string | null
           name: string
           photo_url?: string | null
           preset_id?: number
-          profile_id: number
+          profile_id?: number | null
           views?: number
           youtube_id?: string | null
         }
@@ -343,23 +526,39 @@ export type Database = {
           created_on?: string | null
           description?: string
           download_url?: string
+          downloads?: number
+          featured?: boolean
           hardware?: Database["public"]["Enums"]["hardware_type"]
           last_updated_on?: string | null
           name?: string
           photo_url?: string | null
           preset_id?: number
-          profile_id?: number
+          profile_id?: number | null
           views?: number
           youtube_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "presets_profile_id_fkey"
+            foreignKeyName: "public_presets_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "public_presets_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
-          }
+          },
+          {
+            foreignKeyName: "public_presets_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["profile_id"]
+          },
         ]
       }
       profile: {
@@ -369,6 +568,7 @@ export type Database = {
           bio: string | null
           created_on: string | null
           email: string | null
+          first_login: boolean
           last_logon: string | null
           name: string | null
           profile_id: number
@@ -381,6 +581,7 @@ export type Database = {
           bio?: string | null
           created_on?: string | null
           email?: string | null
+          first_login?: boolean
           last_logon?: string | null
           name?: string | null
           profile_id?: number
@@ -393,6 +594,7 @@ export type Database = {
           bio?: string | null
           created_on?: string | null
           email?: string | null
+          first_login?: boolean
           last_logon?: string | null
           name?: string | null
           profile_id?: number
@@ -401,34 +603,58 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "profile_user_id_fkey"
+            foreignKeyName: "public_profile_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       ratings: {
         Row: {
+          comment_id: number | null
           created_on: string | null
           preset_id: number
           profile_id: number
           rating: number
         }
         Insert: {
+          comment_id?: number | null
           created_on?: string | null
           preset_id: number
           profile_id: number
           rating: number
         }
         Update: {
+          comment_id?: number | null
           created_on?: string | null
           preset_id?: number
           profile_id?: number
           rating?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "public_ratings_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "public_ratings_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "ratings_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["preset_id"]
+          },
           {
             foreignKeyName: "ratings_preset_id_fkey"
             columns: ["preset_id"]
@@ -440,14 +666,131 @@ export type Database = {
             foreignKeyName: "ratings_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "ratings_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
-          }
+          },
+          {
+            foreignKeyName: "ratings_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["profile_id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      fetch_notifications: {
+        Row: {
+          avatar: string | null
+          comment_created_on: string | null
+          comment_id: number | null
+          comment_text: string | null
+          created_at: string | null
+          download_id: number | null
+          downloads: number | null
+          hardware: Database["public"]["Enums"]["hardware_type"] | null
+          like_id: number | null
+          likes: number | null
+          name: string | null
+          notification_id: number | null
+          photo_url: string | null
+          preset_created_on: string | null
+          preset_id: number | null
+          preset_name: string | null
+          profile_id: number | null
+          retriver_id: number | null
+          unread: boolean | null
+          username: string | null
+          youtube_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_retriver_id_fkey"
+            columns: ["retriver_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "notifications_retriver_id_fkey"
+            columns: ["retriver_id"]
+            isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "notifications_retriver_id_fkey"
+            columns: ["retriver_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "public_notifications_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "public_notifications_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "top_comments"
+            referencedColumns: ["comment_id"]
+          },
+          {
+            foreignKeyName: "public_notifications_download_id_fkey"
+            columns: ["download_id"]
+            isOneToOne: false
+            referencedRelation: "downloads"
+            referencedColumns: ["download_id"]
+          },
+          {
+            foreignKeyName: "public_notifications_like_id_fkey"
+            columns: ["like_id"]
+            isOneToOne: false
+            referencedRelation: "likes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      top_comments: {
+        Row: {
+          avatar: string | null
+          comment_id: number | null
+          likes: number | null
+          name: string | null
+          preset_id: number | null
+          profile_id: number | null
+          text: string | null
+          username: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_comments_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "presets"
+            referencedColumns: ["preset_id"]
+          },
+          {
+            foreignKeyName: "public_comments_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "fetch_notifications"
+            referencedColumns: ["preset_id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never
@@ -472,14 +815,16 @@ export type Database = {
   }
 }
 
+type PublicSchema = Database[Extract<keyof Database, "public">]
+
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -487,67 +832,67 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+    : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never

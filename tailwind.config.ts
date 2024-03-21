@@ -87,6 +87,11 @@ const config = {
         },
         "move": {
           to: { backgroundPosition: "4500vh" }
+        },
+        "rgb-ring": {
+          "0%": { backgroundPosition: "0% 0%" },
+          "50%": { backgroundPosition: "400% 0%" },
+          "100%": { backgroundPosition: "0% 0%" }
         }
       },
       animation: {
@@ -94,7 +99,8 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "rainbow-cycle": "rainbow-cycle 6s linear 0s infinite",
         "rainbow-animation": "rainbow-animation 1s ease-in-out infinite",
-        "move": "move 1500s linear infinite"
+        "move": "move 1500s linear infinite",
+        "rgb-ring": "rgb-ring 2000s linear infinite"
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

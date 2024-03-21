@@ -1,5 +1,5 @@
 import RecoverPasswordForm from "@/components/forms/onboard/recover";
-import Title from "@/components/titles/core";
+import Title from "@/components/reusables/title";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 

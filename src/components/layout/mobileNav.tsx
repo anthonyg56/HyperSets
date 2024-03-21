@@ -6,14 +6,16 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useContext } from "react";
-import { LayoutContext, TLayoutContext } from "../context/layoutProvider";
+import { LayoutContext, TLayoutContext } from "../../lib/context/layoutProvider";
 import NotificationSheet from "../sheets/notifications";
+import { ProfileNavQuery } from "../../../types/query-results";
 
 type Props = {
   pathname: string,
+  profile: ProfileNavQuery | null,
 }
 
-export default function MobleNav({ pathname }: Props) {
+export default function MobleNav({ pathname, profile }: Props) {
   const { setMobileNavOpen, isOpen } = useContext(LayoutContext) as TLayoutContext
   function isActive(path: '/' | '/about') {
     return path === pathname
@@ -26,7 +28,7 @@ export default function MobleNav({ pathname }: Props) {
   // const authHref = 
   return (
     <Drawer open={isOpen} onOpenChange={setMobileNavOpen}>
-      <DrawerTrigger className="ml-auto rotate-0 scale-100 transition-all md:-rotate-90 md:scale-0">
+      <DrawerTrigger className="rotate-0 scale-100 transition-all md:-rotate-90 md:hidden">
         <HamburgerMenuIcon className="h-[1.5rem] w-[1.5rem]" />
       </DrawerTrigger>
       <DrawerContent>
@@ -59,13 +61,31 @@ export default function MobleNav({ pathname }: Props) {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
-            <NotificationSheet />
-            <NavigationMenuItem>
+            {/* <NotificationSheet /> */}
+            {!profile && <NavigationMenuItem>
               <Link href={'/login'} legacyBehavior passHref>
                 <NavigationMenuLink active={isActiveSub("/auth")} className={cn([
                   navigationMenuTriggerStyle(),
                 ])}>
                   Sign In
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>}
+            <NavigationMenuItem>
+              <Link href={`/profile/${profile?.username}`} legacyBehavior passHref>
+                <NavigationMenuLink active={isActive('/about')} className={cn([
+                  navigationMenuTriggerStyle()
+                ])}>
+                  My Profile
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href={'/settings?section=profile'} legacyBehavior passHref>
+                <NavigationMenuLink active={isActive('/about')} className={cn([
+                  navigationMenuTriggerStyle()
+                ])}>
+                  Settings
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>

@@ -1,13 +1,13 @@
 "use client"
 
-import { UserSessionContext, TUserSessionContext } from "@/components/context/userProvider";
+import { UserSessionContext, TUserSessionContext } from "@/lib/context/sessionProvider";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Lead, Small } from "@/components/ui/typography";
 import { useToast } from "@/components/ui/use-toast";
 import { loginSchema } from "@/lib/schemas";
-import { createSupbaseClient } from "@/lib/supabase/client";
+import { createSupabaseClient } from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,23 +18,14 @@ import { z } from "zod";
 type Props = {
   isFromRegister: boolean
 }
-export default function LoginForm({ isFromRegister }: Props) {
-  const [error, setError] = useState<null | string>(null)
+
+export default function LoginForm() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const router = useRouter()
   const { toast } = useToast()
-  const supabase = createSupbaseClient()
-
-  useEffect(() => {
-    if (isFromRegister) {
-      toast({
-        title: "Welcome!",
-        description: "You have successfully registered! Please login to continue.",
-      })
-    }
-  }, [])
+  const supabase = createSupabaseClient()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -46,13 +37,12 @@ export default function LoginForm({ isFromRegister }: Props) {
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     setLoading(true)
-
     toast({
       title: "Signing In",
     })
 
     const { email, password } = values
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data: { user }, error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
       toast({
@@ -64,11 +54,28 @@ export default function LoginForm({ isFromRegister }: Props) {
       return
     }
     
+    const { data: profile, error: profileError } = await supabase.from("profile").select("first_login").eq("user_id", user?.id ?? "").single()
+
+    if (profileError || !profile) {
+      toast({
+        title: "Uh oh! Something went wrong!",
+        description: "Please try again later.",
+      })
+      setLoading(false)
+
+      await supabase.auth.signOut()
+      return
+    }
+    
     toast({
       title: "Success! You're logged in!",
     })
 
-    router.push(`/`)
+    if (profile.first_login === true) {
+      router.push('/settings')
+    } else {
+      router.push(`/`)
+    }
   }
 
   return (

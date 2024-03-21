@@ -15,15 +15,15 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-import Title from "@/components/titles/core";
+import Title from "@/components/reusables/title";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Small } from "@/components/ui/typography";
 
 import { PasswordSentDisplay } from "./sentDisplays";
-import { UserSessionContext, TUserSessionContext } from "@/components/context/userProvider";
+import { UserSessionContext, TUserSessionContext } from "@/lib/context/sessionProvider";
 import { useToast } from "@/components/ui/use-toast";
-import { createSupbaseClient } from "@/lib/supabase/client";
+import { createSupabaseClient } from "@/lib/supabase/client";
 import { baseURL } from "@/lib/constants";
 import { set } from "zod";
 
@@ -32,7 +32,7 @@ export default function ForgotPasswordForm() {
   const [loading, setLoading] = useState(false)
 
   const { toast } = useToast()
-  const supabase = createSupbaseClient()
+  const supabase = createSupabaseClient()
 
   const form = useForm<ForgotEmailSchema>({
     resolver: zodResolver(forgotEmailSchema),
@@ -43,6 +43,10 @@ export default function ForgotPasswordForm() {
 
   async function onSubmit(values: ForgotEmailSchema) {
     setLoading(true)
+    toast({
+      title: "Sending...",
+    })
+
     const { email } = values
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${baseURL}/confirm`,
@@ -63,7 +67,7 @@ export default function ForgotPasswordForm() {
   }
 
   if (submitted) {
-    return <PasswordSentDisplay />
+    return <PasswordSentDisplay resetView={() => setSubmitted(false)} />
   }
 
   return (

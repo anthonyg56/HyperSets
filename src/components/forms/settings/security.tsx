@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import SettingsHeader from "./header"
-import { TUserSessionContext, UserSessionContext } from "@/components/context/userProvider";
+import { TUserSessionContext, UserSessionContext } from "@/lib/context/sessionProvider";
 import { Session } from "@supabase/supabase-js";
 
 export default function SecuritySection() {

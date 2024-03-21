@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from '@/lib/utils'
 import "./globals.css";
-import { ThemeProvider } from "@/components/context/themeProvider";
-import LayoutProvider from "@/components/context/layoutProvider";
-import UserSessionProvider from "@/components/context/userProvider";
+import { ThemeProvider } from "@/lib/context/themeProvider";
+import LayoutProvider from "@/lib/context/layoutProvider";
+import UserSessionProvider from "@/lib/context/sessionProvider";
 import { Toaster } from "@/components/ui/toaster";
 
 export const fontSans = FontSans({

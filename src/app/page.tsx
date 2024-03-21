@@ -1,12 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { H1, Lead, } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
-import HeroImage from '../../public/alloys-origin-hero.png';
-import PresetCardList from "@/components/cards/preset-list";
+import { cn } from "@/lib/utils";
 
-export default function Home() {
-  // 
+import { Button } from "@/components/ui/button";
+import { H1, H2, Lead, } from "@/components/ui/typography";
+
+import HeroImage from '../../public/alloys-origin-hero.png';
+import { PresetCarousel } from "@/components/misc/presetCarousel";
+import Link from "next/link";
+
+export default async function Home() {
   return (
     <>
       <div className={cn([
@@ -30,7 +32,14 @@ export default function Home() {
           <Button className="self-start">Explore Our Presets</Button>
         </div>
       </div>
-      <PresetCardList page="Home" />
+      <div className="container max-w-screen-2xl w-full text-center space-y-4 my-12">
+        <H2 classNames="border-b-0">Featured Presets</H2>
+        <PresetCarousel multiple featured />
+        <Button variant='link'>
+          <Link href="/presets">View All</Link>
+        </Button>
+      </div>
+      
     </>
   )
 }

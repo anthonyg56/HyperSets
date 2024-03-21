@@ -21,19 +21,20 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { ProfileFormSchema, profileFormSchema } from "@/lib/schemas";
 import { Tables } from "../../../../types/supabase";
-import { UserSessionContext, TUserSessionContext } from "@/components/context/userProvider";
-import avatar from "@/components/misc/avatar";
-import { createSupbaseClient } from "@/lib/supabase/client";
+import { UserSessionContext, TUserSessionContext } from "@/lib/context/sessionProvider";
+import avatar from "@/components/reusables/avatar";
+import { createSupabaseClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { H3, Muted } from "@/components/ui/typography";
 
 interface ProfileSettingsData extends Omit<Tables<'profile'>, 'created_on' | 'email' | 'last_logon' | 'user_id'> {}
 
 export default function ProfileForm() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
-  const [submit, setSubmit] = useState(false)
 
   const { profile } = useContext(UserSessionContext) as TUserSessionContext
-  const supabase = createSupbaseClient()
+  const supabase = createSupabaseClient()
   const { toast } = useToast()
   const form = useForm<ProfileFormSchema>({
     resolver: zodResolver(profileFormSchema),
@@ -45,18 +46,10 @@ export default function ProfileForm() {
       banner: profile?.banner ?? "",
     },
   });
-  const isSubmitting = form.formState.isSubmitting
-  const handleSubmit = form.handleSubmit(onSubmit)
 
-  useEffect(() => {
-    if (mode === 'edit' && submit === true) {
-      
-      handleSubmit()
-    }
-  }, [submit])
+  const isSubmitting = form.formState.isSubmitting
 
   async function onSubmit(values: ProfileFormSchema) {
-    console.log('submitting')
     if (profile === null) {
       toast({
         title: 'Error',
@@ -73,56 +66,67 @@ export default function ProfileForm() {
     // ✅ This will be type-safe and validated.
     let newValues = {} as ProfileSettingsData
 
-    if (values.name === typeof 'string' && values.name.length > 0 && values.name !== profile.name) newValues.name = values.name
-    if (values.username === typeof 'string' && values.username.length > 0 && values.username !== profile.username) newValues.username = values.username
-    if (values.bio === typeof 'string' && values.bio.length > 0 && values.bio !== profile.bio) newValues.bio = values.bio
-    if (values.avatar === typeof 'string' && values.avatar.length > 0 && values.avatar !== profile.avatar) newValues.avatar = values.avatar
-    if (values.banner === typeof 'string' && values.banner.length > 0 && values.banner !== profile.banner) newValues.banner = values.banner
+    return
+    // if (values.name === typeof 'string' && values.name.length > 0 && values.name !== profile.name) newValues.name = values.name
+    // if (values.username === typeof 'string' && values.username.length > 0 && values.username !== profile.username) newValues.username = values.username
+    // if (values.bio === typeof 'string' && values.bio.length > 0 && values.bio !== profile.bio) newValues.bio = values.bio
+    // if (values.avatar === typeof 'string' && values.avatar.length > 0 && values.avatar !== profile.avatar) newValues.avatar = values.avatar
+    // if (values.banner === typeof 'string' && values.banner.length > 0 && values.banner !== profile.banner) newValues.banner = values.banner
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .upsert({
-        ...newValues,
-        profile_id: profile.profile_id
-      })
-      .select('*')
-      .returns<Tables<'profile'> | null>()
+    // const { data, error } = await supabase
+    //   .from('profiles')
+    //   .upsert({
+    //     ...newValues,
+    //     profile_id: profile.profile_id
+    //   })
+    //   .select('*')
+    //   .returns<Tables<'profile'> | null>()
 
-    if (error) {
-      toast({
-        title: 'Error',
-        description: error.message,
-      })
-      return
-    }
+    // if (error) {
+    //   toast({
+    //     title: 'Error',
+    //     description: error.message,
+    //   })
+    //   return
+    // }
 
-    if (data === null) {
-      toast({
-        title: 'Error',
-        description: 'Profile not found',
-      })
-      return
-    }
+    // if (data === null) {
+    //   toast({
+    //     title: 'Error',
+    //     description: 'Profile not found',
+    //   })
+    //   return
+    // }
 
-    toast({
-      title: 'Success',
-      description: 'Profile updated successfully',
-    })
+    // toast({
+    //   title: 'Success',
+    //   description: 'Profile updated successfully',
+    // })
 
-    form.reset({
-      name: data.name ?? "",
-      username: data.username ?? "",
-      avatar: data.avatar ?? "",
-      bio: data.bio ?? "",
-      banner: data.banner ?? "",
-    })
+    // form.reset({
+    //   name: data.name ?? "",
+    //   username: data.username ?? "",
+    //   avatar: data.avatar ?? "",
+    //   bio: data.bio ?? "",
+    //   banner: data.banner ?? "",
+    // })
   }
 
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="">
-        <SettingsHeader setSubmit={setSubmit} isSubmitting={isSubmitting} mode={mode} setMode={setMode} title="Profile Info" subtitle="Update your personal info here" />
+        {/* <SettingsHeader isSubmitting={isSubmitting} mode={mode} setMode={setMode} title="" subtitle="Update your personal info here" /> */}
+        <div className="flex flex-row w-full">
+          <div className="flex flex-col">
+            <H3>Profile Info</H3>
+            <Muted>Update your personal info here</Muted>
+          </div>
+          <div className="flex flex-row ml-auto gap-x-4">
+            {mode === 'edit' && <Button variant="secondary" type="submit" disabled={isSubmitting}>Save Changes</Button>}
+            <Button variant={mode === "edit" ? "destructive" : "secondary"} type="button" onClick={e => setMode(mode === 'edit' ? 'view' : 'edit')}>{mode === 'edit' ? "Cancel" : "Edit"}</Button>
+          </div>
+        </div>
         <Separator className="w-full my-8" />
         <div className="space-y-8">
           <div className="grid grid-cols-12 w-full">

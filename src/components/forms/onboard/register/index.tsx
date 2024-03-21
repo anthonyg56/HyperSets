@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { useToast } from "@/components/ui/use-toast"
 import { baseURL } from "@/lib/constants"
 import { SignupSchema, signupSchemna } from "@/lib/schemas"
-import { createSupbaseClient } from "@/lib/supabase/client"
+import { createSupabaseClient } from "@/lib/supabase/client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { EnvelopeClosedIcon } from "@radix-ui/react-icons"
 import { useRouter } from "next/navigation"
@@ -14,13 +14,15 @@ import { useForm } from "react-hook-form"
 import { set, z } from "zod"
 import SecurityInfo from "./security-info"
 import ProfileInfo from "./profile"
-import ImagesInfo from "./pictures"
+import ImagesInfo from "../../../misc/dropzone"
 import { Form } from "@/components/ui/form"
 import { cn } from "@/lib/utils"
+import { Small } from "@/components/ui/typography"
 
 enum FormSteps {
   Security,
   Profile,
+  Review,
 }
 
 export default function RegisterForm() {
@@ -30,7 +32,7 @@ export default function RegisterForm() {
 
   const router = useRouter()
   const { toast } = useToast()
-  const supabase = createSupbaseClient()
+  const supabase = createSupabaseClient()
 
   const form = useForm<SignupSchema>({
     resolver: zodResolver(signupSchemna),
@@ -53,17 +55,17 @@ export default function RegisterForm() {
     setLoading(true)
 
     const { email, password } = values
-    let cleansedEmail = email.trim().toLowerCase()
-
+    const cleansedEmail = email.trim().toLowerCase()
+    const metaData = {
+      name: values.name?.trim().toLowerCase(),
+      full_name: values.username?.trim().toLowerCase(),
+      bio: values.bio,
+    }
     // Create an account first
     const { data, error } = await supabase.auth.signUp({
       email: cleansedEmail, password, options: {
         emailRedirectTo: `${baseURL}/confirm/callback`,
-        data: {
-          name: values.name?.trim().toLowerCase(),
-          full_name: values.username?.trim().toLowerCase(),
-          bio: values.bio,
-        }
+        data: metaData
       }
     })
 
@@ -152,16 +154,17 @@ export default function RegisterForm() {
       <DialogTrigger asChild>
         <Button><EnvelopeClosedIcon width={20} height={20} className="mr-2" />Signup with Email</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[400px]">
         <DialogHeader>
           <DialogTitle className="text-center font-">HyperSets</DialogTitle>
           <DialogDescription className="text-center">
-            Register
+            Join Today
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div>
+            {step !== FormSteps.Review && <Small classNames="pt-8 text-muted-foreground text-xs">Step {step + 1} of 2</Small>}
               {step === FormSteps.Security && <SecurityInfo form={form} />}
               {step === FormSteps.Profile && <ProfileInfo form={form} />}
             </div>

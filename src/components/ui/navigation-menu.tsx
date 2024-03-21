@@ -2,9 +2,10 @@ import * as React from "react"
 import { ChevronDownIcon } from "@radix-ui/react-icons"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
-
+import * as RadixIcon from '@radix-ui/react-icons'
 import { cn } from "@/lib/utils"
 import { ClassNameValue } from "tailwind-merge"
+import { IconProps } from "@radix-ui/react-icons/dist/types"
 
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
@@ -84,10 +85,10 @@ const NavigationMenuViewport = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>
 >(({ className, ...props }, ref) => (
-  <div className={cn("absolute right-0 top-full flex justify-center")}>
+  <div className={cn("absolute right-0 top-full flex justify-center w-[125px]")}>
     <NavigationMenuPrimitive.Viewport
       className={cn(
-        "origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border border-zinc-200 bg-white text-zinc-950 shadow data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)] dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50",
+        "!w-full origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)]  overflow-hidden rounded-md border border-zinc-200 bg-white text-zinc-950 shadow data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)] dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50",
         className
       )}
       ref={ref}
@@ -116,22 +117,32 @@ const NavigationMenuIndicator = React.forwardRef<
 NavigationMenuIndicator.displayName =
   NavigationMenuPrimitive.Indicator.displayName
 
-  const ListItem = React.forwardRef<
+const ListItem = React.forwardRef<
   React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
+  {
+    icon?: keyof typeof RadixIcon,
+  } & React.ComponentPropsWithoutRef<"a">
+>(({ icon, className, title, children, ...props }, ref) => {
+  const Icon = icon && RadixIcon[icon]
+  if (Icon) Icon.displayName = "Icon"
+
   return (
     <li>
       <NavigationMenuLink asChild>
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "w-full block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
           {...props}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
+
+          <div className="text-sm font-medium leading-none flex gap-2 justify-center items-center w-full">          
+            {icon === 'GearIcon' && <RadixIcon.GearIcon className="w-5 h-5" />}
+            {icon === 'PersonIcon' && <RadixIcon.PersonIcon className="w-5 h-5" />}
+            {title}
+          </div>
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>

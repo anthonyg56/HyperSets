@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   const redirectTo = request.nextUrl.clone()
   redirectTo.pathname = next
-
+  
   if (token_hash && type) {
     const { error } = await supabase.auth.verifyOtp({
       type,
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // The only time a code should be available is for google OAuth, need to figure out what to do with it
+  // The only time a code should be available is for OAuth
   if (code) {
     const { data: { user }, error } = await supabase.auth.exchangeCodeForSession(code)
 

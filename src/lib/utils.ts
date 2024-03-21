@@ -6,7 +6,7 @@ import moment from "moment";
 export const newTodayDate = moment();
 
 export function convertDate(date: string) {
-  return moment(date).format("MMMM Do YYYY, h:mm a");
+  return moment(date).format("MMMM Do YYYY");
 }
 
 export function cn(...inputs: ClassValue[]) {
@@ -27,7 +27,8 @@ export function capitalizeFirstLetter(str: string): string {
   return str && str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function extractYouTubeVideoId(url: string) {
+export function extractYouTubeVideoId(url: string | undefined) {
+  if (url === undefined) return
   var regex = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\/)?(?:(?:watch|embed)(?:\?v=|\/)?|list=(?:\w+&)?)([\w\-]+))(?:\S+)?$/;
   var match = url.match(regex);
   if (match) {

@@ -5,10 +5,10 @@ import { faTwitter, faDiscord, faGoogle } from "@fortawesome/free-brands-svg-ico
 
 import { Button } from "../ui/button";
 import { baseURL } from "@/lib/constants";
-import { createSupbaseClient } from "@/lib/supabase/client";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 export default function OnboardingOauth() {
-  const supabase = createSupbaseClient()
+  const supabase = createSupabaseClient()
 
   async function handleOAuthSignIn(e: any, provider: "discord" | "google" | "twitter") {
     e.preventDefault()
@@ -16,7 +16,7 @@ export default function OnboardingOauth() {
     await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${baseURL}/auth/confirm/callback`
+        redirectTo: `${baseURL}/confirm`
       } 
     })
   }

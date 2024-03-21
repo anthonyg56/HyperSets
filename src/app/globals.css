@@ -73,6 +73,10 @@
   .redborder {
     @apply focus-visible:ring-primary dark:focus-visible:ring-primary;
   }
+
+  .frosted {
+    @apply bg-white bg-opacity-20 backdrop-blur-lg rounded-md drop-shadow-lg text-xs px-3 py-[6px] text-white;
+  }
 }
 
 /* Data Attributes */
@@ -101,5 +105,12 @@
     @apply text-[20px] font-extrabold bg-[linear-gradient(to_right,red,orange,yellow,green,blue,indigo,violet)] animate-move;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Before & After */
+@layer components {
+  .rgb-ring-container{
+    @apply relative after:blur-[5px] after:content-[''] after:absolute after:bg-[400%] after:w-[calc(100%_+_2px)] after:h-[calc(100%_+_2px)] after:animate-rgb-ring after:-left-px after:-top-px after:-z-10 after:rounded-md after:bg-[linear-gradient(45deg,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000)] before:absolute before:bg-[400%] before:w-[calc(100%_+_2px)] before:h-[calc(100%_+_2px)] before:animate-rgb-ring before:-left-px before:-top-px before:-z-10 before:rounded-md before:bg-[linear-gradient(45deg,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000)];
   }
 }

@@ -7,15 +7,56 @@ import { cn } from "@/lib/utils";
 import { ModeToggle } from "../ui/modeToggle";
 import MobleNav from "./mobileNav";
 import NotificationSheet from "../sheets/notifications";
-import Avatar from "../misc/avatar";
-import { Tables } from "../../../types/supabase";
+import Avatar from "../reusables/avatar";
+import SearchBar from "../misc/search";
+import MobileSearch from "../dialogs/mobileSearch";
+import { ProfileNavQuery, ProfileTable } from "../../../types/query-results";
+import useNotifications from "@/lib/hooks/useNotifications";
+import { useEffect, useState } from "react";
+import { toast } from "../ui/use-toast";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 type Props = {
   pathname: string,
-  profile: Tables<'profile'> | null | undefined
+  profile: ProfileNavQuery | null,
 }
 
 export default function Navbar({ pathname, profile }: Props) {
+  const profile_id = profile?.profile_id
+  const supabase = createSupabaseClient()
+  const { notifications, unreadAmount, unreadNotifications, fetchNotifications, addNotification, markAllAsRead } = useNotifications({ profile_id })
+
+  // useEffect(() => {
+    
+  //   const notificationsChannel = supabase.channel('custom-insert-channel')
+  //     .on(
+  //       'postgres_changes',
+  //       { event: 'INSERT', schema: 'public', table: 'notifications' },
+  //       (payload) => {
+          
+  //         if (payload.new.retriver_id === profile_id) {
+            
+  //           const notification = payload.new
+  //           const notificationType = notification.download_id ? "Download" : notification.comment_id ? "Comment" : "Like";
+  //           const message = NotificationMessage[notificationType as keyof typeof NotificationMessage]
+            
+  //           toast({
+  //             title: `New notification`,
+  //             description: message,
+  //             duration: 5000,
+  //           })
+
+  //           fetchNotifications()
+  //         }
+  //       }
+  //     )
+  //     .subscribe()
+
+  //   return () => {
+  //     notificationsChannel.unsubscribe()
+  //   }
+  // }, [])
+
   function isActive(path: '/' | '/about') {
     return path === pathname
   }
@@ -24,19 +65,19 @@ export default function Navbar({ pathname, profile }: Props) {
     return pathname.startsWith(path)
   }
 
-  if (profile === undefined) return
-
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex flex-row container h-14 max-w-screen-2xl items-center">
-        <div>
+      <div className="flex flex-row container h-14 max-w-screen-2xl w-full items-center">
+        <MobleNav pathname={pathname} profile={profile} />
+        <div className="ml-3">
           <Large>
             HyperSets
           </Large>
         </div>
         <ModeToggle />
-
-        <MobleNav pathname={pathname} />
+        <SearchBar  />
+        
+        
         <NavigationMenu className="hidden md:table-cell">
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -85,21 +126,24 @@ export default function Navbar({ pathname, profile }: Props) {
                       username={profile.username}
                       classNames="w-[30px] h-[30px] mr-2"
                     />{profile.name ? profile.name : "Mystery User"}</NavigationMenuTrigger>
-                  <NavigationMenuContent className="" >
-                    <ul>
-                      <li>
-                        <ListItem href={`/profile/${profile.username}`} title="My Profile"></ListItem>
-                      </li>
-                      <li>
-                        <ListItem href="/settings" title="Settings" />
-                      </li>
+                  <NavigationMenuContent className="!w-full" >
+                    <ul className="w-full">
+                      <ListItem href={`/profile/${profile.username}`} title="My Profile" icon='PersonIcon' className="flex flex-row justify-center items-center"></ListItem>
+                      <ListItem href="/settings" title="Settings" icon="GearIcon" />
                     </ul>
                   </NavigationMenuContent>
               </NavigationMenuItem>)}
           </NavigationMenuList>
         </NavigationMenu>
-        {profile !== null && <NotificationSheet profile_id={profile.profile_id} />}
+          <MobileSearch />
+          {profile !== null && <NotificationSheet profile={profile} notifications={notifications} unreadAmount={unreadAmount} unreadNotifications={unreadNotifications} markAllAsRead={markAllAsRead}/>}  
       </div>
     </header>
   )
+}
+
+enum NotificationMessage {
+  Download = "Someone downloaded your preset!",
+  Comment = "Someone commented on your preset!",
+  Like = "Someone liked your comment!",
 }

@@ -1,4 +1,4 @@
-import SettingsProvider from "@/components/context/settingsProvider"
+import SettingsProvider from "@/lib/context/settingsProvider"
 
 export default function DashboardLayout({ children, }: { children: React.ReactNode, }) {
   

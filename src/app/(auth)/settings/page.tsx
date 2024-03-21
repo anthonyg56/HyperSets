@@ -3,7 +3,6 @@ import PresetForm from "@/components/forms/settings/presets";
 import ProfileForm from "@/components/forms/settings/profile";
 import SecuritySection from "@/components/forms/settings/security";
 import { TSettingsSections } from "@/components/layout/settingsNav";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 const sections = ['profile', 'presets', 'notifications', 'security']
@@ -15,10 +14,9 @@ type Props = {
 }
 
 export default async function Page({ searchParams: { section }, }: Props) {
-  const supabase = await createSupabaseServerClient()
-
   const sectionExists = sections.includes(section)
 
+  console.log(section, sectionExists)
   if (!section || sectionExists === false) {
     redirect('/settings?section=profile')
   }

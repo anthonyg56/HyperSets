@@ -1,5 +1,5 @@
 import LoginForm from "@/components/forms/onboard/login";
-import Title from "@/components/titles/core";
+import Title from "@/components/reusables/title";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SeparatorWithText } from "@/components/misc/separators";
@@ -13,16 +13,10 @@ type Props = {
 
 export default async function Page({ searchParams }: Props) {
   const supabase = await createSupabaseServerClient()
-  const { data: { session }, error } = await supabase.auth.getSession()
+  const { data: { session }} = await supabase.auth.getSession()
 
   if (session) {
     redirect(`/settings`)
-  }
-  
-  let isFromRegister = false
-
-  if (searchParams.fromRegister === "true") {
-    isFromRegister = true
   }
 
   return (
@@ -30,7 +24,7 @@ export default async function Page({ searchParams }: Props) {
       <Title title="Welcome Back" subTitle="Welcome back! Please enter your details." center/>
       <OnboardingOauth />
       <SeparatorWithText text="Or" classNames="py-4" />
-      <LoginForm isFromRegister={isFromRegister} />
+      <LoginForm />
     </div>
   )
 }

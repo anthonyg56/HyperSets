@@ -1,89 +1,120 @@
 
 import { P, H2, Small, } from "@/components/ui/typography";
-import Image from "next/image";
 
-import { cn, convertDate } from "@/lib/utils";
 import { } from "react";
-import { Tables } from "../../../../types/supabase";
 import { Button } from "@/components/ui/button";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PresetCardList, { Count } from "@/components/cards/preset-list";
+import PresetCardList from "@/components/lists/presets";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { usernameSchema } from "@/lib/schemas";
 import { redirect } from "next/navigation";
-import ProfileBackground from "@/components/misc/profile-bg";
-import Avatar from "@/components/misc/avatar";
-import moment from "moment";
-
-interface ProfileQueryData extends Tables<'profile'>, Count<'downloads'>, Count<'presets'> {}
+import Avatar from "@/components/reusables/avatar";
+import { PresetCardQuery, ProfilePageQuery } from "../../../../types/query-results";
+import { capitalizeFirstLetter, convertDate } from "@/lib/utils";
+import { CalendarIcon, DiscordLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
+import { Separator } from "@/components/ui/separator";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import BackgroundImage from "@/components/misc/backgroundImage";
 
 type Props = {
   params: {
     username: string
   }
 }
-// Users should be able to see an edit button when hovering over a preset if its theirs
+
 export default async function Page({ params: { username } }: Props) {
   const supabase = await createSupabaseServerClient()
-  const { data: user, error: userError } = await supabase.auth.getUser()
 
-  const { data: profile, error } = await supabase
+  const { data: currentUser } = await supabase.auth.getUser()
+
+  const { data: profile } = await supabase
     .from('profile')
     .select('*, downloads(count), presets(count)')
     .eq('username', username)
-    .returns<ProfileQueryData>()
+    .single<ProfilePageQuery>()
 
- console.log(profile?.downloads)
- console.log(error)
-
-  if (!profile || error) {
+  if (!profile) {
     // In the future, redirect to a user not found page
     redirect('/presets')
   }
 
+  const [{ data: { user } }, { data: presetsData }] = await Promise.all([
+    supabase.auth.admin.getUserById(profile.user_id),
+    supabase.from('presets').select('*,profile:profile_id(username)').eq('profile_id', profile.profile_id).order('created_on', { ascending: false }).returns<PresetCardQuery[]>()
+  ])
+
+  if (user === null) {
+    // In the future, redirect to a user not found page
+    redirect('/presets')
+  }
+
+  const presets = presetsData || []
+  const oAuthIdentities = user.identities?.map(identity => {
+
+    return {
+      provider: identity.provider,
+      username: identity.identity_data?.full_name,
+      email: identity.identity_data?.email
+    }
+  })
+
+  
+
   return (
-    <div className="relative">
-      <ProfileBackground banner={profile.banner} />
-      <div className="w-full h-full bg-[linear-gradient(to_right,rgba(0,0,0,100),rgba(0,0,0,0.5))] text-white">
-        <div className="grid grid-cols-12 max-w-screen-2xl container h-full w-full min-h-[calc(100vh_-_57px)]">
-
-          {/* <Image /> */}
-
+    <BackgroundImage img={profile.banner} alt={`${profile.username}'s profile banner`} gradient>
+        <div className="h-full w-full min-h-[calc(100vh_-_57px)] pt-[130px]">
           {/* <---------- Profile Info ----------> */}
-          <div className="col-span-5 flex flex-col h-full justify-center">
-            <Avatar avatar={profile.avatar} name={profile.name} username={profile.username} />
-            <div className="mt-4">
-
-              <H2>{profile.name} {user && profile.user_id === user.user?.id &&  <Button size="icon" variant='outline' className="-translate-y-1 ml-2"><FontAwesomeIcon icon={faPencil} /></Button>}</H2>
-              <div>
-                <P classNames="underline">{profile.avatar}</P>
-                <Small classNames="text-muted-foreground">Member Since: {convertDate(profile.created_on as string)}</Small>
+          <div className="max-w-screen-2xl container flex flex-col space-y-6 h-full pb-6">
+            <div className="flex flex-col items-center space-y-5">
+              <div className="flex flex-col justify-end items-center">
+                <Avatar avatar={profile.avatar} name={profile.name} username={profile.username} classNames={'w-[160px] h-[160px]'} />
+                <H2 classNames="mt-4 relative">{profile.name} {currentUser && profile.user_id === currentUser.user?.id && <Button size="icon" variant='outline' className="absolute right-[-25%]"><FontAwesomeIcon icon={faPencil} /></Button>}</H2>
+                <Small classNames="text-muted-foreground">@{profile.username}</Small>
               </div>
-
-              <P>{profile.bio}</P>
+              <div className="md:w-full justify-center gap-x-2 h-full flex-col md:flex-row space-y-2 hidden md:flex">
+                <div className="frosted flex gap-x-[3px] justify-center items-center">
+                  <CalendarIcon className="w-5 h-5" />
+                  <Small classNames=""> Member Since: {convertDate(profile.created_on as string)}</Small>
+                </div>
+                <Separator orientation='vertical' className="h-[28px] w-[2px] justify-start hidden md:visible" />
+                {oAuthIdentities?.map((identity, index) => {
+                  return (
+                    <div key={index} className="frosted flex flex-row gap-x-[5px] justify-center items-center">
+                      {identity.provider === 'google' && <FontAwesomeIcon icon={faGoogle} className="w-5 h-5" />}
+                      {identity.provider === 'discord' && <DiscordLogoIcon className="w-5 h-5" />}
+                      {identity.provider === 'twitter' && <TwitterLogoIcon className="w-5 h-5" />}
+                      <Small>{identity.provider === 'google' ? capitalizeFirstLetter(identity.email) : capitalizeFirstLetter(identity.username)}</Small>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="max-w-[500px]  text-center text-muted-foreground">
+                <P>{profile.bio}</P>
+              </div>
+              {/* <Small classNames="text-muted-foreground">Member Since: {convertDate(profile.created_on as string)}</Small> */}
             </div>
-            <div className="grid grid-cols-6 pt-6">
-              <div className="col-span-2">
+
+            <div className="flex flex-row gap-10 mx-auto text-center">
+              <div className="">
                 {/* # of Downloads */}
                 <P>Downloads</P>
                 <H2>{profile.downloads !== undefined ? profile.downloads[0].count : 0}</H2>
               </div>
-              <div className="col-span-2">
+              <div className="">
                 {/* Average Rating */}
                 <P>Average Rating</P>
                 <H2>4.5</H2>
               </div>
-              <div className="col-span-2">
+              <div className="">
                 {/* # of Presets Made */}
                 <P>Presets Made</P>
                 <H2>{profile.presets !== undefined ? profile.presets[0].count : 0}</H2>
               </div>
             </div>
           </div>
-          <PresetCardList page="Profile" />
+          <PresetCardList serverPresets={presets} profile_id={profile.profile_id} />
         </div>
-      </div>
-    </div>
+    </BackgroundImage>
+
   )
 }

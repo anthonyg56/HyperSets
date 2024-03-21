@@ -86,10 +86,16 @@ export const createAPresetSchema = z.object({
     z.literal("Screen Mirror"),
     z.literal("Video Capture"),
   ])),
-  // games: z.array(z.string({
-  //   required_error: "Name is required",
-  //   invalid_type_error: "Input must be a string",
-  // })),
+  games: z.array(z.object({
+    game_id: z.number({
+      required_error: "Game id is required",
+      invalid_type_error: "Input must be a number"
+    }),
+    game_name: z.string({
+      required_error: "Game Name is required",
+      invalid_type_error: "Input must be a string",
+    })
+  })),
 })
 
 export const hardwareSchema = createAPresetSchema
