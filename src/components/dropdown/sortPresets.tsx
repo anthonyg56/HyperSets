@@ -17,10 +17,12 @@ import { cn } from "@/lib/utils"
 import { PresetSorts } from "../../../types/query-results"
 
 type Props = {
+  dialog?: boolean;
   sort: PresetSorts;
   setSort: React.Dispatch<React.SetStateAction<PresetSorts>>;
+  classNames?: string;
 }
-export function SortPresetsDropdownMenu({ sort, setSort }: Props) {
+export function SortPresetsDropdownMenu({ dialog, sort, setSort, classNames }: Props) {
   const [open, setOpen] = React.useState<boolean>(false)
 
   // useEffect(() => {}, [imageDirection])
@@ -32,8 +34,8 @@ export function SortPresetsDropdownMenu({ sort, setSort }: Props) {
 
 
   return (
-    <div className="flex flex-row ml-auto items-center">
-      <Small classNames="mr-2">Sort By</Small>
+    <div className={cn(["flex flex-row ml-auto items-center", classNames])}>
+      {!dialog && <Small classNames="mr-2">Sort By</Small>}
       <DropdownMenu defaultOpen={open} open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant={'outline'} onClick={handleImageDirection}>
@@ -45,7 +47,7 @@ export function SortPresetsDropdownMenu({ sort, setSort }: Props) {
             ])} />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
+        <DropdownMenuContent className={cn(["w-56"])}>
           <DropdownMenuRadioGroup value={sort} onValueChange={(value: string) => setSort(value as PresetSorts)}>
             <DropdownMenuRadioItem value="Most Popular">Most Popular</DropdownMenuRadioItem>
             <DropdownMenuRadioItem value="Most Recent">Most Recent</DropdownMenuRadioItem>

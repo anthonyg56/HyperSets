@@ -16,7 +16,7 @@ import { Tables } from "../../../../types/supabase";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { UserSessionContext, TUserSessionContext } from "@/lib/context/sessionProvider";
 import { Session } from "@supabase/supabase-js";
-import useAuth from "@/lib/hooks/useSession";
+import useAuth from "@/lib/hooks/useAuth";
 
 export default function NotificationsForm() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')

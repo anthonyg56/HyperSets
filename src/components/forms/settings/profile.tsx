@@ -15,103 +15,115 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import SettingsHeader from "./header";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { ProfileFormSchema, profileFormSchema } from "@/lib/schemas";
-import { Tables } from "../../../../types/supabase";
-import { UserSessionContext, TUserSessionContext } from "@/lib/context/sessionProvider";
-import avatar from "@/components/reusables/avatar";
-import { createSupabaseClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { H3, Muted } from "@/components/ui/typography";
-
-interface ProfileSettingsData extends Omit<Tables<'profile'>, 'created_on' | 'email' | 'last_logon' | 'user_id'> {}
+import useProfile from "@/lib/hooks/useProfile";
+import { useRouter } from "next/navigation";
+import { ProfileSettingsQuery } from "../../../../types/query-results";
+import AreYouSure from "@/components/dialogs/alerts/areYouSure";
 
 export default function ProfileForm() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
+  const [profile, setProfile] = useState<ProfileSettingsQuery | null | undefined>(undefined)
 
-  const { profile } = useContext(UserSessionContext) as TUserSessionContext
-  const supabase = createSupabaseClient()
+  const router = useRouter()
   const { toast } = useToast()
+  const { fetchCurrentProfile, checkUsername, updateProfile } = useProfile<ProfileSettingsQuery>()
+
   const form = useForm<ProfileFormSchema>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: profile?.name ?? "",
-      username: profile?.username ?? "",
-      avatar: profile?.avatar ?? "",
-      bio: profile?.bio ?? "",
-      banner: profile?.banner ?? "",
+      name: "",
+      username: "",
+      avatar: undefined,
+      bio: "",
+      banner: undefined,
     },
   });
 
-  const isSubmitting = form.formState.isSubmitting
+  // Fetch the current profile on mount
+  useEffect(() => {
+    if (profile === undefined) getProfile()
+  }, [])
+
+  // Watch for changes in the username field, required in order to check if it's already in use as the user types
+  useEffect(() => {
+    const subscription = form.watch(async ({ username }, { name, type }) => {
+      if (name === "username" && type === "change") {
+        const usernameValid = await form.trigger("username")
+
+        if (!usernameValid) return
+
+        const response = await checkUsername(username)
+
+        if (response.valid === false) {
+          form.setError('username', { message: response.message })
+          return
+        }
+
+        form.clearErrors('username')
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [form.watch("username")])
+  
+  // On initial load, fetch the current profile
+  async function getProfile() {
+    const profile = await fetchCurrentProfile()
+    
+    if (!profile) {
+      router.push('/login')
+      return
+    }
+
+    setProfile(profile)
+    form.reset({
+      name: profile.name,
+      username: profile.username,
+      avatar: undefined,
+      bio: profile.bio ?? "",
+      banner: undefined,
+    })
+  }
 
   async function onSubmit(values: ProfileFormSchema) {
-    if (profile === null) {
+    if (!profile) {
       toast({
         title: 'Error',
         description: 'Profile not found',
       })
       return
     }
-
+    
     toast({
       title: 'Saving...',
       description: 'Saving your changes',
     })
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    let newValues = {} as ProfileSettingsData
 
-    return
-    // if (values.name === typeof 'string' && values.name.length > 0 && values.name !== profile.name) newValues.name = values.name
-    // if (values.username === typeof 'string' && values.username.length > 0 && values.username !== profile.username) newValues.username = values.username
-    // if (values.bio === typeof 'string' && values.bio.length > 0 && values.bio !== profile.bio) newValues.bio = values.bio
-    // if (values.avatar === typeof 'string' && values.avatar.length > 0 && values.avatar !== profile.avatar) newValues.avatar = values.avatar
-    // if (values.banner === typeof 'string' && values.banner.length > 0 && values.banner !== profile.banner) newValues.banner = values.banner
+    const response = await updateProfile(values, profile)
 
-    // const { data, error } = await supabase
-    //   .from('profiles')
-    //   .upsert({
-    //     ...newValues,
-    //     profile_id: profile.profile_id
-    //   })
-    //   .select('*')
-    //   .returns<Tables<'profile'> | null>()
+    if (response.valid === false) {
+      toast({
+        title: 'Error',
+        description: response.message,
+      })
+      return
+    }
 
-    // if (error) {
-    //   toast({
-    //     title: 'Error',
-    //     description: error.message,
-    //   })
-    //   return
-    // }
+    toast({
+      title: 'Success',
+      description: 'Profile updated successfully',
+    })
 
-    // if (data === null) {
-    //   toast({
-    //     title: 'Error',
-    //     description: 'Profile not found',
-    //   })
-    //   return
-    // }
-
-    // toast({
-    //   title: 'Success',
-    //   description: 'Profile updated successfully',
-    // })
-
-    // form.reset({
-    //   name: data.name ?? "",
-    //   username: data.username ?? "",
-    //   avatar: data.avatar ?? "",
-    //   bio: data.bio ?? "",
-    //   banner: data.banner ?? "",
-    // })
+    setMode('view')
+    router.refresh()
   }
-
 
   return (
     <Form {...form}>
@@ -123,13 +135,14 @@ export default function ProfileForm() {
             <Muted>Update your personal info here</Muted>
           </div>
           <div className="flex flex-row ml-auto gap-x-4">
-            {mode === 'edit' && <Button variant="secondary" type="submit" disabled={isSubmitting}>Save Changes</Button>}
-            <Button variant={mode === "edit" ? "destructive" : "secondary"} type="button" onClick={e => setMode(mode === 'edit' ? 'view' : 'edit')}>{mode === 'edit' ? "Cancel" : "Edit"}</Button>
+            {mode === 'view' && <Button variant="secondary" type="button" onClick={e => setMode('edit')}>edit</Button>}
+            {mode === 'edit' && <Button variant="secondary" type="submit" disabled={form.formState.isSubmitting === true}>Save Changes</Button>}
+            {mode === 'edit' && <AreYouSure onConfirm={e => setMode('view')} />}
           </div>
         </div>
         <Separator className="w-full my-8" />
         <div className="space-y-8">
-          <div className="grid grid-cols-12 w-full">
+          <div className="flex flex-col gap-y-4 md:gap-y-0 md:grid md:grid-cols-12">
             <div className="col-span-5 w-full">
               <FormLabel>Name</FormLabel>
               <FormDescription>
@@ -143,7 +156,7 @@ export default function ProfileForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex flex-row">
-                      <div className="w-[70%] ml-auto">
+                      <div className="w-full md:w-[70%] ml-auto">
                         <FormControl>
                           <Input placeholder="shadcn" {...field} disabled={mode === 'view'} />
                         </FormControl>
@@ -158,7 +171,7 @@ export default function ProfileForm() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-12 w-full">
+          <div className="flex flex-col gap-y-4 md:gap-y-0 md:grid md:grid-cols-12 w-full">
             <div className="col-span-5 w-full">
               <FormLabel>Username</FormLabel>
               <FormDescription>
@@ -172,7 +185,7 @@ export default function ProfileForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex flex-row">
-                      <div className="w-[70%] ml-auto">
+                      <div className="w-full md:w-[70%] ml-auto">
                         <FormControl>
                           <Input placeholder="@username" {...field} disabled={mode === 'view'} />
                         </FormControl>
@@ -187,7 +200,7 @@ export default function ProfileForm() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-12 w-full">
+          <div className="flex flex-col gap-y-4 md:gap-y-0 md:grid md:grid-cols-12 w-full">
             <div className="col-span-5 w-full">
               <FormLabel>Bio</FormLabel>
               <FormDescription>
@@ -201,7 +214,7 @@ export default function ProfileForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex flex-row">
-                      <div className="w-[70%] ml-auto">
+                      <div className="w-full md:w-[70%] ml-auto">
                         <FormControl>
                           <Textarea placeholder="Talk about  " {...field} disabled={mode === 'view'} rows={6}/>
                         </FormControl>
@@ -216,7 +229,7 @@ export default function ProfileForm() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-12 w-full">
+          <div className="flex flex-row md:grid md:grid-cols-12 w-full items-center md:items-start">
             <div className="col-span-5 w-full">
               <FormLabel>Avatar</FormLabel>
               {/* <FormDescription>
@@ -226,20 +239,21 @@ export default function ProfileForm() {
             <div className="col-span-7 flex flex-col w-full gap-y-8">
               <FormField
                 control={form.control}
-                name="bio"
+                name="avatar"
                 render={({ field: { value, onChange, ...fieldProps } }) => (
                   <FormItem>
                     <div className="flex flex-row">
                       <div className="w-[70%] ml-auto">
                         <FormControl>
                         <Input
-                          {...fieldProps}
+                          
                           placeholder="Picture"
                           type="file"
                           accept="image/*, application/pdf"
                           onChange={(event) =>
                             onChange(event.target.files && event.target.files[0])
                           }
+                          {...fieldProps}
                         />
                         </FormControl>
                         <FormMessage />
@@ -250,7 +264,7 @@ export default function ProfileForm() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-12 w-full">
+          <div className="flex flex-row md:grid md:grid-cols-12 w-full items-center md:items-start">
             <div className="col-span-5 w-full">
               <FormLabel>Banner</FormLabel>
               <FormDescription>
@@ -260,7 +274,7 @@ export default function ProfileForm() {
             <div className="col-span-7 flex flex-col w-full gap-y-8">
               <FormField
                 control={form.control}
-                name="bio"
+                name="banner"
                 render={({ field: { value, onChange, ...fieldProps } }) => (
                   <FormItem>
                     <div className="flex flex-row">

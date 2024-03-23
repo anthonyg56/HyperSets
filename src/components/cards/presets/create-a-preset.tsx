@@ -8,7 +8,7 @@ import { useContext } from "react";
 export default function CreateAPresetTile() {
   
   return (
-    <Card className="-translate-y-[34px] w-full min-h-[322px] flex flex-col justify-center items-center relative overflow-hidden hover:cursor-pointer hover:z-10">
+    <Card className="-translate-y-[34px] w-full h-[200px] lg:h-[322px] flex flex-col justify-center items-center relative overflow-hidden hover:cursor-pointer hover:z-10">
     <div className="rounded-[1000px] p-3 gloss z-10">
       <FontAwesomeIcon icon={faPlus} width={90} height={90} className="w-[90px] h-[90px]" />
     </div>

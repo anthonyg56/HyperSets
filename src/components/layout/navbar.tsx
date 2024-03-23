@@ -23,39 +23,7 @@ type Props = {
 
 export default function Navbar({ pathname, profile }: Props) {
   const profile_id = profile?.profile_id
-  const supabase = createSupabaseClient()
-  const { notifications, unreadAmount, unreadNotifications, fetchNotifications, addNotification, markAllAsRead } = useNotifications({ profile_id })
 
-  // useEffect(() => {
-    
-  //   const notificationsChannel = supabase.channel('custom-insert-channel')
-  //     .on(
-  //       'postgres_changes',
-  //       { event: 'INSERT', schema: 'public', table: 'notifications' },
-  //       (payload) => {
-          
-  //         if (payload.new.retriver_id === profile_id) {
-            
-  //           const notification = payload.new
-  //           const notificationType = notification.download_id ? "Download" : notification.comment_id ? "Comment" : "Like";
-  //           const message = NotificationMessage[notificationType as keyof typeof NotificationMessage]
-            
-  //           toast({
-  //             title: `New notification`,
-  //             description: message,
-  //             duration: 5000,
-  //           })
-
-  //           fetchNotifications()
-  //         }
-  //       }
-  //     )
-  //     .subscribe()
-
-  //   return () => {
-  //     notificationsChannel.unsubscribe()
-  //   }
-  // }, [])
 
   function isActive(path: '/' | '/about') {
     return path === pathname
@@ -136,14 +104,8 @@ export default function Navbar({ pathname, profile }: Props) {
           </NavigationMenuList>
         </NavigationMenu>
           <MobileSearch />
-          {profile !== null && <NotificationSheet profile={profile} notifications={notifications} unreadAmount={unreadAmount} unreadNotifications={unreadNotifications} markAllAsRead={markAllAsRead}/>}  
+          {profile !== null && <NotificationSheet profile={profile} />}  
       </div>
     </header>
   )
-}
-
-enum NotificationMessage {
-  Download = "Someone downloaded your preset!",
-  Comment = "Someone commented on your preset!",
-  Like = "Someone liked your comment!",
 }

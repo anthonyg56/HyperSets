@@ -53,7 +53,7 @@ export default function SettingsNavMenu() {
   }
 
   return (
-    <NavigationMenu orientation="vertical" className="col-span-2 max-w-full justify-start mx-auto mt-8 items-start">
+    <NavigationMenu orientation="vertical" className="hidden shrink md:flex col-span-2 max-w-full justify-start mx-auto mt-8 self-start">
       <NavigationMenuList className="gap-y-2">
         {
           sections.map(({ pathname, section, icon }) => (

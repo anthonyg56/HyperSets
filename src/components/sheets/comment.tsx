@@ -35,7 +35,7 @@ export default function CommentSheet({ preset_id }: Props) {
         <Button variant="secondary" className="flex flex-row gap-x-1"><ChatBubbleIcon width={18} height={18} className="" /> {comments.length > 0 && comments.length} Comment{comments.length > 1 && 's'}</Button>
       </SheetTrigger>
       <SheetContent className={cn([
-        "flex flex-col gap-0 right-3 top-3 h-[calc(100%_-_24px)] rounded-md w-full !max-w-md",
+        "flex flex-col gap-0 right-5 top-3 h-[calc(100%_-_24px)] rounded-md w-[90%] px-0 py-0 md:w-full !max-w-md",
         "lg:!max-w-md lg:px-0 lg:py-0"
       ])}>
         <SheetTitle className="w-full flex flex-row items-center pl-5 pr-3 pt-3 pb-2">Comments</SheetTitle>

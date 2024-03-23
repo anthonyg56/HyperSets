@@ -4,7 +4,7 @@ import { Card } from "../../ui/card";
 import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import { H4, P, Small } from "../../ui/typography";
 import { Button } from "../../ui/button";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { PresetCardQuery } from "../../../../types/query-results";
 import { DownloadIcon } from "@radix-ui/react-icons";
@@ -14,9 +14,10 @@ import NewPresetDialogButton from "@/components/dialogs/newPreset";
 type PresetCardProps = {
   preset: PresetCardQuery;
   settings?: boolean;
+  classNames?: string;
 }
 
-export function PresetCard({ settings, preset: {
+export function PresetCard({ classNames, settings, preset: {
   name,
   hardware,
   photo_url,
@@ -27,12 +28,23 @@ export function PresetCard({ settings, preset: {
   preset_id: presetId,
 } }: PresetCardProps) {
   const router = useRouter();
-  const imgSrc = photo_url ? photo_url : `http://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+  const pathName = usePathname();
+  const isSettings = pathName.startsWith('/settings');
+  const imgSrc = photo_url ? photo_url : `http://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
 
+  function handleClick(e: any) {
+    e.preventDefault();
+
+    if (isSettings) {
+      return;
+    }
+
+    router.push(`/presets/${presetId}`);
+  }
   return (
     <div className="col-span-4 group xl:col-span-3">
       {/*<div className="-z-10 group-hover:rgb-ring-container animate-rgb-ring">*/}
-        <Card className="relative col-span-3 overflow-hidden group-hover:cursor-pointer bg-transparent w-full h-[322px] z-10">
+        <Card className={cn(["relative col-span-3 overflow-hidden group-hover:cursor-pointer bg-transparent w-full h-[200px] lg:h-[322px] z-10", classNames])}>
           <div className="col-span-2 w-full h-full relative">
             <Image
               src={imgSrc}
@@ -46,9 +58,13 @@ export function PresetCard({ settings, preset: {
             </div>
 
             <div className="hidden group-hover:flex w-full h-full justify-center items-center flex-col gap-y-2">
-              <PresetPreviewDialog presetId={presetId} />
-              <Button variant="default" className="z-10" onClick={() => router.push(`/presets/${presetId}`)}>Download</Button>
-              {settings === true && <NewPresetDialogButton preset_id={presetId} />}
+              {!isSettings && (
+                <>
+                  <PresetPreviewDialog presetId={presetId} />
+                  <Button variant="default" className="z-10" onClick={handleClick}>Download</Button>
+                </>
+              )}
+              {isSettings === true && <NewPresetDialogButton preset_id={presetId} />}
             </div>
 
           </div>

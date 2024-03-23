@@ -15,7 +15,7 @@ export type Database = {
           created_at: string
           last_updated: string | null
           likes: number
-          preset_id: number | null
+          preset_id: number
           profile_id: number
           text: string
         }
@@ -24,7 +24,7 @@ export type Database = {
           created_at?: string
           last_updated?: string | null
           likes?: number
-          preset_id?: number | null
+          preset_id: number
           profile_id: number
           text?: string
         }
@@ -33,7 +33,7 @@ export type Database = {
           created_at?: string
           last_updated?: string | null
           likes?: number
-          preset_id?: number | null
+          preset_id?: number
           profile_id?: number
           text?: string
         }
@@ -77,19 +77,19 @@ export type Database = {
       }
       downloads: {
         Row: {
-          created_on: string | null
+          created_on: string
           download_id: number
           preset_id: number
           profile_id: number | null
         }
         Insert: {
-          created_on?: string | null
+          created_on?: string
           download_id?: number
           preset_id: number
           profile_id?: number | null
         }
         Update: {
-          created_on?: string | null
+          created_on?: string
           download_id?: number
           preset_id?: number
           profile_id?: number | null
@@ -416,7 +416,7 @@ export type Database = {
           id: number
           like_notifications: boolean
           push_notifications: boolean
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           comment_notifications?: boolean
@@ -426,7 +426,7 @@ export type Database = {
           id?: number
           like_notifications?: boolean
           push_notifications?: boolean
-          user_id?: string | null
+          user_id?: string
         }
         Update: {
           comment_notifications?: boolean
@@ -436,7 +436,7 @@ export type Database = {
           id?: number
           like_notifications?: boolean
           push_notifications?: boolean
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -493,7 +493,7 @@ export type Database = {
       }
       presets: {
         Row: {
-          created_on: string | null
+          created_on: string
           description: string
           download_url: string
           downloads: number
@@ -508,7 +508,7 @@ export type Database = {
           youtube_id: string | null
         }
         Insert: {
-          created_on?: string | null
+          created_on?: string
           description: string
           download_url: string
           downloads?: number
@@ -523,7 +523,7 @@ export type Database = {
           youtube_id?: string | null
         }
         Update: {
-          created_on?: string | null
+          created_on?: string
           description?: string
           download_url?: string
           downloads?: number
@@ -567,39 +567,39 @@ export type Database = {
           banner: string | null
           bio: string | null
           created_on: string | null
-          email: string | null
+          email: string
           first_login: boolean
           last_logon: string | null
-          name: string | null
+          name: string
           profile_id: number
           user_id: string
-          username: string | null
+          username: string
         }
         Insert: {
           avatar?: string | null
           banner?: string | null
           bio?: string | null
           created_on?: string | null
-          email?: string | null
+          email?: string
           first_login?: boolean
           last_logon?: string | null
-          name?: string | null
+          name: string
           profile_id?: number
           user_id: string
-          username?: string | null
+          username: string
         }
         Update: {
           avatar?: string | null
           banner?: string | null
           bio?: string | null
           created_on?: string | null
-          email?: string | null
+          email?: string
           first_login?: boolean
           last_logon?: string | null
-          name?: string | null
+          name?: string
           profile_id?: number
           user_id?: string
-          username?: string | null
+          username?: string
         }
         Relationships: [
           {

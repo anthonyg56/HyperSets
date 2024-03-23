@@ -6,6 +6,7 @@ export type TopCommentView = Tables<'top_comments'>
 export type NotificationsTable = Tables<'notifications'>
 export type NotificationsView = Tables<'fetch_notifications'>
 export type GamesTable = Tables<'games'>
+export type ProfilesTable = Tables<'profile'>
 
 /* Queried Data recieved from primary tables */
 export type PresetCardData = Pick<Tables<'presets'>, 'name' | 'preset_id' | 'photo_url' | 'hardware' | 'youtube_id' | 'created_on' | 'downloads'>
@@ -20,8 +21,9 @@ export type PresetSearchData = Pick<Tables<'presets'>, 'name' | 'preset_id' | 'h
 export type ProfileNavData = Pick<Tables<'profile'>, 'username' | 'avatar' | 'profile_id' | 'name'>
 export type GameCompadibilityFormData = Pick<GamesTable, 'game_id' | 'game_name'>
 
+
 /* Final shape of the queried table */
-export interface PresetCardQuery extends PresetCardData, ReferencedField<'profile', 'username'> {}
+export interface PresetCardQuery extends PresetCardData, ReferencedField<'profile', 'username' | 'profile_id'> {}
 export interface FeaturedPresetHeroQuery extends FeaturedPresetHeroData, ReferencedField<'profile', 'username'> {}
 export interface YoutubeDialogQuery extends YoutubeDialogData, ReferencedField<'profile', 'username' | 'profile_id'> {}
 export interface UserProfileHoverCardQuery extends UserPRofileHoverCardData, Count<'downloads'>, Count<'presets'> {}
@@ -34,6 +36,7 @@ export interface PresetPageQuery extends Omit<PresetTable, 'profile_id'>, Refere
 export interface RawComment extends Omit<Tables<'comments'>, 'comment_id' | 'created_at' | 'last_updated'> {}
 export interface ProfileNavQuery extends ProfileNavData {}
 export interface GameCompadibilityQuery extends GameCompadibilityFormData {}
+export interface ProfileSettingsQuery extends Omit<Tables<'profile'>, 'created_on' | 'email' | 'last_logon' | 'user_id'> {}
 
 export interface PresetQueries {
   PresetCardQuery: PresetCardQuery;
@@ -93,6 +96,7 @@ export interface NotificationsQuery {
 // Types for the PresetCardList component
 export type PresetSorts = "Most Popular" | "Most Recent" | "Most Downloads";
 export type PresetPages = "Presets" | "Home" | "Profile" | "Settings" | "Search";
+export type SettingsSection = 'profile' | 'presets' | 'notifications' | 'security'
 
 /* Object structure for when count is returned */
 export type Count<T extends keyof Database["public"]["Tables"]> = {

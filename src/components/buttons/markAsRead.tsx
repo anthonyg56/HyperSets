@@ -14,7 +14,7 @@ export default function  MarkAsReadButton({ markAllAsRead }: Props) {
   )
 
   return (
-    <Button onClick={e => markAllAsRead()} variant="ghost" size="sm" className="group group-hover:text-primary px-0 ml-auto text-xs font-semibold text-zinc-700 dark:text-zinc-50 hover:bg-transparent gap-1">
+    <Button onClick={e => markAllAsRead()} variant="ghost" size="sm" className="group group-hover:text-primary px-0 ml-auto mr-10 text-xs font-semibold text-zinc-700 dark:text-zinc-50 hover:bg-transparent gap-1">
       <CircleCheckIcon /> Mark all as read
     </Button>
   )

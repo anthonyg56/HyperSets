@@ -7,7 +7,7 @@ import { UseFormReturn } from "react-hook-form";
 import { GameCompadibilityQuery, GamesTable } from "../../../../../../types/query-results";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import { capitalizeEachWord } from "@/lib/utils";
+import { capitalizeEachWord, cn } from "@/lib/utils";
 import { MinusCircledIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
 
@@ -65,15 +65,19 @@ export default function GameCompadibilitySelector({ form, filter, updateGameFilt
   }
 
   return (
-    <div>
+    <div className="!mt-0">
       {!filter && (
         <div className="pb-4">
           <H3>Game Compadibility</H3>
           <Muted>What games does your preset target/cater to?</Muted>
         </div>
       )}
-      <div className="flex justify-center">
-        <div className="space-y-3 py-6">
+      <div className={cn(["flex justify-center", {
+        'justify-start': filter,
+      }])}>
+        <div className={cn(["space-y-3 py-6", {
+          'py-3': filter,
+        }])}>
           <Select value={selectValue} onValueChange={pushGameToForm}>
             <SelectTrigger className="w-[306px]">
               <SelectValue placeholder="Add a game" />

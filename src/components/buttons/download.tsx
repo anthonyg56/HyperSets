@@ -8,10 +8,10 @@ import { useEffect, useState } from "react";
 type Props = {
   preset_id: number,
   download_url: string,
-  user_id: string | null,
+  profile_id: number | null,
 }
 
-export default function DownloadPresetButton({ preset_id, download_url, user_id }: Props) {
+export default function DownloadPresetButton({ preset_id, download_url, profile_id }: Props) {
   const [downloadAdded, setDownloadAdded] = useState(false)
   const supabase = createSupabaseClient()
 
@@ -22,17 +22,7 @@ export default function DownloadPresetButton({ preset_id, download_url, user_id 
   }, [downloadAdded])
 
   async function increaseDownload(e: any) {
-    let profile_id: number | undefined = undefined
-
-    if (user_id) {
-      const { data: currentProfile } = await supabase
-        .from('profile')
-        .select('profile_id')
-        .eq('user_id', user_id)
-        .single()
-
-      profile_id = currentProfile?.profile_id
-    }
+    e.preventDefault()
 
     await supabase
       .from('downloads')

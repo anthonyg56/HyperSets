@@ -13,20 +13,25 @@ import ToolTip from "../reusables/toolTip";
 import { MixerVerticalIcon } from "@radix-ui/react-icons";
 import NewPresetDialogButton from "../dialogs/newPreset";
 import FilterPresetsDialog from "../dialogs/filterDialog";
+import { usePathname } from "next/navigation";
 
 const selectClause = "*, profile:profile_id(username, avatar)";
 
 type PresetCardListProps = {
   profile_id?: number,
-  serverPresets: PresetCardQuery[],
+  serverPresets: PresetCardQuery[] | null,
 }
 
 export default function PresetCardList({ profile_id, serverPresets }: PresetCardListProps) {
   const { hardwares, loading, presets, updateHardwareFilter, updateEffectFilter, sort, setSort, effects, games, updateGamesFilter } = usePresets<PresetCardQuery>({ 
-    selectClause, profile_id, serverPresets })
+    selectClause, profile_id, serverPresets: serverPresets ?? undefined })
+  const pathNames = usePathname()
+  const hideNewPresets = pathNames.startsWith("/settings") || pathNames.startsWith("/profile")
 
   return (
-    <div className="container flex flex-col justify-center mb-[196px] max-w-screen-2xl w-full relative z-10">
+    <div className={cn(["flex flex-col justify-center mb-[196px] w-full relative z-10", {
+      "container max-w-screen-2xl": !pathNames.startsWith("/settings"),
+    }])}>
       <div className="flex flex-row w-full items-center relative pb-4 md:pb-1 gap-x-[2px]">
         <H2 classNames="border-b-0">All Presets</H2>
         <FilterPresetsDialog
@@ -45,7 +50,7 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
         <SortPresetsDropdownMenu sort={sort} setSort={setSort} />
       </div>
       <div className={cn(["flex flex-col pt-8 md:flex-none md:grid md:grid-cols-12 gap-4"])}>
-        <NewPresetDialogButton />
+        {!hideNewPresets && <NewPresetDialogButton />}
         {(presets as PresetCardQuery[]).map((data, index) => <PresetCard key={`${index} - ${data.name} preset`} preset={data} />)}
       </div>
     </div>

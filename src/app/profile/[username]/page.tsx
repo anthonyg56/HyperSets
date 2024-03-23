@@ -15,6 +15,8 @@ import { CalendarIcon, DiscordLogoIcon, TwitterLogoIcon } from "@radix-ui/react-
 import { Separator } from "@/components/ui/separator";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import BackgroundImage from "@/components/misc/backgroundImage";
+import ToolTip from "@/components/reusables/toolTip";
+import Link from "next/link";
 
 type Props = {
   params: {
@@ -40,7 +42,7 @@ export default async function Page({ params: { username } }: Props) {
 
   const [{ data: { user } }, { data: presetsData }] = await Promise.all([
     supabase.auth.admin.getUserById(profile.user_id),
-    supabase.from('presets').select('*,profile:profile_id(username)').eq('profile_id', profile.profile_id).order('created_on', { ascending: false }).returns<PresetCardQuery[]>()
+    supabase.from('presets').select('*,profile:profile_id(username)').eq('profile_id', profile.profile_id).order('views', { ascending: false }).returns<PresetCardQuery[]>()
   ])
 
   if (user === null) {
@@ -68,7 +70,11 @@ export default async function Page({ params: { username } }: Props) {
             <div className="flex flex-col items-center space-y-5">
               <div className="flex flex-col justify-end items-center">
                 <Avatar avatar={profile.avatar} name={profile.name} username={profile.username} classNames={'w-[160px] h-[160px]'} />
-                <H2 classNames="mt-4 relative">{profile.name} {currentUser && profile.user_id === currentUser.user?.id && <Button size="icon" variant='outline' className="absolute right-[-25%]"><FontAwesomeIcon icon={faPencil} /></Button>}</H2>
+                <H2 classNames="mt-4 relative">{profile.name} {currentUser && profile.user_id === currentUser.user?.id && (
+                  <ToolTip size="icon" variant='outline' text="Edit your profile" classNames="absolute right-[-20%]">
+                    <Link href="/settings?section=profile"><FontAwesomeIcon icon={faPencil} /></Link>
+                  </ToolTip>
+                )}</H2>
                 <Small classNames="text-muted-foreground">@{profile.username}</Small>
               </div>
               <div className="md:w-full justify-center gap-x-2 h-full flex-col md:flex-row space-y-2 hidden md:flex">
@@ -79,7 +85,7 @@ export default async function Page({ params: { username } }: Props) {
                 <Separator orientation='vertical' className="h-[28px] w-[2px] justify-start hidden md:visible" />
                 {oAuthIdentities?.map((identity, index) => {
                   return (
-                    <div key={index} className="frosted flex flex-row gap-x-[5px] justify-center items-center">
+                    <div key={index} className="frosted flex !mt-0 py-[10px] px-3 gap-x-[5px] justify-center items-center">
                       {identity.provider === 'google' && <FontAwesomeIcon icon={faGoogle} className="w-5 h-5" />}
                       {identity.provider === 'discord' && <DiscordLogoIcon className="w-5 h-5" />}
                       {identity.provider === 'twitter' && <TwitterLogoIcon className="w-5 h-5" />}

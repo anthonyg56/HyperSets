@@ -65,7 +65,7 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
   return (
     <BackgroundImage img={profile?.banner ?? null} alt={`${profile?.username}'s profile banner`} overlay>
       <div className={cn([
-        "container justify-center min-h-[calc(100vh_-_57px)] flex flex-col gap-14",
+        "container justify-center min-h-[calc(100vh_-_57px)] flex flex-col gap-10",
         "md:grid md:grid-cols-12"
       ])}>
         <div className="col-span-6 justify-center flex flex-col space-y-3">
@@ -75,8 +75,8 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
           </div>
 
           <Small classNames="text-muted-foreground mx-auto md:mx-0">{data.description}</Small>
-          <div className="space-x-5 flex flex-row pt-3">
-            <DownloadPresetButton download_url={data.download_url} preset_id={data.preset_id} user_id={session?.user.id ?? null} />
+          <div className="space-x-5 flex flex-row flex-wrap pt-3 w-full justify-center md:justify-start gap-y-3">
+            <DownloadPresetButton download_url={data.download_url} preset_id={data.preset_id} profile_id={session?.user.user_metadata.profile_id ?? null} />
             <a href={`https://youtube.com/watch?v=${data.youtube_id}`}><Button variant={"secondary"} className="flex flex-row gap-x-1"><VideoIcon width={18} height={18} /> Watch Demo</Button></a>
             <CommentSheet preset_id={preset_id} />
           </div>
@@ -97,7 +97,7 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
           <div className="grid grid-cols-2 self-start pb-10">
             <div className="flex flex-col items-center">
               <P classNames="!mt-0 text-zinc-900 dark:text-white">Ratings</P>
-              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">4.8 out of 5<StarFilledIcon className="w-10 h-10 text-primary" /></H2>
+              <H2 classNames="flex flex-col md:flex-row text-center items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">4.8 out of 5<StarFilledIcon className="w-8 h-8 text-primary" /></H2>
             </div>
             <div className="flex flex-col items-center">
               <P classNames="text-zinc-900 dark:text-white">Hardware </P>
@@ -106,10 +106,10 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
           </div>
 
           <div className="grid grid-cols-2 self-start pb-10">
-            <div className="flex flex-col items-center">
+            {effectsText.length > 0 && <div className="flex flex-col items-center">
               <P classNames="!mt-0 text-zinc-900 dark:text-white">Effects</P>
-              <H2 classNames="text-zinc-900 dark:text-white">{effectsText.length > 0 ? effectsText : "No effects selected"}</H2>
-            </div>
+              <H2 classNames="text-zinc-900 dark:text-white">{effectsText}</H2>
+            </div>}
             {/* <div>
                 <P>Games</P>
                 <H2>Call of Duty, League of legends, Rocket League, Counter Strike</H2>

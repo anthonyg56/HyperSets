@@ -60,7 +60,9 @@ export default function RegisterForm() {
       name: values.name?.trim().toLowerCase(),
       full_name: values.username?.trim().toLowerCase(),
       bio: values.bio,
+      passwordCreated: true,
     }
+
     // Create an account first
     const { data, error } = await supabase.auth.signUp({
       email: cleansedEmail, password, options: {
@@ -136,23 +138,12 @@ export default function RegisterForm() {
     setOpen(open)
   }
 
-  // function HandleWarningButton() {
-  //   return (
-  //     <div>
-  //       <Button>Cancel</Button>
-  //       <Button onClick={e => {
-  //         e.preventDefault()
-  //         setWarning(true)
-  //         handleOpen(false)
-  //       }}>Continue</Button>
-  //     </div>
-  //   )
-  // }
-
   return (
     <Dialog defaultOpen={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
-        <Button><EnvelopeClosedIcon width={20} height={20} className="mr-2" />Signup with Email</Button>
+        <Button>
+          <EnvelopeClosedIcon width={20} height={20} className="mr-2" />Signup with Email
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-[400px]">
         <DialogHeader>

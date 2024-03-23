@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form } from "../ui/form"
 import ReviewForm from "../forms/CreateAPreset/views/reviewForm"
-import useAuth from "@/lib/hooks/useSession"
+import useAuth from "@/lib/hooks/useAuth"
 import AddHardware from "../forms/CreateAPreset/views/addHardware"
 import UploadImage from "../forms/CreateAPreset/views/uploadImage"
 import EnterGeneralDetails from "../forms/CreateAPreset/views/enterGeneralDetails"
@@ -41,14 +41,14 @@ export default function NewPresetDialogButton({ preset_id }: Props) {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
-  const { profile } = useContext(LayoutContext) as TLayoutContext
-  const { presets: presetData, effects, loading, updatePreset, submitNewPreset, fetchPresets, submitGames, submitEffects } = usePresets<PresetTable>({ preset_id: preset_id, profile_id: profile?.profile_id })
   const { session } = useAuth()
+  const { presets: presetData, games, effects, loading, updatePreset, submitNewPreset, fetchPresets, submitGames, submitEffects } = usePresets<PresetTable>({ preset_id: preset_id, profile_id: session?.user.user_metadata.profile_id })
   const pathname = usePathname()
   const { toast } = useToast()
   const router = useRouter()
   const presets = presetData as PresetTable | null
 
+  console.log(presetData)
   const form = useForm<CreateAPresetSchema>({
     resolver: zodResolver(createAPresetSchema),
     defaultValues: {
@@ -63,8 +63,23 @@ export default function NewPresetDialogButton({ preset_id }: Props) {
     },
   });
 
+  useEffect(() => {
+    if (presets) {
+      form.reset({
+        name: presets.name,
+        description: presets.description,
+        hardware: presets.hardware,
+        youtubeId: `http://img.youtube.com/vi/${presets.youtube_id}/mqdefault.jpg`,
+        photoUrl: undefined,
+        downloadUrl: presets.download_url,
+        effects: effects,
+        games: [],
+      })
+    }
+  }, [presets])
+
   async function handleSubmit(values: CreateAPresetSchema) {
-    if (!profile || !profile.profile_id) return
+    if (!session) return
 
     setIsSubmitting(true)
 
@@ -107,7 +122,7 @@ export default function NewPresetDialogButton({ preset_id }: Props) {
   }
 
   function handleOpen(open: boolean) {
-    if (session === null) {
+    if (!session) {
       toast({
         title: "You need to be logged in to create a preset",
       })
@@ -116,12 +131,6 @@ export default function NewPresetDialogButton({ preset_id }: Props) {
     } else if (session.user.email_confirmed_at === undefined) {
       toast({
         title: "You need to confirm your email to create a preset",
-      })
-      setIsOpen(false)
-      return
-    } else if (profile === null) {
-      toast({
-        title: "You need to have a profile to create a preset",
       })
       setIsOpen(false)
       return
@@ -143,14 +152,12 @@ export default function NewPresetDialogButton({ preset_id }: Props) {
       setNextViewValid(false)
   }
 
-  if (pathname.startsWith('/profile')) return null
-
   return (
     <Dialog open={isOpen} onOpenChange={handleOpen}>
       <DialogTrigger className="w-full col-span-4 text-start relative xl:col-span-3">
         {preset_id ? "Edit preset" : <CreateAPresetTile />}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[90%] max-h-[90svh] md:w-full rounded-md overflow-y-auto">
         <DialogHeader className="relative">
           <DialogTitle className="text-center font-">HyperSets</DialogTitle>
           <DialogDescription className="text-center">

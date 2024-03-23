@@ -29,13 +29,13 @@ export default async function Home() {
         <div className="flex flex-col gap-[10px] pb-40 md:pb-0">
           <H1>Hyper Sets</H1>
           <Lead>A community collection of HyperX NGenuity <span className="rainbowText">RGB</span> presets</Lead>
-          <Button className="self-start">Explore Our Presets</Button>
+          <Button className="self-start"><Link href="/presets">Explore Our Presets</Link></Button>
         </div>
       </div>
       <div className="container max-w-screen-2xl w-full text-center space-y-4 my-12">
         <H2 classNames="border-b-0">Featured Presets</H2>
         <PresetCarousel multiple featured />
-        <Button variant='link'>
+        <Button variant='outline'>
           <Link href="/presets">View All</Link>
         </Button>
       </div>

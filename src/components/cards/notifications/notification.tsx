@@ -35,7 +35,7 @@ export default function NotificationCard({ notificationData }: NotificationCardP
     youtube_id: notificationData?.youtube_id,
     photo_url: notificationData?.photo_url,
     hardware: notificationData?.hardware as NonNullable<typeof notificationData.hardware>,
-    created_on: notificationData?.preset_created_on,
+    created_on: notificationData?.preset_created_on as string,
     profile
   }
 
@@ -80,14 +80,14 @@ export default function NotificationCard({ notificationData }: NotificationCardP
             <div className={cn([{
             'bg-zinc-800 rounded-md pt-2': notificationType === 'Comment' && notificationData.comment_id
             }])}>
-              {notificationType === 'Download' && preset && (
+              {notificationType === 'Download' && preset && preset.profile.username !== null && (
                 <Card>
                   <CardContent className="pt-6">
-                    <PresetCard preset={preset} />
+                    <PresetCard preset={preset} classNames="h-[150px] lg-[322px]"/>
                   </CardContent>
                 </Card>
               )}
-              {notificationType === 'Comment' && notificationData.comment_id && (
+              {notificationType === 'Comment' && notificationData.comment_id && notificationData.preset_id !== null && (
                 <CommentCard notification comment={comment} />  
               )}
             </div>

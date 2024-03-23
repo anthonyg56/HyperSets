@@ -16,13 +16,12 @@ type Props = {
 export default async function Page({ searchParams: { section }, }: Props) {
   const sectionExists = sections.includes(section)
 
-  console.log(section, sectionExists)
   if (!section || sectionExists === false) {
     redirect('/settings?section=profile')
   }
 
   return (
-    <div className="col-span-9 pt-8 pr-4">
+    <div className="col-span-9 pt-8 md:pr-4 pb-16">
       { section === 'profile' && <ProfileForm /> }
       { section === 'security' && <SecuritySection /> }
       { section === 'notifications' && <NotificationsForm /> }

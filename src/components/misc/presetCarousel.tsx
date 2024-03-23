@@ -43,7 +43,7 @@ export async function PresetCarousel({ multiple, hardware, featured, serverPrese
       <CarouselContent className="">
         {(serverPresets ? serverPresets : presets ? presets : []).map((preset, index) => (
           <CarouselItem className={cn(["w-full h-auto", {
-            "basis-1/4": multiple,
+            "md:basis-1/2 lg:basis-1/4": multiple,
           }])}>
             {multiple ? <PresetCard key={index} preset={preset as PresetCardQuery} /> : <FeaturedPesetCard key={index} preset={preset} />}
           </CarouselItem>
@@ -51,8 +51,8 @@ export async function PresetCarousel({ multiple, hardware, featured, serverPrese
       </CarouselContent>
 
       <>
-        <CarouselNext />
-        <CarouselPrevious />
+        <CarouselNext className="hidden md:inline-flex" />
+        <CarouselPrevious className="hidden md:inline-flex"/>
       </>
     </Carousel>
   )

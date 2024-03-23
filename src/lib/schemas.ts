@@ -113,7 +113,6 @@ export const usernameSchema = z
   .min(5, "Username must be at least 5 characters long")
   .max(35, "Username must be less than 35 characters long")
   .regex(/^[a-zA-Z0-9_]*$/, "Username can only contain letters, numbers, and underscores")
-  .optional()
 
 export const emailSchema = z
   .string({
@@ -142,10 +141,10 @@ export const recoverPasswordSchema = z.object({
   password: passwordSchema,
   confirm: passwordSchema,
 })
-.refine((data) => data.password === data.confirm, {
-  message: "Passwords don't match",
-  path: ["confirm"], // path of error
-});
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords don't match",
+    path: ["confirm"], // path of error
+  });
 
 export const loginSchema = z.object({
   email: emailSchema,
@@ -159,27 +158,24 @@ export const profileFormSchema = z.object({
       invalid_type_error: "Please enter a valid string"
     })
     .min(2, "First name must be at least 2 characters long")
-    .max(50, "First name must be less than 50 characters long")
-    .optional(),
+    .max(50, "First name must be less than 50 characters long"),
   username: usernameSchema,
   // Make sure to validate username and email uniqueness
   // email: z
   //   .string()
   //   .email("Please enter a valid email"),
   avatar: z
-    .any()
-    .optional()
-    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 5MB.")
+    .instanceof(File)
+    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 50MB.")
     .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
     .optional(),
   bio: z
     .string()
     .max(160, "Bio must be less than 160 characters long")
     .optional(),
-  banner: z    
-    .any()
-    .optional()
-    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 5MB.")
+  banner: z
+    .instanceof(File)
+    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 50MB.")
     .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
     .optional(),
 })
@@ -189,11 +185,11 @@ export const signupSchemna = z.object({
   password: passwordSchema,
   confirm: passwordSchema,
 })
-.merge(profileFormSchema.omit({ avatar: true, banner: true }))
-.refine((data) => data.password === data.confirm, {
-  message: "Passwords don't match",
-  path: ["confirm"], // path of error
-})
+  .merge(profileFormSchema.omit({ avatar: true, banner: true }))
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords don't match",
+    path: ["confirm"], // path of error
+  })
 
 export const regiserFormSchema = loginSchema.extend({
   confirm: passwordSchema,
@@ -205,23 +201,30 @@ export const regiserFormSchema = loginSchema.extend({
 
 
 export const securityFormSchema = z.object({
-  password: passwordSchema,
-  confirm: passwordSchema,
-  email: emailSchema,
-  connectedAccounts: z.array(z.object({
-    name: z.union([
-      z.literal("Google"),
-      z.literal("Discord"),
-      z.literal("Twitter")
-    ]),
-    email: emailSchema,
-    isConnected: z.boolean(),
-  })).max(2),
+  password: z.string({
+    invalid_type_error: "Input must be a string",
+  })
+    .min(8, { message: "Passwords must be 8 or more characters" })
+    .regex(/[A-Z]/, { message: "Passwords must contain one uppercase character" })
+    .regex(/\d/, { message: "Passwords must contain one number" })
+    .regex(/[ -/:-@[-`{-~]/, { message: "Passwords must contain one special character" })
+    .regex(/(?=.*[a-z])/, { message: "Passwords must contain one lowercase character" })
+    .optional(),
+  confirm: z.string({
+    invalid_type_error: "Input must be a string",
+  })
+    .min(8, { message: "Passwords must be 8 or more characters" })
+    .regex(/[A-Z]/, { message: "Passwords must contain one uppercase character" })
+    .regex(/\d/, { message: "Passwords must contain one number" })
+    .regex(/[ -/:-@[-`{-~]/, { message: "Passwords must contain one special character" })
+    .regex(/(?=.*[a-z])/, { message: "Passwords must contain one lowercase character" })
+    .optional(),
+  email: emailSchema
 })
-.refine(data => data.confirm === data.password, {
-  message: "Passwords don't match",
-  path: ["confirm"],
-})
+  .refine(data => data.confirm === data.password, {
+    message: "Passwords don't match",
+    path: ["confirm"],
+  })
 
 export const NotificationsFormSchema = z.object({
   push: z.boolean(),
@@ -246,9 +249,9 @@ export const toastSchema = z.object({
     fn: z.function().args(z.any()).returns(z.void())
   })
 })
-.partial({
-  action: true
-})
+  .partial({
+    action: true
+  })
 
 export const imageSchema = z
   .any()
@@ -272,7 +275,7 @@ export const fileSchema = z
     return ACCEPTED_FILE_TYPES.includes(file?.type as string)
   }, 'File must be a PNG/JPG')
 
-  
+
 // <-------------------------------------- Schemas Types -------------------------------------->
 
 export type LoginSchema = z.infer<typeof loginSchema>

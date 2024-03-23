@@ -34,44 +34,44 @@ export default function EffectsToggleGroup({ form, currentEffect, updateEffect }
       <ToggleGroup className="py-9 flex flex-row flex-wrap" type="multiple" onValueChange={setEffects} defaultValue={form ? formInitalValues : currentEffect}>
         <ToggleGroupItem value="Twilight" className="flex flex-col items-center justify-center">
           <ToolTip text="Twilight" variant="ghost" size="icon">
-            <MoonIcon width={24} height={24} className="fill-current" />  
+            <MoonIcon width={24} height={24} className="fill-current" />
           </ToolTip>
         </ToggleGroupItem>
-          <ToggleGroupItem value="Video Capture" className="flex flex-col items-center justify-center">
-            <ToolTip text="Video Capture" variant="ghost" size="icon">
-              <VideoIcon width={24} height={24} className="fill-current" /> 
-            </ToolTip>
-          </ToggleGroupItem>
-          <ToggleGroupItem value="Sun" className="flex flex-col items-center justify-center">
-            <ToolTip text="Sun" variant="ghost" size="icon">
-              <SunIcon width={24} height={24} className="fill-current" />
-            </ToolTip>
-          </ToggleGroupItem>
-          <ToggleGroupItem value="Confetti" className="flex flex-col items-center justify-center">
-            <ToolTip text="Confetti" variant="ghost" size="icon">
-              <ConfettiSvg width={24} height={24} className="fill-current" />
-            </ToolTip>
-          </ToggleGroupItem>
-          <ToggleGroupItem value="Breathing" className="flex flex-col items-center justify-center">
-            <ToolTip text="Breathing" variant="ghost" size="icon">
-              <BreathingSVG width={24} height={24} className="fill-current" />
-            </ToolTip>
-          </ToggleGroupItem>
-          <ToggleGroupItem value="Wave" className="flex flex-col items-center justify-center">
-            <ToolTip text="Wave" variant="ghost" size="icon">
-              <BarChartIcon width={24} height={24} className="fill-current" />
-            </ToolTip>
-          </ToggleGroupItem>
-          <ToggleGroupItem value="Swipe" className="flex flex-col items-center justify-center">
-            <ToolTip text="Swipe" variant="ghost" size="icon">
-              <DoubleArrowRightIcon width={24} height={24} className="fill-current" />
-            </ToolTip>
-          </ToggleGroupItem>
-          <ToggleGroupItem value="Solid" className="flex flex-col items-center justify-center">
-            <ToolTip text="Solid" variant="ghost" size="icon">
-              <LockClosedIcon width={24} height={24} className="fill-current" />
-            </ToolTip>
-          </ToggleGroupItem>
+        <ToggleGroupItem value="Video Capture" className="flex flex-col items-center justify-center">
+          <ToolTip text="Video Capture" variant="ghost" size="icon">
+            <VideoIcon width={24} height={24} className="fill-current" />
+          </ToolTip>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="Sun" className="flex flex-col items-center justify-center">
+          <ToolTip text="Sun" variant="ghost" size="icon">
+            <SunIcon width={24} height={24} className="fill-current" />
+          </ToolTip>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="Confetti" className="flex flex-col items-center justify-center">
+          <ToolTip text="Confetti" variant="ghost" size="icon">
+            <ConfettiSvg width={24} height={24} className="fill-current" />
+          </ToolTip>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="Breathing" className="flex flex-col items-center justify-center">
+          <ToolTip text="Breathing" variant="ghost" size="icon">
+            <BreathingSVG width={24} height={24} className="fill-current" />
+          </ToolTip>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="Wave" className="flex flex-col items-center justify-center">
+          <ToolTip text="Wave" variant="ghost" size="icon">
+            <BarChartIcon width={24} height={24} className="fill-current" />
+          </ToolTip>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="Swipe" className="flex flex-col items-center justify-center">
+          <ToolTip text="Swipe" variant="ghost" size="icon">
+            <DoubleArrowRightIcon width={24} height={24} className="fill-current" />
+          </ToolTip>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="Solid" className="flex flex-col items-center justify-center">
+          <ToolTip text="Solid" variant="ghost" size="icon">
+            <LockClosedIcon width={24} height={24} className="fill-current" />
+          </ToolTip>
+        </ToggleGroupItem>
         <ToggleGroupItem value="Screen Mirror" className="flex flex-col items-center justify-center">
           <ToolTip text="Screen Mirror" variant="ghost" size="icon">
             <ImageIcon width={24} height={24} className="fill-current" />
@@ -87,7 +87,7 @@ type SVGProps = React.SVGProps<SVGSVGElement>
 function ConfettiSvg(props: SVGProps) {
   return (
     <svg
-      
+
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 64 64"
