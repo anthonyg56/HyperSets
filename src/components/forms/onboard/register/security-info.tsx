@@ -53,7 +53,7 @@ export default function SecurityInfo({ form }: Props) {
     })
 
     return () => subscription.unsubscribe()
-  }, [form.watch("email")])
+  }, [])
 
   return (
     <div>

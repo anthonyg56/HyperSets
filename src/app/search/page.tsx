@@ -67,7 +67,7 @@ export default async function SearchPage({ searchParams }: Props) {
         </div>
       )}
       {presetItems.map((item) => query !== null && item.presets.length > 0 && (
-        <div className="space-y-3 w-full py-6">
+        <div className="space-y-3 w-full py-6" key={item.name + '_' + item.presets[0].profile?.profile_id}>
           <div className="flex flex-row w-full justify-center">
             <H2 classNames="border-b-0">{item.name}s</H2>
             <H4 classNames="ml-auto my-auto flex flex-row gap-x-1 border-b-[1px] border-muted hover:cursor-pointer">View More <ArrowRightIcon className="w-6 h-6"/></H4>
@@ -77,7 +77,7 @@ export default async function SearchPage({ searchParams }: Props) {
         </div>
       ))}
       {query !== null && profiles.length > 0 && profiles.map((profile) => (
-        <div>
+        <div key={profile.profile_id}>
           <h2>{profile.name}</h2>
         </div>
       ))}

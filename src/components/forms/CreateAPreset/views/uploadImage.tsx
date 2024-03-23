@@ -66,7 +66,7 @@ export default function UploadImage({ form, setNextViewValid, updateView }: Prop
     })
 
     return () => subscription.unsubscribe()
-  }, [imgSrc, form.watch('youtubeId'), form.watch('photoUrl')])
+  }, [imgSrc])
 
   useEffect(() => {
     const youtubeUrl = form.getValues('youtubeId')

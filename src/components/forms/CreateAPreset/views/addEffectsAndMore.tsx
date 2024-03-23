@@ -28,20 +28,20 @@ export default function AddEffectsAndMore({ form, setNextViewValid, updateView }
   return (
     <div>
       {data.effectsAndMore.length !== 0 && currentEffectCard === null && (
-        <>
+        <div>
           <div>
-            <H3>{capitalizeFirstLetter(data.hardware)}'s Specialized Details</H3>
+            <H3>{capitalizeFirstLetter(data.hardware)}&apos;s Specialized Details</H3>
             <Muted>Use this to highlight key aspects of your preset, such as effects for your keyboard or the different DPI levels for a mouse <span className="">(Optional)</span></Muted>
           </div>
 
           <div className="grid grid-cols-6 pt-10 pb-6 gap-x-3">
             {data.effectsAndMore.map((item, index) => {
               return (
-                <EffectsCard effectsCardName={item.name} selectEffectCard={setCurrentEffectCard} />
+                <EffectsCard key={`${item.name}`} effectsCardName={item.name} selectEffectCard={setCurrentEffectCard} />
               )
             })}
           </div>
-        </>
+        </div>
       )}
       {currentEffectCard === 'Effects' && (
         <div>

@@ -71,7 +71,7 @@ export default function ProfileForm() {
     })
 
     return () => subscription.unsubscribe()
-  }, [form.watch("username")])
+  }, [])
   
   // On initial load, fetch the current profile
   async function getProfile() {

@@ -30,7 +30,7 @@ export default function GameCompadibilitySelector({ form, filter, updateGameFilt
 
   useEffect(() => {
     
-  }, [form?.watch('games')])
+  }, [])
 
   async function fetchGames() {
     const { data } = await supabase.from('games').select('game_id, game_name').order('game_name', { ascending: true })
@@ -85,7 +85,7 @@ export default function GameCompadibilitySelector({ form, filter, updateGameFilt
             <SelectContent >
               {games.map((game, index) => {
                 return (
-                  <SelectItem value={game.game_name}>{capitalizeEachWord(game.game_name)}</SelectItem>
+                  <SelectItem key={`${game.game_name}`} value={game.game_name}>{capitalizeEachWord(game.game_name)}</SelectItem>
                 )
               })}
             </SelectContent>

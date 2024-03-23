@@ -59,7 +59,7 @@ export default function EnterGeneralDetails({ form, setNextViewValid, updateView
     })
 
     return () => subscription.unsubscribe()
-  }, [form.watch(['name', 'description', 'downloadUrl', 'effects'])])
+  }, [])
 
   // form.clearErrors(['name', 'description', 'downloadUrl', 'effects'])
   

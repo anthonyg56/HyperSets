@@ -63,14 +63,14 @@ export default function ReviewForm({ form, setNextViewValid }: Props) {
         <div>
           <H4>Effects</H4>
           <div className="space-x-4 flex flex-row">
-            {effects.length > 0 ? effects.map((effect) => <Muted>{effect}</Muted>) : <Muted>No effects selected</Muted>}
+            {effects.length > 0 ? effects.map((effect) => <Muted key={`${effect}-review`}>{effect}</Muted>) : <Muted>No effects selected</Muted>}
           </div>
         </div>
         <div>
           <H4>Games</H4>
-          <Muted>{games.length > 0 ? games.map(game => {
-            return `${game.game_name}, `
-          }) : <Muted>No games selected</Muted>}</Muted>
+          {games.length > 0 ? games.map(game => {
+            return <Muted key={`${game.game_name}-review`}>{game.game_name}</Muted>
+          }) : <Muted>No games selected</Muted>}
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@ export default function DownloadPresetButton({ preset_id, download_url, profile_
     if (downloadAdded) {
       window.location.assign(download_url);
     }
-  }, [downloadAdded])
+  }, [downloadAdded, download_url])
 
   async function increaseDownload(e: any) {
     e.preventDefault()

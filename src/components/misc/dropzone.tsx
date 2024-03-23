@@ -137,7 +137,7 @@ export default function DropZone({ form }: Props) {
             type: "file",
             ringPrimary: true
           })} />
-          <Muted>Drag 'n' drop some files here, or click to select files</Muted>
+          <Muted>Drag &rsquo;n&rsquo; drop some files here, or click to select files</Muted>
         </div>
       ) : (
         <Card>
@@ -153,7 +153,6 @@ export default function DropZone({ form }: Props) {
         </Card>
       )}
     </div>
-
   )
 }
 

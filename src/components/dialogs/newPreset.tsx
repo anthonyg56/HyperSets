@@ -76,7 +76,7 @@ export default function NewPresetDialogButton({ preset_id }: Props) {
         games: [],
       })
     }
-  }, [presets])
+  }, [presets, effects])
 
   async function handleSubmit(values: CreateAPresetSchema) {
     if (!session) return

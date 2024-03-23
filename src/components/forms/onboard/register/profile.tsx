@@ -36,7 +36,7 @@ export default function ProfileInfo({ form }: Props) {
     })
 
     return () => subscription.unsubscribe()
-  }, [form.watch("username")])
+  }, [])
 
   return (
     <div>

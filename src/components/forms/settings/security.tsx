@@ -74,7 +74,7 @@ export default function SecuritySection() {
     })
 
     return () => subscription.unsubscribe()
-  }, [form.watch('email')])
+  }, [])
 
   async function onSubmit(values: SecurityFormSchema) {
     // Do something with the form values.

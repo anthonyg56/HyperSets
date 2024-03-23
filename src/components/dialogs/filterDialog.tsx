@@ -134,7 +134,7 @@ export default function FilterPresetsDialog({ currentHardware, updateHardware, c
         <DrawerHeader className="text-left">
           <DrawerTitle>Filter Options</DrawerTitle>
           <DrawerDescription>
-            Make changes to your profile here. Click save when you're done.
+            Make changes to your profile here. Click save when you&apos;re done.
           </DrawerDescription>
         </DrawerHeader>
         <div className="space-y-3 px-4">

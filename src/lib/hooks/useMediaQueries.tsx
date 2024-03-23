@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 
+const componentType = typeof window === 'undefined' ? 'server' : 'client';
+
 export default function useMediaQuery(query: string) {
   const [matches, setMatches] = React.useState<boolean | undefined>(undefined);
+  if (componentType === 'server') return null;
   const matchQueryList = window.matchMedia(query);
 
   useEffect(() => {
@@ -20,5 +23,8 @@ export default function useMediaQuery(query: string) {
   function handleChange(e: any) {
     setMatches(e.matches);
   }
+
+
+
   return matches;
 }

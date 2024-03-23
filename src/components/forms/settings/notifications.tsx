@@ -12,18 +12,15 @@ import { Separator } from "@/components/ui/separator";
 import SettingsHeader from "./header";
 import { NotificationsFormField } from "./form-fields";
 import { notificationsFieldDataGroup } from "./field-data";
-import { Tables } from "../../../../types/supabase";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { UserSessionContext, TUserSessionContext } from "@/lib/context/sessionProvider";
 import { Session } from "@supabase/supabase-js";
 import useAuth from "@/lib/hooks/useAuth";
 
 export default function NotificationsForm() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const supabase = createSupabaseClient()
-  const { session } = useAuth()
+  const { session } = useAuth() as { session: Session | null }
 
   const form = useForm<NotificationsFormSchema>({
     resolver: zodResolver(NotificationsFormSchema),
@@ -72,7 +69,13 @@ export default function NotificationsForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="">
-        <SettingsHeader isSubmitting={isSubmitting} mode={mode} setMode={setMode} title="Notifications" subtitle="Update your notification settings here" />
+        <SettingsHeader
+          isSubmitting={form.formState.isSubmitting}
+          mode={mode}
+          setMode={setMode}
+          title="Notifications"
+          subtitle="Update your notification settings here"
+          />
         <Separator className="w-full my-8" />
         <div className="space-y-8">
           { notificationsFieldDataGroup.general.map((field, index) => <NotificationsFormField 
