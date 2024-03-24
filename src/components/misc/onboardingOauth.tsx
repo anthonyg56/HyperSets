@@ -16,7 +16,7 @@ export default function OnboardingOauth() {
     await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${baseURL}/confirm`
+        redirectTo: `${baseURL}/api/confirm`
       } 
     })
   }

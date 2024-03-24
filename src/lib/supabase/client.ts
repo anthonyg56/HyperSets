@@ -18,7 +18,7 @@ export async function resendConfirmationEmail(email: string) {
     type: 'signup',
     email: email,
     options: {
-      emailRedirectTo: `${baseURL}/auth/confirm`
+      emailRedirectTo: `${baseURL}/api/confirm`
     }
   })
 

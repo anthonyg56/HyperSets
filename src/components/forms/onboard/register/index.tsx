@@ -66,7 +66,7 @@ export default function RegisterForm() {
     // Create an account first
     const { data, error } = await supabase.auth.signUp({
       email: cleansedEmail, password, options: {
-        emailRedirectTo: `${baseURL}/confirm/callback`,
+        emailRedirectTo: `${baseURL}/api/confirm`,
         data: metaData
       }
     })

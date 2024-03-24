@@ -82,7 +82,7 @@ export default function useAuth() {
       email: cleansedEmail,
       password,
       options: {
-        emailRedirectTo: `${baseURL}/confirm/callback`,
+        emailRedirectTo: `${baseURL}/api/confirm`,
         data: metaData
       }
     })
@@ -159,7 +159,7 @@ export default function useAuth() {
     const { error } = await supabase.auth.linkIdentity({
       provider,
       options: {
-        redirectTo: `${baseURL}/confirm/callback`
+        redirectTo: `${baseURL}/api/confirm`
       }
     })
 
