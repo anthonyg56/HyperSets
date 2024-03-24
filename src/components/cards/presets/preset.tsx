@@ -7,9 +7,10 @@ import { Button } from "../../ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { PresetCardQuery } from "../../../../types/query-results";
-import { DownloadIcon } from "@radix-ui/react-icons";
+import { DownloadIcon, VideoIcon } from "@radix-ui/react-icons";
 import PresetPreviewDialog from "@/components/dialogs/presetPeview";
 import NewPresetDialogButton from "@/components/dialogs/newPreset";
+import { useState } from "react";
 
 type PresetCardProps = {
   preset: PresetCardQuery;
@@ -27,14 +28,14 @@ export function PresetCard({ classNames, settings, preset: {
   youtube_id: videoId,
   preset_id: presetId,
 } }: PresetCardProps) {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
   const router = useRouter();
   const pathName = usePathname();
   const isSettings = pathName.startsWith('/settings');
   const imgSrc = photo_url ? photo_url : `http://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
 
   function handleClick(e: any) {
-    e.preventDefault();
-
     if (isSettings) {
       return;
     }
@@ -44,36 +45,41 @@ export function PresetCard({ classNames, settings, preset: {
   return (
     <div className="col-span-4 group xl:col-span-3">
       {/*<div className="-z-10 group-hover:rgb-ring-container animate-rgb-ring">*/}
-        <Card className={cn(["relative col-span-3 overflow-hidden group-hover:cursor-pointer bg-transparent w-full h-[200px] lg:h-[322px] z-10", classNames])}>
-          <div className="col-span-2 w-full h-full relative">
-            <Image
-              src={imgSrc}
-              alt={`cover photo`}
-              fill
-              className="h-full w-full object-cover -z-10"
-            />
-            <div className="absolute left-4 top-4 flex flex-row gap-x-2 z-10">
-              <Small classNames="frosted flex flex-row gap-x-[2px]">{downloads}<DownloadIcon width={16} height={16} className="" /></Small>
-              <Small classNames="frosted">{hardware}</Small>
-            </div>
-
-            <div className="hidden group-hover:flex w-full h-full justify-center items-center flex-col gap-y-2">
-              {!isSettings && (
-                <>
-                  <PresetPreviewDialog presetId={presetId} />
-                  <Button variant="default" className="z-10" onClick={handleClick}>Download</Button>
-                </>
-              )}
-              {isSettings === true && <NewPresetDialogButton preset_id={presetId} />}
-            </div>
-
+      <Card className={cn(["relative col-span-3 overflow-hidden group-hover:cursor-pointer bg-transparent w-full h-[200px] lg:h-[322px] z-10", classNames])} onClick={handleClick}>
+        <div className="col-span-2 w-full h-full relative">
+          <Image
+            src={imgSrc}
+            alt={`cover photo`}
+            fill
+            className="h-full w-full object-cover -z-10"
+          />
+          <div className="absolute left-4 top-4 flex flex-row gap-x-2 z-10">
+            <Small classNames="frosted flex flex-row gap-x-[2px]">{downloads}<DownloadIcon width={16} height={16} className="" /></Small>
+            <Small classNames="frosted">{hardware}</Small>
           </div>
-        </Card>
+          <div className="hidden group-hover:flex w-full h-full justify-center items-center flex-col gap-y-2">
+            {isSettings === true && <NewPresetDialogButton preset_id={presetId} />}
+          </div>
+          <div onClick={e => {
+            e.stopPropagation()
+            setIsPreviewOpen(true)
+          }} className={cn([
+            "absolute bottom-0 right-0 w-[25%] h-7 flex justify-end",
+            "bg-gradient-to-b md:bg-gradient-to-r from-transparent from-0% to-black to-[99%] text-white py-5"
+          ])}>
+          </div>
+          <div className="absolute bottom-0 right-0 py-2 flex flex-row items-center gap-x-4 hover:gap-x-2 translate-x-[85px] hover:translate-x-0 transition-all pr-2">
+              <VideoIcon className=" w-6 h-6" />
+              <H4 classNames="">Preview</H4>
+            </div>
+        </div>
+      </Card>
       {/* </div> */}
       <div className="py-3">
-              <P classNames="font-medium">{capitalizeFirstLetter(name)}</P>
-              <Small classNames="text-xs text-muted-foreground translate-y-[5]">by @{profile?.username ?? 'deleteUser'}</Small>
-            </div>
+        <P classNames="font-medium">{capitalizeFirstLetter(name)}</P>
+        <Small classNames="text-xs text-muted-foreground translate-y-[5]">by @{profile?.username ?? 'deleteUser'}</Small>
+      </div>
+      <PresetPreviewDialog presetId={presetId} open={isPreviewOpen} setOpen={setIsPreviewOpen} />
     </div>
   )
 }

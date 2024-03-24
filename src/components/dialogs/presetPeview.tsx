@@ -4,20 +4,23 @@ import Image from "next/image";
 import { TopCommentView, YoutubeDialogQuery } from "../../../types/query-results";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { H3 } from "../ui/typography";
+import { H3, H4 } from "../ui/typography";
 import UserProfileHoverCard from "../misc/profileHoverCard";
 import Link from "next/link";
 import TopCommentCard from "@/components/cards/comments/topComment";
 import usePresets from "@/lib/hooks/usePresets";
 import useComments from "@/lib/hooks/useComments";
+import { VideoIcon } from "@radix-ui/react-icons";
 
 type Props = {
   presetId: number;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
 const presetSelectClause = 'created_on,description,hardware,name,photo_url,preset_id,youtube_id,last_updated_on,downloads,profile:profile_id(profile_id,username)'
 
-export default function PresetPreviewDialog({ presetId: preset_id }: Props) {
+export default function PresetPreviewDialog({ presetId: preset_id, open, setOpen }: Props) {
   const { topComments } = useComments<TopCommentView>({ preset_id, topComments: true }) as { topComments: TopCommentView[] }
   
   const { presets } = usePresets<YoutubeDialogQuery>({ 
@@ -27,10 +30,7 @@ export default function PresetPreviewDialog({ presetId: preset_id }: Props) {
 
   const preset = presets
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant='secondary' className="z-10">Watch a Preview</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-[1000px] max-h-screen overflow-y-auto">
         {!preset ? (
           <div className="w-full text-center py-10">
