@@ -21,11 +21,13 @@ enum NotificationActionMessage {
 }
 
 export default function NotificationCard({ notificationData }: NotificationCardProps) {
+  const { fetchComments } = useComments({ preset_id: notificationData.preset_id as number });
+
   const profile = {
-    username: notificationData?.username,
+    username: notificationData?.username as string,
     avatar: notificationData?.avatar,
     profile_id: notificationData?.profile_id as number,
-    name: notificationData?.name,
+    name: notificationData?.name as string,
   }
 
   const preset =  {
@@ -43,7 +45,7 @@ export default function NotificationCard({ notificationData }: NotificationCardP
     text: notificationData?.comment_text as string,
     comment_id: notificationData?.comment_id as number,
     likes: notificationData?.likes as number,
-    preset_id: notificationData?.preset_id,
+    preset_id: notificationData?.preset_id as number,
     created_at: notificationData?.comment_created_on as string,
     profile
   }
@@ -80,7 +82,7 @@ export default function NotificationCard({ notificationData }: NotificationCardP
             <div className={cn([{
             'bg-zinc-800 rounded-md pt-2': notificationType === 'Comment' && notificationData.comment_id
             }])}>
-              {notificationType === 'Download' && preset && preset.profile.username !== null && (
+              {notificationType === 'Download' && profile.username !== null && (
                 <Card>
                   <CardContent className="pt-6">
                     <PresetCard preset={preset} classNames="h-[150px] lg-[322px]"/>
@@ -88,7 +90,7 @@ export default function NotificationCard({ notificationData }: NotificationCardP
                 </Card>
               )}
               {notificationType === 'Comment' && notificationData.comment_id && notificationData.preset_id !== null && (
-                <CommentCard notification comment={comment} />  
+                <CommentCard notification comment={comment} fetchComments={fetchComments} />  
               )}
             </div>
           </div>
