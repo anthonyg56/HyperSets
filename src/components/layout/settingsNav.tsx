@@ -1,3 +1,5 @@
+"use client"
+
 import { capitalizeEachWord, cn } from "@/lib/utils";
 import Link from "next/link";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "../ui/navigation-menu";
@@ -5,8 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket, faExclamation, faShieldHalved, faSliders, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { TUserSessionContext, UserSessionContext } from "../../lib/context/sessionProvider";
-import { useContext } from "react";
 import { createSupabaseClient } from "@/lib/supabase/client";
 
 export type TSettingsSections = 'profile' | 'profile' | 'presets' | 'notifications' | 'security' 

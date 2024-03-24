@@ -6,14 +6,11 @@ import { useState } from "react";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
-type Props = {
-  initalPage: SettingsSection,
-}
-export default function SettingsPagesDropdown({ initalPage }: Props) {
+export default function SettingsPagesDropdown() {
+  const searchParams = useSearchParams()
   const [open, setOpen] = useState<boolean>(false)
-  const [currentPage, setCurrentPage] = useState<SettingsSection>(initalPage)
+  const [currentPage, setCurrentPage] = useState<SettingsSection>(searchParams.get('section') as SettingsSection)
 
-  console.log(currentPage)
   const router = useRouter()
 
   function routePage(section: SettingsSection) {

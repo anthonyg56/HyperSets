@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useEffect, useState } from "react"
+import { Suspense, createContext, useEffect, useState } from "react"
 import SettingsNavMenu from "../../components/layout/settingsNav"
 import Image, { StaticImageData } from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
@@ -26,11 +26,10 @@ export const SettingsContext = createContext<Partial<TSettingsContext>>({})
 
 export default function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<ProfileTable | null | undefined>(undefined)
+
   const { fetchCurrentProfile } = useProfile<ProfileTable>()
   const { resolvedTheme } = useTheme()
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const section = searchParams.get('section')
 
   useEffect(() => {
     async function getProfile() {
@@ -121,9 +120,13 @@ export default function SettingsProvider({ children }: { children: React.ReactNo
       <div className={cn(["-translate-y-[106px] md:-translate-y-0 flex flex-col md:grid md:grid-cols-12 w-full container max-w-screen-2xl h-full", {
 
       }])}>
-        <SettingsNavMenu />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SettingsNavMenu />
+        </Suspense>
         <Separator className="my-4 mx-auto h-full hidden md:block" orientation="vertical" />
-        <SettingsPagesDropdown initalPage={section as SettingsSection} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SettingsPagesDropdown />
+        </Suspense>
         <SettingsContext.Provider value={{}}>
           {children}
         </SettingsContext.Provider>

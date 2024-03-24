@@ -12,7 +12,7 @@ import SearchBar from "../misc/search";
 import MobileSearch from "../dialogs/mobileSearch";
 import { ProfileNavQuery, ProfileTable } from "../../../types/query-results";
 import useNotifications from "@/lib/hooks/useNotifications";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { toast } from "../ui/use-toast";
 import { createSupabaseClient } from "@/lib/supabase/client";
 
@@ -43,8 +43,9 @@ export default function Navbar({ pathname, profile }: Props) {
           </Large>
         </div>
         <ModeToggle />
-        <SearchBar  />
-        
+        <Suspense>
+          <SearchBar  />
+        </Suspense>
         
         <NavigationMenu className="hidden md:table-cell">
           <NavigationMenuList>
