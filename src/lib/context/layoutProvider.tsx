@@ -22,7 +22,7 @@ export default function LayoutProvider({ children }: Props) {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const { profile } = useProfile<ProfileNavQuery>(undefined, "username, avatar, profile_id, name") as { profile: ProfileNavQuery | null }
   const pathname = usePathname()
-  
+  // console.log(profile)
   useEffect(() => {
       setMobileNavOpen(false)
   }, [pathname])

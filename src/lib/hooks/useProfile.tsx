@@ -16,12 +16,10 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
   const supabase = createSupabaseClient()
 
   useEffect(() => {
-      fetchProfile()
-  }, [profile_id])
+    fetchProfile()
+  }, [])
 
   async function fetchProfile() {
-    if (!profile_id) return
-
     setLoading(true)
 
     let queryBuilder = supabase
@@ -32,13 +30,14 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
       queryBuilder = queryBuilder.eq('profile_id', profile_id)
     } else {
       const { data: { session }} = await supabase.auth.getSession()
+      console.log(session)
       if (!session) return
-      queryBuilder = queryBuilder.eq('user_id', session.user.user_metadata.profile_id)
+      queryBuilder = queryBuilder.eq('profile_id', session.user.user_metadata.options.profile_id)
     }
 
     const { data } = await queryBuilder.single<T>()
 
-    setProfile(data ?? [])
+    setProfile(data)
     setLoading(false)
   }
 
