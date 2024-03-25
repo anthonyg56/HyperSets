@@ -29,6 +29,7 @@ export function PresetCard({ classNames, settings, preset: {
   preset_id: presetId,
 } }: PresetCardProps) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isPresetFormOpen, setPresetFormOpen] = useState(false);
 
   const router = useRouter();
   const pathName = usePathname();
@@ -37,11 +38,13 @@ export function PresetCard({ classNames, settings, preset: {
 
   function handleClick(e: any) {
     if (isSettings) {
+      setPresetFormOpen(true);
       return;
     }
 
     router.push(`/presets/${presetId}`);
   }
+  
   return (
     <div className="col-span-4 group xl:col-span-3">
       {/*<div className="-z-10 group-hover:rgb-ring-container animate-rgb-ring">*/}
@@ -57,29 +60,27 @@ export function PresetCard({ classNames, settings, preset: {
             <Small classNames="frosted flex flex-row gap-x-[2px]">{downloads}<DownloadIcon width={16} height={16} className="" /></Small>
             <Small classNames="frosted">{hardware}</Small>
           </div>
-          <div className="hidden group-hover:flex w-full h-full justify-center items-center flex-col gap-y-2">
-            {isSettings === true && <NewPresetDialogButton preset_id={presetId} />}
-          </div>
-          <div onClick={e => {
-            e.stopPropagation()
-            setIsPreviewOpen(true)
-          }} className={cn([
+          <div className={cn([
             "absolute bottom-0 right-0 w-[25%] h-7 flex justify-end",
             "bg-gradient-to-b md:bg-gradient-to-r from-transparent from-0% to-black to-[99%] text-white py-5"
           ])}>
           </div>
-          <div className="absolute bottom-0 right-0 py-2 flex flex-row items-center gap-x-4 hover:gap-x-2 translate-x-[85px] hover:translate-x-0 transition-all pr-2">
+          <div onClick={e => {
+            e.stopPropagation()
+            setIsPreviewOpen(true)
+          }} className="absolute bottom-0 right-0 py-2 flex flex-row items-center gap-x-4 hover:gap-x-2 translate-x-[85px] hover:translate-x-0 transition-all pr-2">
               <VideoIcon className=" w-6 h-6" />
               <H4 classNames="">Preview</H4>
             </div>
         </div>
       </Card>
       {/* </div> */}
-      <div className="py-3">
-        <P classNames="font-medium">{capitalizeFirstLetter(name)}</P>
-        <Small classNames="text-xs text-muted-foreground translate-y-[5]">by @{profile?.username ?? 'deleteUser'}</Small>
+      <div className="pt-0 pb-3">
+        <P classNames="font-medium translate-y-[6px]">{capitalizeFirstLetter(name)}</P>
+        <Small classNames="transform text-xs text-muted-foreground translate-y-[-15px]">by @{profile?.username ?? 'deleteUser'}</Small>
       </div>
-      <PresetPreviewDialog presetId={presetId} open={isPreviewOpen} setOpen={setIsPreviewOpen} />
+      {isPreviewOpen && <PresetPreviewDialog presetId={presetId} open={isPreviewOpen} setOpen={setIsPreviewOpen} />}
+      {isPresetFormOpen && <NewPresetDialogButton preset_id={presetId} isOpen={isPresetFormOpen} setIsOpen={setPresetFormOpen} component="button"/>}
     </div>
   )
 }

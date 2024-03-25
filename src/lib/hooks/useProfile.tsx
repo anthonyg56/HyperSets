@@ -16,42 +16,30 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
   const supabase = createSupabaseClient()
 
   useEffect(() => {
-    if (profile_id) {
       fetchProfile()
-    } else {
-      fetchCurrentProfile()
-    }
-  }, [])
+  }, [profile_id])
 
   async function fetchProfile() {
     if (!profile_id) return
 
     setLoading(true)
 
-    const { data } = await supabase
+    let queryBuilder = supabase
       .from('profile')
       .select(query ?? '*')
-      .eq('profile_id', profile_id)
-      .single<T>()
+
+    if (profile_id) {
+      queryBuilder = queryBuilder.eq('profile_id', profile_id)
+    } else {
+      const { data: { session }} = await supabase.auth.getSession()
+      if (!session) return
+      queryBuilder = queryBuilder.eq('user_id', session.user.user_metadata.profile_id)
+    }
+
+    const { data } = await queryBuilder.single<T>()
 
     setProfile(data ?? [])
     setLoading(false)
-  }
-
-  async function fetchCurrentProfile() {
-    const { data: { session }} = await supabase.auth.getSession()
-    if (!session) return
-
-    setLoading(true)
-
-    const { data } = await supabase
-      .from('profile')
-      .select(query ?? '*')
-      .eq('user_id', session.user.id)
-      .single<T>()
-    setProfile(data ?? [])
-    setLoading(false)
-    return data
   }
 
   async function updateProfile(values: ProfileFormSchema, profile: ProfileSettingsQuery) {
@@ -146,7 +134,6 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
     profile,
     loading,
     setProfile,
-    fetchCurrentProfile,
     checkUsername,
     updateProfile,
   }

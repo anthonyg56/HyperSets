@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { PresetCardQuery, PresetSorts } from "../../../types/query-results";
 import usePresets from "@/lib/hooks/usePresets";
 import { Enums } from "../../../types/supabase";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import ToolTip from "../reusables/toolTip";
 import { MixerVerticalIcon } from "@radix-ui/react-icons";
 import NewPresetDialogButton from "../dialogs/newPreset";
@@ -23,6 +23,7 @@ type PresetCardListProps = {
 }
 
 export default function PresetCardList({ profile_id, serverPresets }: PresetCardListProps) {
+  const [open, setOpen] = useState(false)
   const { hardwares, loading, presets, updateHardwareFilter, updateEffectFilter, sort, setSort, effects, games, updateGamesFilter } = usePresets<PresetCardQuery>({ 
     selectClause, profile_id, serverPresets: serverPresets ?? undefined })
   const pathNames = usePathname()
@@ -50,7 +51,7 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
         <SortPresetsDropdownMenu sort={sort} setSort={setSort} />
       </div>
       <div className={cn(["flex flex-col pt-8 md:flex-none md:grid md:grid-cols-12 gap-4"])}>
-        {!hideNewPresets && <NewPresetDialogButton />}
+        {!hideNewPresets && <NewPresetDialogButton isOpen={open} setIsOpen={setOpen} />}
         {(presets as PresetCardQuery[]).map((data, index) => <PresetCard key={`${index} - ${data.name} preset`} preset={data} />)}
       </div>
     </div>

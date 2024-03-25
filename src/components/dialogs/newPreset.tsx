@@ -32,14 +32,16 @@ export enum FormView {
 
 type Props = {
   preset_id?: number,
+  isOpen: boolean,
+  setIsOpen: (open: boolean) => void,
+  component?: "button" | "tile"
 }
 
-export default function NewPresetDialogButton({ preset_id }: Props) {
+export default function NewPresetDialogButton({ preset_id, isOpen, setIsOpen, component }: Props) {
   const [currentView, setView] = useState<FormView>(FormView.AddHardware)
   const [nextViewValid, setNextViewValid] = useState<boolean>(false) // Track if the next view is valid, if not disable the next button
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
 
   const { session } = useAuth()
   const { presets: presetData, games, effects, loading, updatePreset, submitNewPreset, fetchPresets, submitGames, submitEffects } = usePresets<PresetTable>({ preset_id: preset_id, profile_id: session?.user.user_metadata.profile_id })
@@ -48,35 +50,35 @@ export default function NewPresetDialogButton({ preset_id }: Props) {
   const router = useRouter()
   const presets = presetData as PresetTable | null
 
-  console.log(presetData)
+  console.log(presetData, preset_id, component)
   const form = useForm<CreateAPresetSchema>({
     resolver: zodResolver(createAPresetSchema),
     defaultValues: {
-      name: presets?.name ?? "",
-      description: presets?.description ?? undefined,
-      hardware: presets?.hardware ?? "Keyboard",
-      youtubeId: presets?.youtube_id ?? undefined,
+      name: "",
+      description: undefined,
+      hardware: "Keyboard",
+      youtubeId: undefined,
       photoUrl: undefined,
       downloadUrl: "",
-      effects: effects ?? [],
+      effects: [],
       games: [],
     },
   });
 
-  useEffect(() => {
-    if (presets) {
-      form.reset({
-        name: presets.name,
-        description: presets.description,
-        hardware: presets.hardware,
-        youtubeId: `http://img.youtube.com/vi/${presets.youtube_id}/mqdefault.jpg`,
-        photoUrl: undefined,
-        downloadUrl: presets.download_url,
-        effects: effects,
-        games: [],
-      })
-    }
-  }, [presets, effects])
+  // useEffect(() => {
+  //   if (presets) {
+  //     form.reset({
+  //       name: presets.name,
+  //       description: presets.description,
+  //       hardware: presets.hardware,
+  //       youtubeId: `http://img.youtube.com/vi/${presets.youtube_id}/mqdefault.jpg`,
+  //       photoUrl: undefined,
+  //       downloadUrl: presets.download_url,
+  //       effects: effects,
+  //       games: [],
+  //     })
+  //   }
+  // }, [presets, effects])
 
   async function handleSubmit(values: CreateAPresetSchema) {
     if (!session) return
@@ -154,9 +156,11 @@ export default function NewPresetDialogButton({ preset_id }: Props) {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpen}>
-      <DialogTrigger className="w-full col-span-4 text-start relative xl:col-span-3">
-        {preset_id ? "Edit preset" : <CreateAPresetTile />}
-      </DialogTrigger>
+      {!preset_id && (
+        <DialogTrigger className="w-full col-span-4 text-start relative xl:col-span-3">
+          <CreateAPresetTile />
+        </DialogTrigger>
+      )}
       <DialogContent className="w-[90%] max-h-[90svh] md:w-full rounded-md overflow-y-auto">
         <DialogHeader className="relative">
           <DialogTitle className="text-center font-">HyperSets</DialogTitle>

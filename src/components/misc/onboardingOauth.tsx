@@ -23,14 +23,14 @@ export default function OnboardingOauth() {
 
   return (
     <div className="flex flex-row w-full gap-x-4 pt-2">
-      <Button variant="outline" size="icon" className="w-full">
-        <FontAwesomeIcon icon={faTwitter} onClick={(e) => handleOAuthSignIn(e, 'twitter')} />
+      <Button variant="outline" size="icon" className="w-full" onClick={(e) => handleOAuthSignIn(e, 'twitter')}>
+        <FontAwesomeIcon icon={faTwitter} />
       </Button>
-      <Button variant="outline" size="icon" className="w-full">
-        <FontAwesomeIcon icon={faDiscord} onClick={(e) => handleOAuthSignIn(e, 'discord')} />
+      <Button variant="outline" size="icon" className="w-full"  onClick={(e) => handleOAuthSignIn(e, 'discord')}>
+        <FontAwesomeIcon icon={faDiscord} />
       </Button>
-      <Button variant="outline" size="icon" className="w-full">
-        <FontAwesomeIcon icon={faGoogle} onClick={(e) => handleOAuthSignIn(e, 'google')} />
+      <Button variant="outline" size="icon" className="w-full" onClick={(e) => handleOAuthSignIn(e, 'google')}>
+        <FontAwesomeIcon icon={faGoogle} />
       </Button>
     </div>
   )
