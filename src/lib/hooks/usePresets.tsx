@@ -33,7 +33,7 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
 
   useEffect(() => {
     fetchPresets()
-  }, [hardwares, sort, games, effects])
+  }, [])
 
   async function fetchPresets() {
     setLoading(true)

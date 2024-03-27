@@ -15,10 +15,10 @@ import { GearIcon } from '@radix-ui/react-icons';
 type Props = {
   notifications: NotificationsView[],
   unreadNotifications: NotificationsView[],
-  unreadAmount: number,
+  profile_id: number | null,
 }
 
-export default function NotificationsTabs({ notifications, unreadNotifications, unreadAmount }: Props) {
+export default function NotificationsTabs({ notifications, unreadNotifications, profile_id }: Props) {
   const [tab, setTab] = useState<'All' | 'Unread'>('All')
 
   return (
@@ -27,9 +27,9 @@ export default function NotificationsTabs({ notifications, unreadNotifications, 
         <TabsTrigger value='All' className={cn(['rounded-none px-5 py-3 border-b-2 border-b-transparent', {
           'border-b-zinc-700 dark:border-b-white': tab === 'All'
         }])}>All</TabsTrigger>
-        <TabsTrigger value='Unread' disabled={unreadAmount === undefined} className={cn(['border-b-transparent border-b-2 relative rounded-none px-5 py-3', {
+        <TabsTrigger value='Unread' disabled={unreadNotifications.length <= 0} className={cn(['border-b-transparent border-b-2 relative rounded-none px-5 py-3', {
           'border-b-zinc-700 dark:border-b-white': tab === 'Unread'
-        }])}>Unread {unreadAmount > 0 && <span className='translate-x-[-4px] translate-y-[4px] py-[0px] px-[8px] scale-90 rounded-[1000px] text-[10px] font-bold text-white bg-primary absolute top-0 right-0 flex items-center justify-center'>{unreadAmount}</span>}</TabsTrigger>
+        }])}>Unread {unreadNotifications.length > 0 && <span className='translate-x-[-4px] translate-y-[4px] py-[0px] px-[8px] scale-90 rounded-[1000px] text-[10px] font-bold text-white bg-primary absolute top-0 right-0 flex items-center justify-center'>{unreadNotifications.length}</span>}</TabsTrigger>
         <ToolTip text='Notification Settings' variant='ghost' size='sm' classNames="ml-auto">
           <Link href='/settings?section=notifications'>
             <GearIcon className="w-[18px] h-[18px]"/>
@@ -44,7 +44,7 @@ export default function NotificationsTabs({ notifications, unreadNotifications, 
             notifications.map((notification) => (
               <>
                 <div className='relative px-5 w-full py-6'>
-                  <NotificationCard notificationData={notification} />
+                  <NotificationCard notificationData={notification} profile_id={profile_id} />
                 </div>
                 <Separator />
               </>
@@ -62,7 +62,7 @@ export default function NotificationsTabs({ notifications, unreadNotifications, 
           {unreadNotifications.length > 0 ? unreadNotifications.map((notification) => (
             <>
               <div className='relative w-full py-6 px-5'>
-                <NotificationCard notificationData={notification} />
+                <NotificationCard notificationData={notification} profile_id={profile_id} />
               </div>
             </>
 

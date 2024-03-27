@@ -29,11 +29,14 @@ import AreYouSure from "@/components/dialogs/alerts/areYouSure";
 
 export default function ProfileForm() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
-  const [profile, setProfile] = useState<ProfileSettingsQuery | null | undefined>(undefined)
 
   const router = useRouter()
   const { toast } = useToast()
-  const { fetchCurrentProfile, checkUsername, updateProfile } = useProfile<ProfileSettingsQuery>()
+  const { profile, checkUsername, updateProfile } = useProfile<ProfileSettingsQuery>() as {
+    profile: ProfileSettingsQuery,
+    checkUsername: (username: string) => Promise<{ valid: boolean, message?: string }>,
+    updateProfile: (values: ProfileFormSchema, profile: ProfileSettingsQuery) => Promise<{ valid: boolean, message?: string }>,
+  }
 
   const form = useForm<ProfileFormSchema>({
     resolver: zodResolver(profileFormSchema),
@@ -48,7 +51,13 @@ export default function ProfileForm() {
 
   // Fetch the current profile on mount
   useEffect(() => {
-    if (profile === undefined) getProfile()
+    form.reset({
+      name: profile.name,
+      username: profile.username,
+      avatar: undefined,
+      bio: profile.bio ?? "",
+      banner: undefined,
+    })
   }, [])
 
   // Watch for changes in the username field, required in order to check if it's already in use as the user types
@@ -59,7 +68,7 @@ export default function ProfileForm() {
 
         if (!usernameValid) return
 
-        const response = await checkUsername(username)
+        const response = await checkUsername(username ?? "")
 
         if (response.valid === false) {
           form.setError('username', { message: response.message })
@@ -72,25 +81,6 @@ export default function ProfileForm() {
 
     return () => subscription.unsubscribe()
   }, [])
-  
-  // On initial load, fetch the current profile
-  async function getProfile() {
-    const profile = await fetchCurrentProfile()
-    
-    if (!profile) {
-      router.push('/login')
-      return
-    }
-
-    setProfile(profile)
-    form.reset({
-      name: profile.name,
-      username: profile.username,
-      avatar: undefined,
-      bio: profile.bio ?? "",
-      banner: undefined,
-    })
-  }
 
   async function onSubmit(values: ProfileFormSchema) {
     if (!profile) {
@@ -123,6 +113,11 @@ export default function ProfileForm() {
 
     setMode('view')
     router.refresh()
+  }
+
+  if (!profile) {
+    router.push('/login')
+    return
   }
 
   return (

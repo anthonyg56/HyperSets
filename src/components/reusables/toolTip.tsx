@@ -15,18 +15,17 @@ type Props = {
   type?: "button" | "submit" | "reset" | undefined,
   classNames?: ClassNameValue,
   props?: ButtonHTMLAttributes<HTMLButtonElement>,
+  onClick?: (e: any) => void,
 }
 
-export default function ToolTip({ children, text, texts, variant, size, classNames, type = 'button', ...props }: Props) {
+export default function ToolTip({ children, text, texts, variant, size, classNames, onClick, type = 'button', ...props }: Props) {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant={variant} type={type} size={size} className={cn([
+        <TooltipTrigger onClick={onClick} {...props} className={cn([
             { "rounded-[100px]": size === "icon" } , classNames
-          ])} {...props}>
+          ])}>
             {children}
-          </Button>
         </TooltipTrigger>
         <TooltipContent>
           {text ? (

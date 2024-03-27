@@ -60,11 +60,12 @@ export default function FilterPresetsDialog({ currentHardware, updateHardware, c
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <ToolTip text="Filter Options" variant="ghost" size="icon">
-            <MixerVerticalIcon className="w-6 h-6" />
-          </ToolTip>
-        </DialogTrigger>
+        <ToolTip text="Filter Options" variant="ghost" size="icon" onClick={e => {
+          // e.preventDefault()
+          setOpen(true)
+        }}>
+          <MixerVerticalIcon className="w-6 h-6" />
+        </ToolTip>
         <DialogContent>
           <H3 classNames="border-b-0">Filter Options</H3>
           <div className="space-y-3">
@@ -124,11 +125,12 @@ export default function FilterPresetsDialog({ currentHardware, updateHardware, c
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <ToolTip text="Filter Options" variant="ghost" size="icon">
+        <ToolTip text="Filter Options" variant="ghost" size="icon" onClick={e => {
+          // e.preventDefault()
+          setOpen(true)
+        }}>
           <MixerVerticalIcon className="w-6 h-6" />
         </ToolTip>
-      </DialogTrigger>
 
       <DrawerContent>
         <DrawerHeader className="text-left">

@@ -13,12 +13,10 @@ export default function EffectsCard({ effectsCardName, selectEffectCard }: Props
 
   return (
     <div className="col-span-3 h-full w-full" onClick={() => {
-      console.log(effectsCardName)
       selectEffectCard(effectsCardName)
     }}>
       <ToolTip type="button" variant="ghost" size="lg" classNames='flex flex-col h-full w-full py-6 gap-y-3' props={{
         onClick: () => {
-          console.log(effectsCardName)
           selectEffectCard(effectsCardName)
         }
       }}>

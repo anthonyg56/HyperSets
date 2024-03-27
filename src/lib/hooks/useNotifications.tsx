@@ -23,37 +23,39 @@ export default function useNotifications({ profile_id }: Props) {
   const { toast } = useToast();
 
   useEffect(() => {
-    // const notificationsChannel = supabase.channel('custom-insert-channel')
-    // .on(
-    //   'postgres_changes',
-    //   { event: 'INSERT', schema: 'public', table: 'notifications' },
-    //   (payload) => {
-        
-    //     if (payload.new.retriver_id === profile_id) {
-    //       
-    //       const notification = payload.new
-    //       const notificationType = notification.download_id ? "Download" : notification.comment_id ? "Comment" : "Like";
-    //       const message = NotificationMessage[notificationType as keyof typeof NotificationMessage]
-          
-    //       toast({
-    //         title: `New notification`,
-    //         description: message,
-    //         duration: 5000,
-    //       })
-
-    //       fetchNotifications()
-    //     }
-    //   }
-    // )
-    // .subscribe()
-
     fetchNotifications();
-
-    // return () => {
-    //   notificationsChannel.unsubscribe()
-    // }
   }, []);
 
+  console.log(notifications, "useNotifications")
+  useEffect(() => {
+    const notificationsChannel = supabase.channel('custom-insert-channel')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'notifications' },
+        (payload) => {
+          
+          if (payload.new.retriver_id === profile_id) {
+            
+            const notification = payload.new
+            const notificationType = notification.download_id ? "Download" : notification.comment_id ? "Comment" : "Like";
+            const message = NotificationMessage[notificationType as keyof typeof NotificationMessage]
+            
+            toast({
+              title: `New notification`,
+              description: message,
+              duration: 5000,
+            })
+
+            fetchNotifications()
+          }
+        }
+      )
+      .subscribe()
+    return () => {
+      notificationsChannel.unsubscribe()
+    }
+  }, [])
+  
   const fetchNotifications = async () => {
     if (!profile_id) return;
     const { data, error } = await supabase
@@ -113,7 +115,6 @@ export default function useNotifications({ profile_id }: Props) {
   return {
     notifications,
     unreadNotifications,
-    fetchNotifications,
     addNotification,
     removeNotification,
     markAsRead,

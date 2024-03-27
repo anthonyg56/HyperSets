@@ -79,8 +79,8 @@ export function PresetCard({ classNames, settings, preset: {
         <P classNames="font-medium translate-y-[6px]">{capitalizeFirstLetter(name)}</P>
         <Small classNames="transform text-xs text-muted-foreground translate-y-[-15px]">by @{profile?.username ?? 'deleteUser'}</Small>
       </div>
-      {isPreviewOpen && <PresetPreviewDialog presetId={presetId} open={isPreviewOpen} setOpen={setIsPreviewOpen} />}
-      {isPresetFormOpen && <NewPresetDialogButton preset_id={presetId} isOpen={isPresetFormOpen} setIsOpen={setPresetFormOpen} component="button"/>}
+      {isPreviewOpen === true && <PresetPreviewDialog presetId={presetId} open={isPreviewOpen} setOpen={setIsPreviewOpen} />}
+      {isPresetFormOpen === true && <NewPresetDialogButton preset_id={presetId} isOpen={isPresetFormOpen} setIsOpen={setPresetFormOpen} component="button"/>}
     </div>
   )
 }

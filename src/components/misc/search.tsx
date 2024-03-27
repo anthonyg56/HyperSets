@@ -29,7 +29,6 @@ export default function SearchBar() {
       fetchProfiles(searchTerm),
       fetchPresets(searchTerm),
     ])
-
     
     setProfiles(profiles ?? [])
     setPresets(presets ?? [])
@@ -97,16 +96,19 @@ export default function SearchBar() {
     <div className="w-full h-full md:flex justify-center items-center relative hidden ">
       <Command className="max-w-[515px] my-auto h-auto absolute top-[6px] w-full ">
         <div className="bg-transparent">
-          <CommandInput onValueChange={val => {
-            // 
-            // fetchAll(val)
-            handleSearch(val)
+          <CommandInput 
+            onValueChange={val => {
+              // 
+              // fetchAll(val)
+              handleSearch(val)
 
-          }} defaultValue={searchTerm} placeholder="Search" className="my-auto bg-transparent" onFocus={e => {
-            setOpen(true)
-          }} onBlur={e => {
-            setOpen(false)
-          }} />
+            }} 
+            defaultValue={searchTerm}
+            placeholder="Search" 
+            className="my-auto bg-transparent" 
+            onFocus={e => setOpen(true)} 
+            onBlur={e => setOpen(false)}
+          />
         </div>
 
 

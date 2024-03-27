@@ -12,7 +12,12 @@ import ToolTip from "../reusables/toolTip";
 import Avatar from "../reusables/avatar";
 import { NotificationsView, ProfileNavQuery } from "../../../types/query-results";
 import MarkAsReadButton from "../buttons/markAsRead";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+type Props = {
+  profile: ProfileNavQuery | null;
+  serverNotifications: NotificationsView[] | null;
+}
 
 enum NotificationMessage {
   Download = "Someone downloaded your preset!",
@@ -20,21 +25,25 @@ enum NotificationMessage {
   Like = "Someone liked your comment!",
 }
 
-type Props = {
-  profile: ProfileNavQuery;
-}
+export default function NotificationSheet({ profile, serverNotifications }: Props) {
+  const [notifications, setnotifications] = useState<NotificationsView[]>(serverNotifications || []);
+  const [revalidate, setRevalidate] = useState(false)
 
-export default function NotificationSheet({ profile: {
-  profile_id,
-  name,
-  avatar,
-  username,
-}}: Props) {
   const supabase = createSupabaseClient()
-  const { notifications, unreadAmount, unreadNotifications, fetchNotifications, addNotification, markAllAsRead } = useNotifications({ profile_id })
+  const { toast } = useToast()
+
+  // const { notifications, unreadAmount, unreadNotifications, markAllAsRead } = useNotifications({ profile_id })
+  useEffect(() => {
+    if (revalidate) {
+      fetchNotifications()
+    }
+
+    return () => {
+      setRevalidate(false)
+    }
+  }, [revalidate])
 
   useEffect(() => {
-    
     const notificationsChannel = supabase.channel('custom-insert-channel')
       .on(
         'postgres_changes',
@@ -58,33 +67,39 @@ export default function NotificationSheet({ profile: {
         }
       )
       .subscribe()
-
     return () => {
       notificationsChannel.unsubscribe()
     }
   }, [])
-  
+
+  async function fetchNotifications() {
+
+  }
+
+  if (!profile) return null;
+
+  const { avatar, name, username, profile_id } = profile;
+  const unreadNotifications = notifications.filter(notification => notification.unread);
+
   return (
     <Sheet>
-      <SheetTrigger >
-        <ToolTip variant="ghost" size="icon" classNames="relative" text="Notifications">
-          <Avatar
-            avatar={avatar}
-            name={name}
-            username={username}
-            classNames="w-[30px] h-[30px] md:hidden"
-          />
-          <BellIcon className="hidden h-5 w-5 md:block" />
-          {unreadAmount > 0 && <DotFilledIcon className="absolute top-0 right-[2px] text-primary w-[22px] h-[22px]" />}
-        </ToolTip>
+      <SheetTrigger>
+        <Avatar
+          avatar={avatar}
+          name={name}
+          username={username}
+          classNames="w-[30px] h-[30px] md:hidden"
+        />
+        <BellIcon className="hidden h-5 w-5 md:block" />
+        {unreadNotifications.length > 0 && <DotFilledIcon className="absolute top-0 right-[2px] text-primary w-[22px] h-[22px]" />}
       </SheetTrigger>
         <SheetContent className={cn([
           "flex flex-col gap-0 right-5 md:right-3 top-3 h-[calc(100%_-_24px)] rounded-md w-[90%] md:w-full !max-w-md",
           "lg:!max-w-md px-0 py-0"
         ])}>
-          <SheetTitle className="w-full flex flex-row items-center pl-5 pr-3 pt-3 pb-2">Notifications <MarkAsReadButton markAllAsRead={markAllAsRead}/></SheetTitle>
-          <Separator  />
-          <NotificationsTabs notifications={notifications} unreadAmount={unreadAmount} unreadNotifications={unreadNotifications} />
+          <SheetTitle className="w-full flex flex-row items-center pl-5 pr-3 pt-3 pb-2">Notifications <MarkAsReadButton setRevalidate={setRevalidate} profile_id={profile_id}/></SheetTitle>
+          <Separator />
+          <NotificationsTabs profile_id={profile_id} notifications={notifications} unreadNotifications={unreadNotifications} />
         </SheetContent>
     </Sheet>
   )

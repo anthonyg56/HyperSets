@@ -6,78 +6,78 @@ import { createSupabaseClient } from "../supabase/client";
 
 type Props = {
   preset_id?: number; // Needed for preset page
-  comment_id?: number | null; // Needed for comment page
-  profile_id?: number; // Needed for profile page
   topComments?: boolean; // If true, fetch top comments
   selectClause?: string; // Select clause for supabase
 }
 
-export default function useComments<T extends CommentQueries[keyof CommentQueries]>({ topComments: isTopComments, preset_id, comment_id, selectClause, profile_id }: Props) {
+export default function useComments<T extends CommentQueries[keyof CommentQueries]>({ topComments: isTopComments, preset_id, selectClause }: Props) {
   const [comments, setComments] = useState<T[] | T>([]);
-  const [topComments, setTopComments] = useState<T[] | T>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const supabase = createSupabaseClient();
 
   useEffect(() => {
     fetchComments();
-    if (isTopComments) fetchTopComments();
   }, []);
 
-  const fetchComments = async () => {
+  async function fetchComments() {
     if (!preset_id) return;
+
     setLoading(true);
+    let query = supabase.from(isTopComments ? "top_comments" : "comments").select(selectClause ?? '*');
 
-    const { data } = await supabase
-      .from("comments")
-      .select(selectClause ?? '*')
-      .eq("preset_id", preset_id)
-      .order("created_at", { ascending: false })
-      .returns<T[]>();
+    if (preset_id)
+      query = query.eq("preset_id", preset_id);
+    // else if (profile_id) For future use
+    //   query = query.eq("profile_id", profile_id);
 
+    if (isTopComments)
+      query = query.limit(3);
+
+    const { data } = await query.returns<T[]>();
     setComments(data ?? []);
+
     setLoading(false);
-  };
-
-  async function fetchTopComments() {
-    if (!preset_id) return;
-    setLoading(true);
-
-    const { data: comments } = await supabase
-      .from('top_comments')
-      .select(selectClause ?? '*')
-      .eq('preset_id', preset_id)
-      .limit(3)
-      .returns<T[]>()
-
-    
-    setTopComments(comments ?? []);
-    setLoading(false);
-  };
-
-  async function fetchComment() {
-    if (!comment_id) return;
-    
-    const { data } = await supabase
-      .from("comments")
-      .select(selectClause ?? '*')
-      .eq("comment_id", comment_id)
-      .single<T>();
-
-    return data;
   }
 
-  async function insertComment(comment: RawComment) {
-    if (!profile_id) return;
+  async function submitComment(comment: RawComment, profile_id: number | null) {
+    if (!profile_id) return {
+      valid: false,
+      message: "You must be logged in to comment",
+    };
+
     await supabase.from("comments").insert(comment);
     fetchComments();
+
+    return {
+      valid: true,
+      message: "Comment submitted",
+    }
   }
 
-  async function deleteComment(comment_id: number) {
+  async function deleteComment(comment_id: number, profile_id: number | null) {
     if (!profile_id) return;
     await supabase.from("comments").delete().eq("id", comment_id);
     fetchComments();
   }
 
-  return { comments, fetchComments, insertComment, deleteComment, fetchComment, fetchTopComments, loading, topComments, setTopComments };
+  async function likeComment(comment_id: number, profile_id: number | null) {
+    if (!profile_id) return;
+    await supabase.from("likes").insert({ comment_id, profile_id });
+    fetchComments();
+  }
+
+  async function unlikeComment(comment_id: number, profile_id: number | null) {
+    if (!profile_id) return;
+    await supabase.from("likes").delete().eq("comment_id", comment_id).eq("profile_id", profile_id);
+    fetchComments();
+  }
+
+  async function isLiked(comment_id: number, profile_id: number | null) {
+    if (!profile_id) return false;
+    const { data } = await supabase.from("likes").select("profile_id").eq("comment_id", comment_id);
+    return data?.some(like => like.profile_id === profile_id) ?? false;
+  }
+
+  return { comments, submitComment, deleteComment, loading, likeComment, unlikeComment, isLiked };
 }

@@ -50,7 +50,6 @@ export default function NewPresetDialogButton({ preset_id, isOpen, setIsOpen, co
   const router = useRouter()
   const presets = presetData as PresetTable | null
 
-  console.log(presetData, preset_id, component)
   const form = useForm<CreateAPresetSchema>({
     resolver: zodResolver(createAPresetSchema),
     defaultValues: {

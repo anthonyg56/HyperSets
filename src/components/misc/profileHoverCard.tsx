@@ -13,6 +13,7 @@ import Image from "next/image";
 import { ClassNameValue } from "tailwind-merge";
 import useProfile from "@/lib/hooks/useProfile";
 import ProfileHoverCardContent from "../cards/misc/profileHovercardContent";
+import { Small } from "../ui/typography";
 
 type UserProfileHoverCardProps = {
   profile_id: number | null;
@@ -25,10 +26,10 @@ export default function ProfileHoverCard({ profile_id, classNames }: UserProfile
   return (
     <HoverCard>
       <HoverCardTrigger>
-        <Link href={profile_id ? `/profile/${profile?.username}` : ''} className={cn(['hover:text-white transition-all duration-150 ease-in-out ', {
+        <Small classNames={cn(['hover:text-white hover:cursor-pointer transition-all duration-150 ease-in-out ', {
           'underline': profile !== null,
           'line-through': profile === null,
-        }, classNames])}>@{profile ? profile.username : "Deleted user"}</Link>
+        }, classNames])}>@{profile ? profile.username : "Deleted user"}</Small>
       </HoverCardTrigger>
       <HoverCardContent className="relative overflow-hidden">
         <Image         

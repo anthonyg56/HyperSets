@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import UserHoverCard from "@/components/misc/profileHoverCard";
 import { StarFilledIcon, VideoIcon } from "@radix-ui/react-icons";
-import { PresetPageQuery } from "../../../../types/query-results";
+import { CommentCardQuery, PresetPageQuery } from "../../../../types/query-results";
 import { redirect } from "next/navigation";
 import DownloadPresetButton from "@/components/buttons/download";
 import BackgroundImage from "@/components/misc/backgroundImage";
@@ -24,29 +24,33 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
     return <div>Invalid preset id</div>
   }
 
-  const [{ data }, { data: { session } }] = await Promise.all([
+  const [{ data: presetsData }, { data: { session } }, { data: commentsData }] = await Promise.all([
     supabase
       .from('presets')
       .select('*, profile:profile_id(avatar, banner, name, profile_id, username), effects(*)')
       .eq('preset_id', preset_id)
       .single<PresetPageQuery>(),
-
     supabase
       .auth
       .getSession(),
+    supabase
+      .from('comments')
+      .select('*, profile:profile_id(username, name, avatar, profile_id)')
+      .eq('preset_id', preset_id)
+      .returns<CommentCardQuery[]>()
   ])
 
-  if (!data) {
+  if (!presetsData) {
     redirect('/presets')
   }
 
   await supabase
     .from('presets')
-    .update({ views: data.views + 1 })
+    .update({ views: presetsData.views + 1 })
     .eq('preset_id', preset_id)
 
-  const effects = data.effects
-  const profile = data.profile
+  const effects = presetsData.effects
+  const profile = presetsData.profile
 
   let effectsArray = []
   for (let effect in effects) {
@@ -70,15 +74,15 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
       ])}>
         <div className="col-span-6 justify-center flex flex-col space-y-3">
           <div className="w-full text-center md:text-start">
-            <H1 classNames="font-bold text-zinc-900 dark:text-white">{data?.name}</H1>
+            <H1 classNames="font-bold text-zinc-900 dark:text-white">{presetsData?.name}</H1>
             <Small classNames="text-muted-foreground">Created by <UserHoverCard profile_id={profile && profile?.profile_id} /></Small>
           </div>
 
-          <Small classNames="text-muted-foreground mx-auto md:mx-0">{data.description}</Small>
+          <Small classNames="text-muted-foreground mx-auto md:mx-0">{presetsData.description}</Small>
           <div className="space-x-5 flex flex-row flex-wrap pt-3 w-full justify-center md:justify-start gap-y-3">
-            <DownloadPresetButton download_url={data.download_url} preset_id={data.preset_id} profile_id={session?.user.user_metadata.profile_id ?? null} />
-            <a href={`https://youtube.com/watch?v=${data.youtube_id}`}><Button variant={"secondary"} className="flex flex-row gap-x-1"><VideoIcon width={18} height={18} /> Watch Demo</Button></a>
-            <CommentSheet preset_id={preset_id} />
+            <DownloadPresetButton download_url={presetsData.download_url} preset_id={presetsData.preset_id} profile_id={session?.user.user_metadata.options.profile_id ?? null} />
+            <a href={`https://youtube.com/watch?v=${presetsData.youtube_id}`}><Button variant={"secondary"} className="flex flex-row gap-x-1"><VideoIcon width={18} height={18} /> Watch Demo</Button></a>
+            <CommentSheet preset_id={preset_id} profile_id={session?.user.user_metadata.options.profile_id ?? null} commentsData={commentsData ?? []}/>
           </div>
         </div>
 
@@ -86,11 +90,11 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
           <div className="grid grid-cols-2 self-start pb-10">
             <div className="flex flex-col items-center">
               <P classNames="!mt-0 text-zinc-900 dark:text-white">Downloads</P>
-              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{data.downloads}</H2>
+              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{presetsData.downloads}</H2>
             </div>
             <div className="flex flex-col items-center">
               <P classNames="!mt-0 text-zinc-900 dark:text-white">Views</P>
-              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{data.views}</H2>
+              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{presetsData.views}</H2>
             </div>
           </div>
 
@@ -101,7 +105,7 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
             </div>
             <div className="flex flex-col items-center">
               <P classNames="text-zinc-900 dark:text-white">Hardware </P>
-              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{data.hardware}</H2>
+              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{presetsData.hardware}</H2>
             </div>
           </div>
 

@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
-import { ProfileQueries, ProfileSettingsQuery, ProfilesTable } from "../../../types/query-results";
-import { createSupabaseClient } from "../supabase/client";
-import { UseFormReturn } from "react-hook-form";
 import { ProfileFormSchema } from "../schemas";
+import { createSupabaseClient } from "../supabase/client";
+import { ProfileQueries, ProfileSettingsQuery, ProfilesTable } from "../../../types/query-results";
 
-type Props = {
-  profile_id?: number | null,
-  query?: string,
-}
-
-export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( profile_id?: number | null, query?: string,) {
+export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( profile_id?: number | null, query: string = '*',) {
   const [profile, setProfile] = useState<T | T[] | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -30,7 +24,6 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
       queryBuilder = queryBuilder.eq('profile_id', profile_id)
     } else {
       const { data: { session }} = await supabase.auth.getSession()
-      console.log(session)
       if (!session) return
       queryBuilder = queryBuilder.eq('profile_id', session.user.user_metadata.options.profile_id)
     }
@@ -42,37 +35,33 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
   }
 
   async function updateProfile(values: ProfileFormSchema, profile: ProfileSettingsQuery) {
-    let tmpAvatar: File | undefined
-    let tmpBanner: File | undefined
-    let newValues = {} as ProfileSettingsQuery
+    let newValues = {
+      name: values.name,
+      username: values.username,
+      bio: values.bio || null,
+    } as ProfileSettingsQuery
 
-    if (values.name !== profile.name) newValues.name = values.name
-    if (values.username !== profile.username) newValues.username = values.username
-    if (values.bio !== profile.bio) newValues.bio = values.bio || null;
-    if (values.avatar) tmpAvatar = values.avatar
-    if (values.banner) tmpBanner = values.banner
-
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('profile')
       .update(newValues)
       .eq('profile_id', profile.profile_id)
       .select('name, username, bio')
       .returns<ProfilesTable | null>()
 
-    if (!data) {
+    if (error) {
       return {
         valid: false,
         message: 'No profile was found to update.',
       }
     }
 
-    if (tmpAvatar) {
-      const { data: avatarData } = await supabase
+    if (values.avatar) {
+      const { error } = await supabase
         .storage
         .from('avatars')
-        .upload(`avatars/${profile.profile_id}`, tmpAvatar)
+        .upload(`avatars/${profile.profile_id}`, values.avatar)
 
-      if (avatarData) {
+      if (error) {
         return {
           valid: false,
           message: 'Failed to upload avatar.',
@@ -80,13 +69,13 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
       }
     }
 
-    if (tmpBanner) {
-      const { data: bannerData } = await supabase
+    if (values.banner) {
+      const { error } = await supabase
         .storage
         .from('banners')
-        .upload(`banners/${profile.profile_id}`, tmpBanner)
+        .upload(`banners/${profile.profile_id}`, values.banner)
 
-      if (bannerData) {
+      if (error) {
         return {
           valid: false,
           message: 'Failed to upload banner.',
@@ -132,7 +121,6 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
   return {
     profile,
     loading,
-    setProfile,
     checkUsername,
     updateProfile,
   }

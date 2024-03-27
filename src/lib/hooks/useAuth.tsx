@@ -7,30 +7,24 @@ import { baseURL } from "../constants"
 import { SignupSchema } from "../schemas"
 
 export default function useAuth() {
-  const [session, setSession] = useState<Session | null | undefined>(undefined)
+  const [session, setSession] = useState<Session | null>(null)
 
   const router = useRouter()
   const { toast } = useToast()
   const supabase = createSupabaseClient()
 
   useEffect(() => {
-    if (session === undefined)
-      fetchSession()
+    fetchSession()
   }, [])
   
   async function fetchSession() {
     const { data: { session }} = await supabase.auth.getSession()
-    const { data } = await supabase.auth.getUser()
 
     if (!session) {
-      toast({
-        title: 'You are not logged in'
-      })
       return null
     }
 
     setSession(session)
-    return session
   }
 
   async function signOut() {
@@ -103,7 +97,7 @@ export default function useAuth() {
   async function updateSecurityInfo({ email, password }: { email?: string, password?: string }) {
     if (!email && !password) return null
 
-    const { data:{ user }, error } = await supabase.auth.updateUser({
+    const { data:{ user }} = await supabase.auth.updateUser({
       email,
       password
     })
@@ -233,9 +227,7 @@ export default function useAuth() {
   }
 
   return {
-    fetchSession,
     session,
-    setSession,
     signOut,
     updateSecurityInfo,
     signIn,

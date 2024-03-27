@@ -3,9 +3,9 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from '@/lib/utils'
 import "./globals.css";
 import { ThemeProvider } from "@/lib/context/themeProvider";
-import LayoutProvider from "@/lib/context/layoutProvider";
 import UserSessionProvider from "@/lib/context/sessionProvider";
 import { Toaster } from "@/components/ui/toaster";
+import Navbar from "@/components/layout/navbar";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -34,10 +34,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Navbar />
           <UserSessionProvider>
-            <LayoutProvider>
-                {children}
-              </LayoutProvider>
+              
+              {children}
           </UserSessionProvider>
         </ThemeProvider>
         <Toaster />

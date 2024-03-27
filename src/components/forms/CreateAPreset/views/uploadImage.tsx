@@ -46,7 +46,7 @@ export default function UploadImage({ form, setNextViewValid, updateView }: Prop
             })
             return
           }
-          console.log('youtube id is valid')
+          
           setNextViewValid(true)
         }
           

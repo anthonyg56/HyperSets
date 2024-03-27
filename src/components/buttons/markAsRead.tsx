@@ -1,11 +1,21 @@
 import { CheckIcon, CircleIcon } from "@radix-ui/react-icons"
 import { Button } from "../ui/button"
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 type Props = {
-  markAllAsRead: () => void;
+  setRevalidate: (value: boolean) => void,
+  profile_id: number | null,
 }
 
-export default function  MarkAsReadButton({ markAllAsRead }: Props) {
+export default function  MarkAsReadButton({ setRevalidate, profile_id }: Props) {
+  const supabase = createSupabaseClient();
+
+  async function markAllAsRead() {
+    if (!profile_id) return;
+    await supabase.from("notifications").update({ unread: false }).eq("retriver_id", profile_id);
+    setRevalidate(true);
+  }
+
   const CircleCheckIcon = () => (
     <div className="relative flex justify-center w-5 h-5 translate-y-[2px]">
       <CheckIcon className="w-[18px] h-[18px] translate-x-[1px] translate-y-[-3px] absolute text-primary" />

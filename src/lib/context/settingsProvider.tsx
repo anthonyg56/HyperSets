@@ -24,30 +24,15 @@ type TSettingsContext = {}
 
 export const SettingsContext = createContext<Partial<TSettingsContext>>({})
 
-export default function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [profile, setProfile] = useState<ProfileTable | null | undefined>(undefined)
+function extractInitals(input: string | null): string {
+  if (!input) return '';
+  return input.split(' ').map(word => word[0]).join('');
+}
 
-  const { fetchCurrentProfile } = useProfile<ProfileTable>()
+export default function SettingsProvider({ children }: { children: React.ReactNode }) {
+  const { profile } = useProfile<ProfileTable>() as { profile: ProfileTable | null}
   const { resolvedTheme } = useTheme()
   const router = useRouter()
-
-  useEffect(() => {
-    async function getProfile() {
-      const profile = await fetchCurrentProfile()
-      if (!profile) {
-        router.push('/login')
-        return
-      }
-      setProfile(profile)
-    }
-
-    if (profile === undefined) getProfile()
-  }, [])
-
-  function extractFirstLetters(input: string | null): string {
-    if (!input) return '';
-    return input.split(' ').map(word => word[0]).join('');
-  }
 
   const UserBanner = ({ src }: { src: string | StaticImageData }) => (
     <>
@@ -70,9 +55,7 @@ export default function SettingsProvider({ children }: { children: React.ReactNo
     </>
   )
 
-  if (profile === undefined) return <div>Loading...</div>
-
-  if (profile === null) {
+  if (!profile) {
     router.push('/login')
     return
   }
@@ -80,7 +63,7 @@ export default function SettingsProvider({ children }: { children: React.ReactNo
   const { avatar, banner, bio, name, username, user_id, profile_id } = profile
 
   const capitalized = capitalizeEachWord(name);
-  const initials = extractFirstLetters(capitalized);
+  const initials = extractInitals(capitalized);
 
   return (
     <div>

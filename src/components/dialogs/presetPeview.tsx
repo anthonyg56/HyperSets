@@ -21,7 +21,7 @@ type Props = {
 const presetSelectClause = 'created_on,description,hardware,name,photo_url,preset_id,youtube_id,last_updated_on,downloads,profile:profile_id(profile_id,username)'
 
 export default function PresetPreviewDialog({ presetId: preset_id, open, setOpen }: Props) {
-  const { topComments } = useComments<TopCommentView>({ preset_id, topComments: true }) as { topComments: TopCommentView[] }
+  const { comments } = useComments<TopCommentView>({ preset_id, topComments: true }) as { comments: TopCommentView[] }
   
   const { presets } = usePresets<YoutubeDialogQuery>({ 
     preset_id, 
@@ -73,7 +73,7 @@ export default function PresetPreviewDialog({ presetId: preset_id, open, setOpen
                 <H3>Top Comments</H3>
               </div>
               <div className="grid grid-cols-6 gap-x-10">
-                {topComments.length > 0 ? topComments.map((comment) => {
+                {comments.length > 0 ? comments.map((comment) => {
                   return <TopCommentCard comment={comment} key={comment.comment_id} />
                 }) : (
                   <div className="col-span-6 text-center">

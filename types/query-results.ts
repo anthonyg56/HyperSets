@@ -7,6 +7,9 @@ export type NotificationsTable = Tables<'notifications'>
 export type NotificationsView = Tables<'fetch_notifications'>
 export type GamesTable = Tables<'games'>
 export type ProfilesTable = Tables<'profile'>
+export type CommentsTable = Tables<'comments'>
+export type LikesTable = Tables<'likes'>
+export type EffectsTable = Tables<'effects'>
 
 /* Queried Data recieved from primary tables */
 export type PresetCardData = Pick<Tables<'presets'>, 'name' | 'preset_id' | 'photo_url' | 'hardware' | 'youtube_id' | 'created_on' | 'downloads'>
@@ -33,10 +36,10 @@ export interface LikesQuery extends LikesData {}
 export interface ProfileSearchQuery extends ProfileSearchData {}
 export interface PresetSearchQuery extends PresetSearchData, Count<'presets'> {}
 export interface PresetPageQuery extends Omit<PresetTable, 'profile_id'>, ReferencedField<'effects', 'breathing' | 'confetti' | 'effect_id' | 'preset_id' | 'screen_mirror' | 'solid' | 'sun' | 'swipe' | 'twilight' | 'video_capture' | 'wave'>, ReferencedField<'profile', 'avatar' | 'banner' | 'name' | 'profile_id' | 'username'> {}
-export interface RawComment extends Omit<Tables<'comments'>, 'comment_id' | 'created_at' | 'last_updated'> {}
+export interface RawComment extends Omit<Tables<'comments'>, 'comment_id' | 'created_at' | 'last_updated' | 'likes'> {}
 export interface ProfileNavQuery extends ProfileNavData {}
 export interface GameCompadibilityQuery extends GameCompadibilityFormData {}
-export interface ProfileSettingsQuery extends Omit<Tables<'profile'>, 'created_on' | 'email' | 'last_logon' | 'user_id'> {}
+export interface ProfileSettingsQuery extends Omit<Tables<'profile'>, 'created_on' | 'email' | 'last_logon' | 'user_id' > {}
 
 export interface PresetQueries {
   PresetCardQuery: PresetCardQuery;

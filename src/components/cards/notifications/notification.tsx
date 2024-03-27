@@ -9,9 +9,11 @@ import useComments from "@/lib/hooks/useComments";
 import CommentCard from "../comments/comment";
 import usePresets from "@/lib/hooks/usePresets";
 import { PresetCard } from "../presets/preset";
+import useAuth from "@/lib/hooks/useAuth";
 
 type NotificationCardProps = {
   notificationData: NotificationsView,
+  profile_id: number | null,
 }
 
 enum NotificationActionMessage {
@@ -20,9 +22,7 @@ enum NotificationActionMessage {
   Like = "liked your comment on",
 }
 
-export default function NotificationCard({ notificationData }: NotificationCardProps) {
-  const { fetchComments } = useComments({ preset_id: notificationData.preset_id as number });
-
+export default function NotificationCard({ notificationData, profile_id }: NotificationCardProps) {
   const profile = {
     username: notificationData?.username as string,
     avatar: notificationData?.avatar,
@@ -90,7 +90,7 @@ export default function NotificationCard({ notificationData }: NotificationCardP
                 </Card>
               )}
               {notificationType === 'Comment' && notificationData.comment_id && notificationData.preset_id !== null && (
-                <CommentCard notification comment={comment} fetchComments={fetchComments} />  
+                <CommentCard notification comment={comment} profile_id={profile_id} />  
               )}
             </div>
           </div>

@@ -5,18 +5,16 @@ import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "../ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useContext } from "react";
-import { LayoutContext, TLayoutContext } from "../../lib/context/layoutProvider";
-import NotificationSheet from "../sheets/notifications";
 import { ProfileNavQuery } from "../../../types/query-results";
+import { usePathname } from "next/navigation";
 
 type Props = {
-  pathname: string,
   profile: ProfileNavQuery | null,
 }
 
-export default function MobleNav({ pathname, profile }: Props) {
-  const { setMobileNavOpen, isOpen } = useContext(LayoutContext) as TLayoutContext
+export default function MobleNav({ profile }: Props) {
+  const pathname = usePathname()
+  
   function isActive(path: '/' | '/about') {
     return path === pathname
   }
@@ -27,7 +25,7 @@ export default function MobleNav({ pathname, profile }: Props) {
 
   // const authHref = 
   return (
-    <Drawer open={isOpen} onOpenChange={setMobileNavOpen}>
+    <Drawer>
       <DrawerTrigger className="rotate-0 scale-100 transition-all md:-rotate-90 md:hidden">
         <HamburgerMenuIcon className="h-[1.5rem] w-[1.5rem]" />
       </DrawerTrigger>
