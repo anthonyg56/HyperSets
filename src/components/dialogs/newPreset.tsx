@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Button } from "../ui/button"
 import { useToast } from "../ui/use-toast"
-import { LayoutContext, TLayoutContext } from "@/lib/context/layoutProvider"
 import { usePathname } from "next/navigation"
 import CreateAPresetTile from "../cards/presets/create-a-preset"
 import { Small } from "../ui/typography"
@@ -96,7 +95,7 @@ export default function NewPresetDialogButton({ preset_id, isOpen, setIsOpen, co
 
     if (!preset_id) {
       const presetRes = await submitNewPreset(values)
-      console.log(presetRes)
+
       const effectsRes = await submitEffects(values, presetRes.preset_id)
       const gamesRes = await submitGames(values, effectsRes.preset_id)
 

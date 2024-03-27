@@ -3,23 +3,25 @@
 
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { UserSessionContext, TUserSessionContext } from "@/lib/context/sessionProvider";
-import useComments from "@/lib/hooks/useComments";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { useContext } from "react";
-import { ProfileTable, TopCommentView } from "../../../types/query-results";
-import useProfile from "@/lib/hooks/useProfile";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 type Props = {
   comment_id: number,
-  profile_id: number | undefined,
+  isOwner: boolean,
+  profile_id: number | null,
 }
 
-export default function CommentOptionsDropDown({ comment_id, profile_id }: Props) {
-  const { profile } = useProfile<ProfileTable>() as { profile: ProfileTable }
-  const { deleteComment } = useComments<TopCommentView>({})
+export default function CommentOptionsDropDown({ comment_id, isOwner, profile_id }: Props) {
+  const supabase = createSupabaseClient();
 
-  const isOwner = profile?.profile_id === profile_id
+  async function deleteComment(e: any) {
+    e.preventDefault();
+
+    if (!profile_id) return;
+    await supabase.from("comments").delete().eq("id", comment_id);
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,10 +31,7 @@ export default function CommentOptionsDropDown({ comment_id, profile_id }: Props
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
-          <Button variant="ghost" disabled={!isOwner} onClick={e => {
-            e.preventDefault()
-            deleteComment(comment_id)
-          }}>Delete</Button>
+          <Button variant="ghost" disabled={!isOwner} onClick={deleteComment}>Delete</Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

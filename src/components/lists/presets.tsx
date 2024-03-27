@@ -26,7 +26,6 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
   const pathNames = usePathname()
   const hideNewPresets = pathNames.startsWith("/settings") || pathNames.startsWith("/profile")
     
-  console.log('preset card list rerendered')
   return (
     <div className={cn(["flex flex-col justify-center mb-[196px] w-full relative z-10", {
       "container max-w-screen-2xl": !pathNames.startsWith("/settings"),

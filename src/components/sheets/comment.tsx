@@ -24,14 +24,14 @@ interface Props {
 export default function CommentSheet({ preset_id, profile_id, commentsData }: Props) {
   const [comments, setComments] = useState<CommentCardQuery[]>(commentsData)
   const [revalidate, setRevalidate] = useState(false)
-  const [isLiked, setIsLiked] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const supabase = createSupabaseClient()
   const { toast } = useToast()
 
   useEffect(() => {
-    if (revalidate) {
+    if (revalidate === true) {
+      console.log('fetching')
       fetchComments()
     }
   
@@ -50,7 +50,6 @@ export default function CommentSheet({ preset_id, profile_id, commentsData }: Pr
       .returns<CommentCardQuery[]>()
 
     if (error) {
-      console.error(error)
       return
     }
 

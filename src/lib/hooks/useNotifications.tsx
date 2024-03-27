@@ -26,7 +26,6 @@ export default function useNotifications({ profile_id }: Props) {
     fetchNotifications();
   }, []);
 
-  console.log(notifications, "useNotifications")
   useEffect(() => {
     const notificationsChannel = supabase.channel('custom-insert-channel')
       .on(
