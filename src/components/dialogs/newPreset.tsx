@@ -145,8 +145,9 @@ export default function NewPresetDialogButton({ preset_id, isOpen, setIsOpen, co
     const nextView = currentView + 1 === 4 ? 4 : currentView + 1
     const next = dir === "Next" ? nextView : prevView
 
-    if (!nextViewValid && dir === 'Next' || !nextViewValid) return
-
+    
+    if (!nextViewValid && dir === 'Next') return
+    console.log(nextViewValid, dir, nextView, currentView, next)
     setView(next)
     if (next > currentView && dir === 'Next')
       setNextViewValid(false)

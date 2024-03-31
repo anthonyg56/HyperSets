@@ -79,7 +79,7 @@ export default function MobleNav({ profile }: Props) {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href={'/settings?section=profile'} legacyBehavior passHref>
+              <Link href={'/settings/profile'} legacyBehavior passHref>
                 <NavigationMenuLink active={isActive('/about')} className={cn([
                   navigationMenuTriggerStyle()
                 ])}>

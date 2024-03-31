@@ -72,7 +72,7 @@ export default async function Page({ params: { username } }: Props) {
                 <Avatar avatar={profile.avatar} name={profile.name} username={profile.username} classNames={'w-[160px] h-[160px]'} />
                 <H2 classNames="mt-4 relative">{profile.name} {currentUser && profile.user_id === currentUser.user?.id && (
                   <ToolTip size="icon" variant='outline' text="Edit your profile" classNames="absolute right-[-20%]">
-                    <Link href="/settings?section=profile"><FontAwesomeIcon icon={faPencil} /></Link>
+                    <Link href="/settings/profile"><FontAwesomeIcon icon={faPencil} /></Link>
                   </ToolTip>
                 )}</H2>
                 <Small classNames="text-muted-foreground">@{profile.username}</Small>

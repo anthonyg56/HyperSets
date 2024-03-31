@@ -72,7 +72,7 @@ export default function LoginForm() {
     })
 
     if (profile.first_login === true) {
-      router.push('/settings')
+      router.push('/settings/profile')
     } else {
       router.push(`/`)
     }

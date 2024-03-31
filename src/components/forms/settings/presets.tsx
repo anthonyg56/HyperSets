@@ -12,6 +12,7 @@ export default async function PresetForm() {
   if (!user) {
     redirect('/login')
   }
+  
   const profile_id = user.user_metadata.profile_id
   const { data } = await supabase.from('presets').select('*, profile:profile_id(username, profile_id)').eq('profile_id', profile_id).returns<PresetCardQuery[]>()
 

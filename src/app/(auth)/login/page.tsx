@@ -16,7 +16,7 @@ export default async function Page({ searchParams }: Props) {
   const { data: { session }} = await supabase.auth.getSession()
 
   if (session) {
-    redirect(`/settings`)
+    redirect(`/settings/profile`)
   }
 
   return (

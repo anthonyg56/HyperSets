@@ -1,53 +1,43 @@
 "use client"
 
+import { useToast } from "@/components/ui/use-toast"
+import { SettingsContext, TSettingsContext } from "@/lib/context/settingsProvider"
+import { ProfileFormSchema, profileFormSchema } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { use, useContext, useEffect, useState } from "react";
-import { z } from "zod"
+import { ProfileSettingsQuery, ProfileTable, ProfilesTable } from "../../../../../types/query-results"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { H3, Muted } from "@/components/ui/typography"
+import AreYouSure from "@/components/dialogs/alerts/areYouSure"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+import { createSupabaseClient } from "@/lib/supabase/client"
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import { ProfileFormSchema, profileFormSchema } from "@/lib/schemas";
-import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
-import { H3, Muted } from "@/components/ui/typography";
-import useProfile from "@/lib/hooks/useProfile";
-import { useRouter } from "next/navigation";
-import { ProfileSettingsQuery, ProfileTable } from "../../../../types/query-results";
-import AreYouSure from "@/components/dialogs/alerts/areYouSure";
-
-type Props = {
-  profileData: ProfileTable
-}
-
-export default function ProfileForm({ profileData: profile }: Props) {
+export default function Page() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
 
   const router = useRouter()
   const { toast } = useToast()
-  const { checkUsername, updateProfile } = useProfile<ProfileSettingsQuery>() as {
-    checkUsername: (username: string) => Promise<{ valid: boolean, message?: string }>,
-    updateProfile: (values: ProfileFormSchema, profile: ProfileSettingsQuery) => Promise<{ valid: boolean, message?: string }>,
-  }
+  const { profile } = useContext(SettingsContext)
+
+  const supabase = createSupabaseClient()
+
+  // const { checkUsername, updateProfile } = useProfile<ProfileSettingsQuery>() as {
+  //   checkUsername: (username: string) => Promise<{ valid: boolean, message?: string }>,
+  //   updateProfile: (values: ProfileFormSchema, profile: ProfileSettingsQuery) => Promise<{ valid: boolean, message?: string }>,
+  // }
 
   const form = useForm<ProfileFormSchema>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: profile.name,
-      username: profile.username,
+      name: profile?.name ?? "",
+      username: profile?.username,
       avatar: undefined,
-      bio: profile.bio ?? "",
+      bio: profile?.bio ?? "",
       banner: undefined,
     },
   });
@@ -55,10 +45,10 @@ export default function ProfileForm({ profileData: profile }: Props) {
   // Fetch the current profile on mount
   useEffect(() => {
     form.reset({
-      name: profile.name,
-      username: profile.username,
+      name: profile?.name,
+      username: profile?.username,
       avatar: undefined,
-      bio: profile.bio ?? "",
+      bio: profile?.bio ?? "",
       banner: undefined,
     })
   }, [])
@@ -93,7 +83,7 @@ export default function ProfileForm({ profileData: profile }: Props) {
       })
       return
     }
-    
+
     toast({
       title: 'Saving...',
       description: 'Saving your changes',
@@ -118,9 +108,88 @@ export default function ProfileForm({ profileData: profile }: Props) {
     router.refresh()
   }
 
-  if (!profile) {
-    router.push('/login')
-    return
+  async function checkUsername(username: string | undefined) {
+    const cleansedUsername = username?.trim().toLowerCase()
+
+    if (!cleansedUsername) {
+      return {
+        valid: false,
+        message: "Username is invalid.",
+      }
+    }
+
+    const { data: profile } = await supabase
+      .from('profile')
+      .select('username')
+      .eq('username', cleansedUsername)
+      .single()
+
+    if (profile === null) {
+      return {
+        valid: false,
+        message: "username is already in use.",
+      }
+    }
+
+    return {
+      valid: true,
+      message: "Username is available.",
+    }
+  }
+
+  async function updateProfile(values: ProfileFormSchema, profile: ProfileSettingsQuery) {
+    let newValues = {
+      name: values.name,
+      username: values.username,
+      bio: values.bio || null,
+    } as ProfileSettingsQuery
+
+    const { error } = await supabase
+      .from('profile')
+      .update(newValues)
+      .eq('profile_id', profile.profile_id)
+      .select('name, username, bio')
+      .returns<ProfilesTable | null>()
+
+    if (error) {
+      return {
+        valid: false,
+        message: 'No profile was found to update.',
+      }
+    }
+
+    if (values.avatar) {
+      const { error } = await supabase
+        .storage
+        .from('avatars')
+        .upload(`avatars/${profile.profile_id}`, values.avatar)
+
+      if (error) {
+        return {
+          valid: false,
+          message: 'Failed to upload avatar.',
+        }
+      }
+    }
+
+    if (values.banner) {
+      const { error } = await supabase
+        .storage
+        .from('banners')
+        .upload(`banners/${profile.profile_id}`, values.banner)
+
+      if (error) {
+        return {
+          valid: false,
+          message: 'Failed to upload banner.',
+        }
+      }
+    }
+
+    return {
+      valid: true,
+      message: 'Profile updated successfully.',
+    }
   }
 
   return (
@@ -214,7 +283,7 @@ export default function ProfileForm({ profileData: profile }: Props) {
                     <div className="flex flex-row">
                       <div className="w-full md:w-[70%] ml-auto">
                         <FormControl>
-                          <Textarea placeholder="Talk about  " {...field} disabled={mode === 'view'} rows={6}/>
+                          <Textarea placeholder="Talk about  " {...field} disabled={mode === 'view'} rows={6} />
                         </FormControl>
                         <FormDescription className="pt-2">
                           {field.value?.length} / 160
@@ -243,16 +312,16 @@ export default function ProfileForm({ profileData: profile }: Props) {
                     <div className="flex flex-row">
                       <div className="w-[70%] ml-auto">
                         <FormControl>
-                        <Input
-                          
-                          placeholder="Picture"
-                          type="file"
-                          accept="image/*, application/pdf"
-                          onChange={(event) =>
-                            onChange(event.target.files && event.target.files[0])
-                          }
-                          {...fieldProps}
-                        />
+                          <Input
+
+                            placeholder="Picture"
+                            type="file"
+                            accept="image/*, application/pdf"
+                            onChange={(event) =>
+                              onChange(event.target.files && event.target.files[0])
+                            }
+                            {...fieldProps}
+                          />
                         </FormControl>
                         <FormMessage />
                       </div>

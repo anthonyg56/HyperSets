@@ -58,7 +58,7 @@ export default function SettingsNavMenu() {
         {
           sections.map(({ pathname, section, icon }) => (
             <NavigationMenuItem key={section} className="w-full">
-              <Link href={{ pathname: '/settings', query: { section: pathname }}} legacyBehavior passHref>
+              <Link href={{ pathname: `/settings/${pathname}`}} legacyBehavior passHref>
                 <NavigationMenuLink active={isActive(section as TSettingsSections)} className={cn([
                   navigationMenuTriggerStyle(),
                   "w-full justify-start",

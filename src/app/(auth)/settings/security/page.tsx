@@ -20,7 +20,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-import SettingsHeader from "./header"
 import { TUserSessionContext, UserSessionContext } from "@/lib/context/sessionProvider";
 import { Provider, Session, User, UserIdentity } from "@supabase/supabase-js";
 import { createSupabaseClient } from "@/lib/supabase/client";
@@ -31,18 +30,16 @@ import DisconnectOAuthProviderAlert from "@/components/dialogs/alerts/disconnect
 import { H3, Muted } from "@/components/ui/typography";
 import Reauthenticate from "@/components/dialogs/alerts/reauthenticate";
 import ConnectOAuthProviderAlertDialog from "@/components/buttons/connectOAuthProvider";
+import { SettingsContext } from "@/lib/context/settingsProvider";
 
 const currentProviders: Provider[] = ["google", "discord", "twitter"]
 
-type Props = {
-  user: User
-}
-
-export default function SecuritySection({ user }: Props) {
+export default function Page() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
   const [removedIdentities, setRemovedIdentities] = useState<UserIdentity[]>([])
 
   const { updateSecurityInfo, disconnectOAuthProvider, connectOAuthProvider, checkEmail } = useAuth()
+  const { security: user } = useContext(SettingsContext)
   const { toast } = useToast()
 
   const form = useForm<SecurityFormSchema>({
@@ -50,7 +47,7 @@ export default function SecuritySection({ user }: Props) {
     defaultValues: {
       password: undefined,
       confirm: undefined,
-      email: user.email ?? "",
+      email: user?.email ?? "",
     },
   })
 

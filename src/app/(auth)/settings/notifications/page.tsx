@@ -9,19 +9,14 @@ import { NotificationsFormSchema } from "@/lib/schemas";
 import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator";
 
-import SettingsHeader from "./header";
-import { NotificationsFormField } from "./form-fields";
-import { notificationsFieldDataGroup } from "./field-data";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import useAuth from "@/lib/hooks/useAuth";
-import { Tables } from "../../../../types/supabase";
+import SettingsHeader from "@/components/forms/settings/header";
+import { notificationsFieldDataGroup } from "@/components/forms/settings/field-data";
+import { NotificationsFormField } from "@/components/forms/settings/form-fields";
 
-type Props = {
-  data: Tables<'notifications_prefrences'>
-}
-
-export default function NotificationsForm({ data }: Props) {
+export default function Page() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
 
   const supabase = createSupabaseClient()

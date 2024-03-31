@@ -15,7 +15,7 @@ export default function SettingsPagesDropdown() {
 
   function routePage(section: SettingsSection) {
     setCurrentPage(section)
-    router.push(`/settings?section=${section}`)
+    router.push(`/settings/${section}`)
   }
 
   return (

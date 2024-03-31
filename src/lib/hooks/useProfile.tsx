@@ -30,6 +30,7 @@ export default function useProfile<T = ProfileQueries[keyof ProfileQueries]>( pr
 
     const { data } = await queryBuilder.single<T>()
 
+    console.log(data)
     setProfile(data)
     setLoading(false)
   }

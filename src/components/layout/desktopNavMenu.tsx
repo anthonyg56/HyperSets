@@ -65,7 +65,7 @@ export default function DesktopNavMenu({ profile }: Props) {
             <NavigationMenuContent className="!w-full" >
               <ul className="w-full">
                 <ListItem href={`/profile/${profile.username}`} title="My Profile" icon='PersonIcon' className="flex flex-row justify-center items-center"></ListItem>
-                <ListItem href="/settings" title="Settings" icon="GearIcon" />
+                <ListItem href="/settings/profile" title="Settings" icon="GearIcon" />
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
