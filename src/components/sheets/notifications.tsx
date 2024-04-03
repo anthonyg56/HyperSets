@@ -83,15 +83,9 @@ export default function NotificationSheet({ profile, serverNotifications }: Prop
 
   return (
     <Sheet>
-      <SheetTrigger>
-        <Avatar
-          avatar={avatar}
-          name={name}
-          username={username}
-          classNames="w-[30px] h-[30px] md:hidden"
-        />
-        <BellIcon className="hidden h-5 w-5 md:block" />
-        {unreadNotifications.length > 0 && <DotFilledIcon className="absolute top-0 right-[2px] text-primary w-[22px] h-[22px]" />}
+      <SheetTrigger className="relative px-2">
+        <BellIcon className="h-[1.4rem] w-[1.4rem]" />
+        {unreadNotifications.length > 0 && <DotFilledIcon className="absolute top-[-6px] right-[5px] text-primary w-[1.2rem] h-[1.2rem]" />}
       </SheetTrigger>
         <SheetContent className={cn([
           "flex flex-col gap-0 right-5 md:right-3 top-3 h-[calc(100%_-_24px)] rounded-md w-[90%] md:w-full !max-w-md",

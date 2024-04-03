@@ -8,6 +8,7 @@ import { NotificationsView, ProfileNavQuery } from "../../../types/query-results
 import { Suspense } from "react";
 import DesktopNavMenu from "./desktopNavMenu";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import ProfileButton from "../buttons/profile";
 
 export default async function Navbar() {
   const supabase = await createSupabaseServerClient()
@@ -42,6 +43,7 @@ export default async function Navbar() {
         <DesktopNavMenu profile={profile} />
         <MobileSearch />
         <NotificationSheet profile={profile} serverNotifications={notifications} />
+        <ProfileButton profile={profile} />
       </div>
     </header>
   )

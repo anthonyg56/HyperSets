@@ -69,7 +69,7 @@ export default async function PresetDetailsPage({ params: { presetId } }: Props)
   return (
     <BackgroundImage img={profile?.banner ?? null} alt={`${profile?.username}'s profile banner`} overlay>
       <div className={cn([
-        "container justify-center min-h-[calc(100vh_-_57px)] flex flex-col gap-10",
+        "container justify-center min-h-[calc(100vh_-_57px)] flex flex-col gap-10 translate-y-[60px]",
         "md:grid md:grid-cols-12"
       ])}>
         <div className="col-span-6 justify-center flex flex-col space-y-3">

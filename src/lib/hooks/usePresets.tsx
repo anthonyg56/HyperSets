@@ -18,14 +18,18 @@ type Props<T> = {
 }
 
 export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ selectClause, profile_id, serverPresets, preset_id }: Props<T>) {
+  // Filter states
   const [hardwares, setHardwares] = useState<Enums<'hardware_type'>[]>(['Headset', 'Keyboard', "Microphone", "Mouse"]);
   const [presets, setPresets] = useState<T | T[] | null>(serverPresets || null);
   const [effects, setEffects] = useState<Enums<'effect_type'>[]>([]);
   const [sort, setSort] = useState<PresetSorts>("Most Popular");
   const [games, setGames] = useState<GamesTable[]>([])
 
+  // Component states
   const [loading, setLoading] = useState<boolean>(true);
+  const [initialLoading, setInitialLoading] = useState<boolean>(true);
 
+  // Utilities
   const { toast } = useToast();
   const pathname = usePathname();
   const page = setPage(pathname);

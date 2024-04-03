@@ -15,21 +15,22 @@ import useAuth from "@/lib/hooks/useAuth";
 import SettingsHeader from "@/components/forms/settings/header";
 import { notificationsFieldDataGroup } from "@/components/forms/settings/field-data";
 import { NotificationsFormField } from "@/components/forms/settings/form-fields";
+import { SettingsContext } from "@/lib/context/settingsProvider";
 
 export default function Page() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
 
   const supabase = createSupabaseClient()
   const { session } = useAuth() as { session: Session | null }
-
+  const { notificationPreferences } = useContext(SettingsContext)
   const form = useForm<NotificationsFormSchema>({
     resolver: zodResolver(NotificationsFormSchema),
     defaultValues: {
-      push: undefined,
-      email: undefined,
-      comments: undefined,
-      likes: undefined,
-      downloads: undefined,
+      push: notificationPreferences?.push_notifications,
+      email: notificationPreferences?.email_notifications,
+      comments: notificationPreferences?.comment_notifications,
+      likes: notificationPreferences?.like_notifications,
+      downloads: notificationPreferences?.like_notifications,
       muted: [],
     },
   });
