@@ -32,10 +32,10 @@ export default async function Home() {
           <Button className="self-start"><Link href="/presets">Explore Our Presets</Link></Button>
         </div>
       </div>
-      <div className="container max-w-screen-2xl w-full text-center space-y-4 my-12">
+      <div className="container max-w-screen-2xl w-full text-center space-y-4 my-12 relative">
         <H2 classNames="border-b-0">Featured Presets</H2>
         <PresetCarousel multiple featured />
-        <Button variant='outline'>
+        <Button variant='outline' >
           <Link href="/presets">View All</Link>
         </Button>
       </div>

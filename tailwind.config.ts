@@ -92,6 +92,11 @@ const config = {
           "0%": { backgroundPosition: "0% 0%" },
           "50%": { backgroundPosition: "400% 0%" },
           "100%": { backgroundPosition: "0% 0%" }
+        },
+        "swipe": {
+          "0%": { transform: "translateX(-100%)" },
+          "50%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(100%)" }
         }
       },
       animation: {
@@ -100,7 +105,8 @@ const config = {
         "rainbow-cycle": "rainbow-cycle 6s linear 0s infinite",
         "rainbow-animation": "rainbow-animation 1s ease-in-out infinite",
         "move": "move 1500s linear infinite",
-        "rgb-ring": "rgb-ring 2000s linear infinite"
+        "rgb-ring": "rgb-ring 2000s linear infinite",
+        "swipe": "swipe 2s ease-in infinite"
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

@@ -54,6 +54,7 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
     setLoading(false)
   }
 
+  // Primarily used for the presets page
   async function fetchEffects() {
     if (!preset_id) return
 
@@ -76,28 +77,37 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
     setEffects(transformedEffects)
   }
 
+  // Dynamically build the query based on where we are at in the app or what we are doing
   function buildQuery() {
+    // When building the query, we can either pass in a select clause or use the default select clause
+    // The default select clause is used when we want to get all the columns from the presets table
+    // When it comes to hardwares, all hardwares will be included by default unless the user filters them out as show in the hardwares state
     let query = supabase
       .from("presets")
       .select(selectClause ?? '*')
       .in('hardware', hardwares)
-      
+    
+    // If a user adds a game to the filter, then make sure to search for presets that include that game
     if (games.length > 0) {
       query = query.in('preset_games.game_id', games.map(game => game.game_id))
     }
 
+    // If a user adds an effect to the filter, then make sure to search for presets that include those effects
     if (effects.length > 0) {
       query = query.in('effects', effects)
     }
 
+    // If a user is on the profile page, then only show presets that belong to that profile
     if (profile_id) {
       query = query.eq('profile_id', profile_id)
     }
 
+    // Not needed yet, but if we want to filter by a specific preset, then we can do that here
     if (preset_id) {
       query = query.eq('preset_id', preset_id)
     }
 
+    // Sort the presets based on the user's selection
     if (sort === "Most Popular") {
       query = query.order('views', { ascending: false })
     } else if (sort === "Most Downloads") {
@@ -107,6 +117,7 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
       query = query.order('created_on', { ascending: false })
     }
 
+    // Limit the amount of presets shown on the home and search page
     if (page === "Home" || page === "Search") {
       query = query.limit(8)
     }

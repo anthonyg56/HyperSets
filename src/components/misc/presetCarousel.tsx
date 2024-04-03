@@ -13,6 +13,7 @@ import { FeaturedPresetHeroQuery, PresetCardQuery } from "../../../types/query-r
 import { PresetCard } from "../cards/presets/preset";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Enums } from "../../../types/supabase";
+import SwipeSVG from '../../../public/swipe.svg'
 
 type Props = {
   featured?: boolean,
@@ -46,9 +47,10 @@ export async function PresetCarousel({ multiple, hardware, featured, serverPrese
             "md:basis-1/2 lg:basis-1/4": multiple,
           }])}>
             {multiple ? <PresetCard  preset={preset as PresetCardQuery} /> : <FeaturedPesetCard preset={preset} />}
-          </CarouselItem>
+          </CarouselItem> 
         ))}
       </CarouselContent>
+      {multiple && <SwipeSVG className="absolute right-[50%] top-[30%] md:hidden w-10 h-10 rotate-[45deg] my-6 animate-swipe" />}
       <>
         <CarouselNext className="hidden md:inline-flex" />
         <CarouselPrevious className="hidden md:inline-flex"/>

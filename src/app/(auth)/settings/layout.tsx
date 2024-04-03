@@ -33,8 +33,6 @@ export default async function DashboardLayout({ children, }: { children: React.R
   const profile_id = session.user.user_metadata.options.profile_id
   const user = session.user
 
-  
-
   const [{ data: profile }, { data: notificationPreferences }] = await Promise.all([
     supabase
       .from('profile')
@@ -49,11 +47,9 @@ export default async function DashboardLayout({ children, }: { children: React.R
     supabase
   ])
 
-  console.log(notificationPreferences)
   if (!profile || !notificationPreferences) {
     redirect('/login')
   }
-
 
   const { avatar, banner, bio, created_on, email, first_login, last_logon, name, user_id, username } = profile
   const capitalized = capitalizeEachWord(name);

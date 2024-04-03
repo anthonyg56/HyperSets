@@ -6,7 +6,7 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket, faExclamation, faShieldHalved, faSliders, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createSupabaseClient } from "@/lib/supabase/client";
 
 export type TSettingsSections = 'profile' | 'profile' | 'presets' | 'notifications' | 'security' 
@@ -14,35 +14,28 @@ export type TSettingsSections = 'profile' | 'profile' | 'presets' | 'notificatio
 const sections = [
   {
     pathname: 'profile',
-    section: 'profile',
     icon: faUser,
   },
   {
     pathname: 'security',
-    section: 'security',
     icon: faShieldHalved,
   },
   {
     pathname: 'notifications',
-    section: 'notifications',
     icon: faExclamation,
   },
   {
     pathname: 'presets',
-    section: 'presets',
     icon: faSliders,
   },
 ]
 
 export default function SettingsNavMenu() {
-  const params = useSearchParams();
   const supabase = createSupabaseClient()
-  const router = useRouter()
-
-  const section = params.get('section') as TSettingsSections
+  const pathname = usePathname()
 
   function isActive(path: TSettingsSections) {
-    return path === section
+    return pathname.includes(path)
   }
 
   async function handleLogout(e: any) {
@@ -56,21 +49,21 @@ export default function SettingsNavMenu() {
     <NavigationMenu orientation="vertical" className="hidden shrink md:flex col-span-2 max-w-full justify-start mx-auto mt-8 self-start">
       <NavigationMenuList className="gap-y-2">
         {
-          sections.map(({ pathname, section, icon }) => (
-            <NavigationMenuItem key={section} className="w-full">
+          sections.map(({ pathname, icon }) => (
+            <NavigationMenuItem key={pathname} className="w-full">
               <Link href={{ pathname: `/settings/${pathname}`}} legacyBehavior passHref>
-                <NavigationMenuLink active={isActive(section as TSettingsSections)} className={cn([
+                <NavigationMenuLink active={isActive(pathname as TSettingsSections)} className={cn([
                   navigationMenuTriggerStyle(),
                   "w-full justify-start",
                 ])}>
                   <FontAwesomeIcon icon={icon} className="w-[18px] h-[18px] pr-4" />
-                  {capitalizeEachWord(section)}
+                  {capitalizeEachWord(pathname)}
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
           ))
         }
-        <NavigationMenuItem key={section} className="w-full">
+        <NavigationMenuItem key={pathname} className="w-full">
           <FontAwesomeIcon icon={faArrowRightFromBracket} className="rotate-180 w-[18px] h-[18px] pr-4 text-primary hover:underline translate-y-[3px]"/>
           <Button variant="link" onClick={handleLogout}>Logout</Button>
         </NavigationMenuItem>
