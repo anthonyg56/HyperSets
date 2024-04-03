@@ -43,7 +43,7 @@ export default function SettingsNavMenu() {
     e.preventDefault()
     
     await supabase.auth.signOut()
-    router.push('/login')
+    router.refresh()
   }
 
   return (
