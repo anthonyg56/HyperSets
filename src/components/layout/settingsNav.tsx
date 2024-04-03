@@ -33,6 +33,7 @@ const sections = [
 export default function SettingsNavMenu() {
   const supabase = createSupabaseClient()
   const pathname = usePathname()
+  const router = useRouter()
 
   function isActive(path: TSettingsSections) {
     return pathname.includes(path)
@@ -42,7 +43,7 @@ export default function SettingsNavMenu() {
     e.preventDefault()
     
     await supabase.auth.signOut()
-
+    router.push('/login')
   }
 
   return (
