@@ -1,7 +1,6 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { ClassNameValue } from "tailwind-merge"
 import { ButtonHTMLAttributes } from "react"
@@ -22,12 +21,12 @@ export default function ToolTip({ children, text, texts, variant, size, classNam
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger onClick={onClick} {...props} className={cn([
-            { "rounded-[100px]": size === "icon" } , classNames
+        <TooltipTrigger onClick={onClick} type={type} {...props} className={cn([
+            { "rounded-full h-9 w-9 justify-center grid items-center": size === "icon" } , classNames
           ])}>
             {children}
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent className="z-40 max-w-[200px]">
           {text ? (
             <p className="text-xs">{text}</p>
           ) : (

@@ -4,6 +4,12 @@
  
 
 @layer base {
+  @property --rotate {
+    syntax: "<angle>";
+    initial-value: 132deg; 
+    inherits: false;
+  }
+  
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -110,7 +116,9 @@
 
 /* Before & After */
 @layer components {
-  .rgb-ring-container{
-    @apply relative after:blur-[5px] after:content-[''] after:absolute after:bg-[400%] after:w-[calc(100%_+_2px)] after:h-[calc(100%_+_2px)] after:animate-rgb-ring after:-left-px after:-top-px after:-z-10 after:rounded-md after:bg-[linear-gradient(45deg,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000)] before:absolute before:bg-[400%] before:w-[calc(100%_+_2px)] before:h-[calc(100%_+_2px)] before:animate-rgb-ring before:-left-px before:-top-px before:-z-10 before:rounded-md before:bg-[linear-gradient(45deg,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000,#fb0094,#0000ff,#00ff00,#ffff00,#ff0000)];
+  .preset-card-animation-ring {
+    @apply before:content-[''] before:left-0 before:w-[104%] before:h-[102%] before:rounded-md before:bg-[linear-gradient(var(--rotate),#6666ff,#0099ff,#00ff00,#ff3399,#6666ff)] before:absolute before:-z-20 top-[-1%] left-[-2%] after:absolute after:content-[''] after:left-0 after:right-0 after:-z-20 after:h-full after:w-full after:mx-0 after:my-auto after:scale-[0.8] after:bg-[linear-gradient(var(--rotate),#6666ff,#0099ff,#00ff00,#ff3399,#6666ff)] after:opacity-[1] after:transition-opacity after:top-[33.33px] lg:after:top-[54] after:blur-[33.33px] lg:after:blur-[54px];
   }
 }
+
+/* before:animate-spin after:animate-spin */

@@ -185,7 +185,7 @@ export default function useAuth() {
     }
 
     const { data: profile } = await supabase
-      .from('profile')
+      .from('profiles')
       .select('email')
       .eq('email', cleansedEmail)
       .single()

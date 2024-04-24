@@ -17,19 +17,16 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/buttons/button";
 import { Separator } from "@/components/ui/separator";
 
-import { TUserSessionContext, UserSessionContext } from "@/lib/context/sessionProvider";
-import { Provider, Session, User, UserIdentity } from "@supabase/supabase-js";
-import { createSupabaseClient } from "@/lib/supabase/client";
+import { Provider, UserIdentity } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import useAuth from "@/lib/hooks/useAuth";
-import DisconnectOAuthProviderAlert from "@/components/dialogs/alerts/disconnectOAuth";
+import DisconnectOAuthProviderAlert from "@/components/ui/dialogs/alerts/disconnectOAuth";
 import { H3, Muted } from "@/components/ui/typography";
-import Reauthenticate from "@/components/dialogs/alerts/reauthenticate";
-import ConnectOAuthProviderAlertDialog from "@/components/buttons/connectOAuthProvider";
+import Reauthenticate from "@/components/ui/dialogs/alerts/reauthenticate";
+import ConnectOAuthProviderAlertDialog from "@/components/ui/dialogs/connectOAuthProvider";
 import { SettingsContext } from "@/lib/context/settingsProvider";
 
 const currentProviders: Provider[] = ["google", "discord", "twitter"]
@@ -179,7 +176,7 @@ export default function Page() {
           <div className="flex flex-row ml-auto gap-x-4">
             {mode === 'edit' && <Button variant="secondary" type="submit" disabled={form.formState.isSubmitting}>Save Changes</Button>}
             {mode === 'edit' && <Button variant="destructive" type="button" onClick={e => updateMode('view')}>Cancel</Button>}
-            {mode === 'view' && <Reauthenticate passwordAdded={user?.user_metadata.options.passwordCreated} email={user?.email} setMode={setMode} />}
+            {mode === 'view' && <Reauthenticate passwordAdded={user?.user_metadata.passwordCreated} email={user?.email} setMode={setMode} />}
           </div>
         </div>
         <Separator className="w-full mt-4 mb-8" />

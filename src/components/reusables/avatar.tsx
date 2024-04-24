@@ -11,9 +11,10 @@ type Props = {
   width?: number,
   height?: number,
   classNames?: ClassNameValue,
+  onClick?: () => void,
 }
 
-export default function Avatar({ avatar, username, name, width, height, classNames }: Props) {
+export default function Avatar({ avatar, username, name, width, height, classNames, onClick }: Props) {
   const capitalized = capitalizeEachWord(name);
   const initials = extractFirstLetters(capitalized);
   const avatarSrc = avatar !== null ? avatar : "";
@@ -25,7 +26,7 @@ export default function Avatar({ avatar, username, name, width, height, classNam
 
   return (
     <ShadAvatar  className={cn(classNames)}>
-      <AvatarImage src={avatarSrc} alt={`@${username}`} width={width} height={height}/>
+      <AvatarImage src={avatarSrc} alt={`@${username}`} width={width} height={height} onClick={e => onClick ? onClick() : null}/>
       <AvatarFallback>{initials}</AvatarFallback >
     </ShadAvatar>
   )

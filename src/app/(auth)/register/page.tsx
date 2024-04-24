@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Title from "@/components/reusables/title";
 import { SeparatorWithText } from "@/components/misc/separators";
 import OnboardingOauth from "@/components/misc/onboardingOauth";
-import RegisterForm from "@/components/forms/onboard/register";
+import RegisterForm from "@/components/ui/forms/onboard/register";
 import Link from "next/link";
 import { Small } from "@/components/ui/typography";
 
@@ -12,7 +12,7 @@ export default async function Page() {
   const { data: { session }, error } = await supabase.auth.getSession()
 
   if (session) {
-    redirect(`/account/${session.user.id}`)
+    redirect(`/presets`)
   }
 
   return (

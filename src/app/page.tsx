@@ -1,14 +1,37 @@
+/* Packages */
+import Link from "next/link";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 
-import { Button } from "@/components/ui/button";
+/* Utils */
+import { cn } from "@/lib/utils";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+/* ShadCN UI Components */
+import { Button } from "@/components/ui/buttons/button";
 import { H1, H2, Lead, } from "@/components/ui/typography";
 
+/* Public Assets */
 import HeroImage from '../../public/alloys-origin-hero.png';
-import { PresetCarousel } from "@/components/misc/presetCarousel";
-import Link from "next/link";
+import { PresetCarousel } from "@/components/ui/carousels/presetCarousel";
+
+/* Types */
+import { PresetCard, PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 
 export default async function Home() {
+  const supabase = await createSupabaseServerClient()
+
+  const { data: presets } = await supabase
+    .from('presets')
+    .select('*, profile:profile_id(profile_id, username, avatar, name)')
+    .order('views', { ascending: false })
+    .eq('featured', true)
+    .limit(4)
+    .returns<PresetCardQueryResults[]>()
+
+  const presetCardsMap = presets?.map((preset, index) => {
+    return <PresetCard key={`${preset.name}-${index}`} preset={preset} />
+  })
+
   return (
     <>
       <div className={cn([
@@ -34,12 +57,13 @@ export default async function Home() {
       </div>
       <div className="container max-w-screen-2xl w-full text-center space-y-4 my-12 relative">
         <H2 classNames="border-b-0">Featured Presets</H2>
-        <PresetCarousel multiple featured />
+        <div className={cn(["flex flex-col pt-8 md:flex-none md:grid md:grid-cols-12 gap-4"])}>
+          {presetCardsMap}
+        </div>
         <Button variant='outline' >
           <Link href="/presets">View All</Link>
         </Button>
       </div>
-      
     </>
   )
 }

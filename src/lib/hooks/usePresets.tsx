@@ -1,43 +1,50 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import { createSupabaseClient } from "../supabase/client";
-import { GamesTable, PresetPages, PresetQueries, PresetSorts } from "../../../types/query-results";
-import { Enums } from "../../../types/supabase";
-import { usePathname, useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
-import { CreateAPresetSchema } from "../schemas";
-import { UseFormReturn } from "react-hook-form";
-import { extractYouTubeVideoId } from "../utils";
+/* NPM Packages */
+import { 
+  useEffect, 
+  useRef, 
+  useState 
+} from "react";
+import { usePathname } from "next/navigation";
 
-type Props<T> = {
-  preset_id?: number; // Needed for preset page
-  profile_id?: number; // Needed for profile page
-  serverPresets?: T[]; // Faster load times
-  selectClause?: string; // Select clause for supabase
-}
+/* Utilities */
+import { createSupabaseClient } from "../supabase/client";
+
+/* Types */
+import {
+  GamesTable,
+  PresetQueries,
+  PresetSorts
+} from "../../../types/query-results";
+import { Enums } from "../../../types/supabase";
 
 export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ selectClause, profile_id, serverPresets, preset_id }: Props<T>) {
-  // Filter states
+  const supabase = createSupabaseClient();
+
+  /* Filter states */
   const [hardwares, setHardwares] = useState<Enums<'hardware_type'>[]>(['Headset', 'Keyboard', "Microphone", "Mouse"]);
   const [presets, setPresets] = useState<T | T[] | null>(serverPresets || null);
   const [effects, setEffects] = useState<Enums<'effect_type'>[]>([]);
   const [sort, setSort] = useState<PresetSorts>("Most Popular");
   const [games, setGames] = useState<GamesTable[]>([])
 
-  // Component states
+  /* Control states */
   const [loading, setLoading] = useState<boolean>(true);
-  const [initialLoading, setInitialLoading] = useState<boolean>(true);
 
-  // Utilities
-  const { toast } = useToast();
+  /* Control Refs */
+  const shouldFetch = useRef(serverPresets !== undefined ? true : false);
+
+  /* Utilities */
   const pathname = usePathname();
-  const page = setPage(pathname);
-  const supabase = createSupabaseClient();
 
   useEffect(() => {
-    fetchPresets()
-  }, [])
+    if (shouldFetch.current) {
+      fetchPresets()
+    } else {
+      shouldFetch.current = true
+    }
+  }, [hardwares, presets, effects, sort, games])
 
   async function fetchPresets() {
     setLoading(true)
@@ -56,29 +63,6 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
 
     setPresets(data)
     setLoading(false)
-  }
-
-  // Primarily used for the presets page
-  async function fetchEffects() {
-    if (!preset_id) return
-
-    const { data: effects } = await supabase
-      .from('effects')
-      .select('breathing,confetti,swipe,solid,twilight,wave,sun,screen_mirror,video_capture')
-      .eq('preset_id', preset_id)
-      .single()
-
-    if (!effects) return
-
-    let transformedEffects: Enums<'effect_type'>[] = []
-
-    for (const key in effects) {
-      if (effects[key as keyof typeof effects] === true) {
-        transformedEffects.push(key as Enums<'effect_type'>)
-      }
-    }
-
-    setEffects(transformedEffects)
   }
 
   // Dynamically build the query based on where we are at in the app or what we are doing
@@ -106,7 +90,7 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
       query = query.eq('profile_id', profile_id)
     }
 
-    // Not needed yet, but if we want to filter by a specific preset, then we can do that here
+    // If we are on the preset page, or the user is trying to edit a preset, then only show that preset
     if (preset_id) {
       query = query.eq('preset_id', preset_id)
     }
@@ -122,7 +106,7 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
     }
 
     // Limit the amount of presets shown on the home and search page
-    if (page === "Home" || page === "Search") {
+    if (pathname === '/' || pathname === "/search") {
       query = query.limit(8)
     }
 
@@ -134,7 +118,7 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
     setHardwares(hardware)
   }
 
-  function setSortBy(sort: PresetSorts) {
+  function updateSortBy(sort: PresetSorts) {
     setSort(sort)
   }
 
@@ -146,199 +130,24 @@ export default function usePresets<T = PresetQueries[keyof PresetQueries]>({ sel
     setEffects(effect)
   }
 
-  /* These functions are independent of the hooks state and are used as utilities */
-  async function submitNewPreset(values: CreateAPresetSchema) {
-    if (!profile_id) return { error: true, preset_id: null }
-
-    const transformedYoutubeId = extractYouTubeVideoId(values.youtubeId ?? "")
-
-    const newPreset = {
-      name: values.name,
-      description: values.description,
-      hardware: values.hardware ?? "Keyboard",
-      youtube_id: transformedYoutubeId,
-      photo_url: values.photoUrl ?? null,
-      download_url: values.downloadUrl,
-      views: 0,
-      profile_id: profile_id,
-    }
-
-    const { data: preset } = await supabase
-      .from('presets')
-      .insert(newPreset)
-      .select()
-      .single()
-
-    if (preset === null) {
-      toast({
-        title: "There was an error creating your preset",
-      })
-      return {
-        error: true,
-        preset_id: null
-      }
-    }
-
-    return {
-      error: false,
-      preset_id: preset.preset_id
-    }
-  }
-
-  async function submitEffects(values: CreateAPresetSchema, preset_id: number | null) {
-    if (!preset_id) return {
-      error: true,
-      preset_id: null
-    }
-
-    const effectsFormData = {
-      preset_id: preset_id,
-      breathing: values.effects?.includes("Breathing") ?? false,
-      confetti: values.effects?.includes("Confetti") ?? false,
-      swipe: values.effects?.includes("Swipe") ?? false,
-      solid: values.effects?.includes("Solid") ?? false,
-      twilight: values.effects?.includes("Twilight") ?? false,
-      wave: values.effects?.includes("Wave") ?? false,
-      sun: values.effects?.includes("Sun") ?? false,
-      screen_mirror: values.effects?.includes("Screen Mirror") ?? false,
-      video_capture: values.effects?.includes("Video Capture") ?? false,
-    }
-
-    const { data } = await supabase
-      .from('effects')
-      .insert(effectsFormData)
-      .select()
-
-    if (!data) {
-      toast({
-        title: "There was an error creating your preset",
-      })
-
-      // Delete the preset if the effects failed to insert
-      await supabase
-        .from('presets')
-        .delete()
-        .eq('preset_id', preset_id)
-
-      return {
-        error: true,
-        preset_id: null
-      }
-    }
-
-    return {
-      error: false,
-      preset_id: preset_id
-    }
-  }
-
-  async function submitGames(values: CreateAPresetSchema, preset_id: number | null) {
-    if (!preset_id) return {
-      error: true,
-      preset_id: null
-    }
-
-    const games = values.games
-    if (games.length === 0) return {
-      error: true,
-      preset_id: null
-    }
-
-    const normalizedGames = games.map(game => {
-      return {
-        preset_id,
-        game_id: game.game_id
-      }
-    })
-
-    const { error } = await supabase
-      .from('preset_games')
-      .insert(normalizedGames)
-
-    if (error) {
-      toast({
-        title: "There was an error creating your preset",
-      })
-
-      // Delete the preset if the effects failed to insert
-      await supabase
-        .from('presets')
-        .delete()
-        .eq('preset_id', preset_id)
-
-      return {
-        error: true,
-        preset_id: null
-      }
-    }
-
-    return {
-      error: false,
-      preset_id: preset_id
-    }
-  }
-
-  async function deletePreset() {
-    if (!preset_id) return
-
-    await supabase
-      .from('presets')
-      .delete()
-      .eq('preset_id', preset_id)
-  }
-
-  async function updatePreset(values: CreateAPresetSchema) {
-    return {
-      error: false,
-      preset_id: 0
-    }
-  }
-
   return {
+    sort,
+    games,
     loading,
     presets,
-    updateHardwareFilter,
-    setSort,
-    submitNewPreset,
-    deletePreset,
-    updatePreset,
-    sort,
-    hardwares,
-    setSortBy,
-    fetchPresets,
-    fetchEffects,
     effects,
-    submitEffects,
-    submitGames,
-    games,
+    hardwares,
+    fetchPresets,
+    updateSortBy,
     updateGamesFilter,
     updateEffectFilter,
+    updateHardwareFilter,
   }
 }
 
-function setPage(pathname: string) {
-  let page: PresetPages = "Presets"
-
-  switch (pathname) {
-    case "/presets":
-      page = "Presets"
-      break;
-    case "/profile":
-      page = "Profile"
-      break;
-    case "/":
-      page = "Home"
-      break;
-    case "/settings":
-      page = "Settings"
-      break;
-    case "/search":
-      page = "Search"
-      break;
-    default:
-      page = "Presets"
-      break;
-  }
-
-  return page
+type Props<T> = {
+  preset_id?: number; // Needed for preset page
+  profile_id?: number; // Needed for profile page
+  serverPresets?: T[]; // Faster load times
+  selectClause?: string; // Select clause for supabase
 }

@@ -54,8 +54,7 @@ export const createAPresetSchema = z.object({
     z.literal("Mouse"),
     z.literal("Microphone"),
     z.literal("Headset"),
-  ])
-    .optional(),
+  ]),
   youtubeId: z
     .string({
       required_error: "Youtube URL is required",
@@ -75,27 +74,31 @@ export const createAPresetSchema = z.object({
     .regex(/^(https:\/\/)?(www\.)?(dropbox\.com|drive\.google\.com|onedrive\.live\.com)\/[^\s]+$/, {
       message: "Download links must be from either Dropbox, Google Drive, or One drive"
     }),
-  effects: z.array(z.union([
-    z.literal("Breathing"),
-    z.literal("Confetti"),
-    z.literal("Swipe"),
-    z.literal("Solid"),
-    z.literal("Twilight"),
-    z.literal("Wave"),
-    z.literal("Sun"),
-    z.literal("Screen Mirror"),
-    z.literal("Video Capture"),
-  ])),
-  games: z.array(z.object({
-    game_id: z.number({
-      required_error: "Game id is required",
-      invalid_type_error: "Input must be a number"
-    }),
-    game_name: z.string({
-      required_error: "Game Name is required",
-      invalid_type_error: "Input must be a string",
-    })
-  })),
+  effects: z.array(
+    z.union([
+      z.literal("Breathing"),
+      z.literal("Confetti"),
+      z.literal("Swipe"),
+      z.literal("Solid"),
+      z.literal("Twilight"),
+      z.literal("Wave"),
+      z.literal("Sun"),
+      z.literal("Screen Mirror"),
+      z.literal("Video Capture"),
+    ]))
+    .optional(),
+  games: z.array(
+    z.object({
+      game_id: z.number({
+        required_error: "Game id is required",
+        invalid_type_error: "Input must be a number"
+      }),
+      game_name: z.string({
+        required_error: "Game Name is required",
+        invalid_type_error: "Input must be a string",
+      })
+    }))
+    .optional(),
 })
 
 export const hardwareSchema = createAPresetSchema
@@ -164,20 +167,35 @@ export const profileFormSchema = z.object({
   // email: z
   //   .string()
   //   .email("Please enter a valid email"),
-  avatar: z
-    .instanceof(File)
-    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 50MB.")
-    .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
-    .optional(),
+  avatar: z.union([
+    z.string().trim().url({
+      message: "Please enter a valid URL"
+    }),
+    z.instanceof(File)
+      .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 5MB.")
+      .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
+      .optional(),
+  ]),
   bio: z
     .string()
     .max(160, "Bio must be less than 160 characters long")
     .optional(),
-  banner: z
-    .instanceof(File)
-    .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 50MB.")
-    .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
-    .optional(),
+  banner: z.union([
+    z.string()
+      .trim()
+      .url({
+        message: "Please enter a valid URL"
+      }),
+    z.instanceof(File)
+      .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 5MB.")
+      .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
+      .optional(),
+  ]),
+  // z
+  //   .instanceof(File)
+  //   .refine((file) => file.size < MAX_IMAGE_FILE_SIZE, "Max size is 50MB.")
+  //   .refine((file) => checkFileType(file), "Only .pdf, .docx formats are supported.")
+  //   .optional(),
 })
 
 export const signupSchemna = z.object({
@@ -185,7 +203,7 @@ export const signupSchemna = z.object({
   password: passwordSchema,
   confirm: passwordSchema,
 })
-  .merge(profileFormSchema.omit({ avatar: true, banner: true }))
+  .merge(profileFormSchema)
   .refine((data) => data.password === data.confirm, {
     message: "Passwords don't match",
     path: ["confirm"], // path of error

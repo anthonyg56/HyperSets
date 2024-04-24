@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { CommentQueries, RawComment } from "../../../types/query-results";
 import { createSupabaseClient } from "../supabase/client";
 
 type Props = {
@@ -10,7 +9,7 @@ type Props = {
   selectClause?: string; // Select clause for supabase
 }
 
-export default function useComments<T extends CommentQueries[keyof CommentQueries]>({ topComments: isTopComments, preset_id, selectClause }: Props) {
+export default function useComments<T>({ topComments: isTopComments, preset_id, selectClause }: Props) {
   const [comments, setComments] = useState<T[] | T>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -40,21 +39,6 @@ export default function useComments<T extends CommentQueries[keyof CommentQuerie
     setLoading(false);
   }
 
-  async function submitComment(comment: RawComment, profile_id: number | null) {
-    if (!profile_id) return {
-      valid: false,
-      message: "You must be logged in to comment",
-    };
-
-    await supabase.from("comments").insert(comment);
-    fetchComments();
-
-    return {
-      valid: true,
-      message: "Comment submitted",
-    }
-  }
-
   async function deleteComment(comment_id: number, profile_id: number | null) {
     if (!profile_id) return;
     await supabase.from("comments").delete().eq("id", comment_id);
@@ -79,5 +63,5 @@ export default function useComments<T extends CommentQueries[keyof CommentQuerie
     return data?.some(like => like.profile_id === profile_id) ?? false;
   }
 
-  return { comments, submitComment, deleteComment, loading, likeComment, unlikeComment, isLiked };
+  return { comments, deleteComment, loading, likeComment, unlikeComment, isLiked };
 }

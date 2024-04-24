@@ -97,6 +97,10 @@ const config = {
           "0%": { transform: "translateX(-100%)" },
           "50%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(100%)" }
+        },
+        "spin": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
         }
       },
       animation: {
@@ -106,7 +110,8 @@ const config = {
         "rainbow-animation": "rainbow-animation 1s ease-in-out infinite",
         "move": "move 1500s linear infinite",
         "rgb-ring": "rgb-ring 2000s linear infinite",
-        "swipe": "swipe 2s ease-in infinite"
+        "swipe": "swipe 2s ease-in infinite",
+        "spin": "spin 2.5s linear infinite",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

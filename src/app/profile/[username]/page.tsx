@@ -1,22 +1,18 @@
 
 import { P, H2, Small, } from "@/components/ui/typography";
-
-import { } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/buttons/button";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PresetCardList from "@/components/lists/presets";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import Avatar from "@/components/reusables/avatar";
-import { PresetCardQuery, ProfilePageQuery } from "../../../../types/query-results";
-import { capitalizeFirstLetter, convertDate } from "@/lib/utils";
-import { CalendarIcon, DiscordLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
-import { Separator } from "@/components/ui/separator";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { convertDate } from "@/lib/utils";
+import { CalendarIcon } from "@radix-ui/react-icons";
 import BackgroundImage from "@/components/misc/backgroundImage";
 import ToolTip from "@/components/reusables/toolTip";
 import Link from "next/link";
+import { Tables } from "../../../../types/supabase";
+import { PresetCardQueryResults } from "@/app/presets/page";
 
 type Props = {
   params: {
@@ -27,41 +23,32 @@ type Props = {
 export default async function Page({ params: { username } }: Props) {
   const supabase = await createSupabaseServerClient()
 
-  const { data: currentUser } = await supabase.auth.getUser()
-
-  const { data: profile } = await supabase
-    .from('profile')
+  const [{ data: currentUser }, { data: profile }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase
+    .from('profiles')
     .select('*, downloads(count), presets(count)')
     .eq('username', username)
-    .single<ProfilePageQuery>()
-
-  if (!profile) {
-    // In the future, redirect to a user not found page
-    redirect('/presets')
-  }
-
-  const [{ data: { user } }, { data: presetsData }] = await Promise.all([
-    supabase.auth.admin.getUserById(profile.user_id),
-    supabase.from('presets').select('*,profile:profile_id(username)').eq('profile_id', profile.profile_id).order('views', { ascending: false }).returns<PresetCardQuery[]>()
+    .single<ProfilePageQueryResults>()
   ])
 
-  if (user === null) {
+  if (profile === null) {
     // In the future, redirect to a user not found page
-    redirect('/presets')
+    return (
+      <div className="w-full h-full pt-48 items-center flex flex-col justify-center text-center">
+        <P>Profile not found</P>
+        <Link href="/presets">
+          <Button variant="link">
+            Back to presets
+          </Button>
+        </Link>
+      </div>
+    )
   }
-
-  const presets = presetsData || []
-  const oAuthIdentities = user.identities?.map(identity => {
-
-    return {
-      provider: identity.provider,
-      username: identity.identity_data?.full_name,
-      email: identity.identity_data?.email
-    }
-  })
-
   
-
+  const { data: presetsData } = await supabase.from('presets').select('*,profile:profile_id(username)').eq('profile_id', profile.profile_id).order('views', { ascending: false }).returns<PresetCardQueryResults[]>() 
+  const presets = presetsData || []
+  
   return (
     <BackgroundImage img={profile.banner} alt={`${profile.username}'s profile banner`} gradient>
         <div className="h-full w-full min-h-[calc(100vh_-_57px)] pt-[130px]">
@@ -70,7 +57,7 @@ export default async function Page({ params: { username } }: Props) {
             <div className="flex flex-col items-center space-y-5">
               <div className="flex flex-col justify-end items-center">
                 <Avatar avatar={profile.avatar} name={profile.name} username={profile.username} classNames={'w-[160px] h-[160px]'} />
-                <H2 classNames="mt-4 relative">{profile.name} {currentUser && profile.user_id === currentUser.user?.id && (
+                <H2 classNames="mt-4 relative">{profile.name} {currentUser && profile.profile_id === currentUser.user?.user_metadata.profile_id && (
                   <ToolTip size="icon" variant='outline' text="Edit your profile" classNames="absolute top-[-5px] right-[-15%]">
                     <Link href="/settings/profile"><FontAwesomeIcon icon={faPencil} className="w-[1.05rem h-[1.05rem]"/></Link>
                   </ToolTip>
@@ -82,17 +69,7 @@ export default async function Page({ params: { username } }: Props) {
                   <CalendarIcon className="w-5 h-5" />
                   <Small classNames=""> Member Since: {convertDate(profile.created_on as string)}</Small>
                 </div>
-                <Separator orientation='vertical' className="h-[28px] w-[2px] justify-start hidden md:visible" />
-                {oAuthIdentities?.map((identity, index) => {
-                  return (
-                    <div key={index} className="frosted flex !mt-0 py-[10px] px-3 gap-x-[5px] justify-center items-center">
-                      {identity.provider === 'google' && <FontAwesomeIcon icon={faGoogle} className="w-5 h-5" />}
-                      {identity.provider === 'discord' && <DiscordLogoIcon className="w-5 h-5" />}
-                      {identity.provider === 'twitter' && <TwitterLogoIcon className="w-5 h-5" />}
-                      <Small>{identity.provider === 'google' ? capitalizeFirstLetter(identity.email) : capitalizeFirstLetter(identity.username)}</Small>
-                    </div>
-                  )
-                })}
+
               </div>
               <div className="max-w-[500px]  text-center text-muted-foreground">
                 <P>{profile.bio}</P>
@@ -123,4 +100,9 @@ export default async function Page({ params: { username } }: Props) {
     </BackgroundImage>
 
   )
+}
+
+export interface ProfilePageQueryResults extends Tables<'profiles'> {
+  downloads: { count: number }[]
+  presets: { count: number }[]
 }

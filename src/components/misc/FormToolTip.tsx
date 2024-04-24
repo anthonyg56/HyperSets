@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Button } from "../ui/buttons/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { ClassNameValue } from "tailwind-merge";
 

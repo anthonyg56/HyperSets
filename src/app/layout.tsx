@@ -3,7 +3,6 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from '@/lib/utils'
 import "./globals.css";
 import { ThemeProvider } from "@/lib/context/themeProvider";
-import UserSessionProvider from "@/lib/context/sessionProvider";
 import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/layout/navbar";
 
@@ -35,12 +34,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <UserSessionProvider>
-              
-              {children}
-          </UserSessionProvider>
+          {children}
+          <Toaster />
         </ThemeProvider>
-        <Toaster />
       </body>
     </html>
   );

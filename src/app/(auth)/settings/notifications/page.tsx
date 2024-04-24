@@ -12,9 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import useAuth from "@/lib/hooks/useAuth";
-import SettingsHeader from "@/components/forms/settings/header";
-import { notificationsFieldDataGroup } from "@/components/forms/settings/field-data";
-import { NotificationsFormField } from "@/components/forms/settings/form-fields";
+import SettingsHeader from "@/components/ui/forms/settings/header";
+import { notificationsFieldDataGroup } from "@/components/ui/forms/settings/field-data";
+import { NotificationsFormField } from "@/components/ui/forms/settings/form-fields";
 import { SettingsContext } from "@/lib/context/settingsProvider";
 
 export default function Page() {

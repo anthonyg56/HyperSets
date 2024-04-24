@@ -1,9 +1,9 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { PresetCardQuery } from "../../../../../types/query-results";
 import { H3, Muted } from "@/components/ui/typography";
 import { Separator } from "@/components/ui/separator";
 import PresetCardList from "@/components/lists/presets";
+import { PresetCardQueryResults } from "@/app/presets/page";
 
 export default async function Page() {
   const supabase = await createSupabaseServerClient()
@@ -14,7 +14,11 @@ export default async function Page() {
   }
 
   const profile_id = user.user_metadata.profile_id
-  const { data } = await supabase.from('presets').select('*, profile:profile_id(username, profile_id)').eq('profile_id', profile_id).returns<PresetCardQuery[]>()
+  const { data } = await supabase
+    .from('presets')
+    .select('*, profile:profile_id(profile_id, username, avatar, name)')
+    .eq('profile_id', profile_id)
+    .returns<PresetCardQueryResults[] | null>()
 
   const presets = data ?? []
 

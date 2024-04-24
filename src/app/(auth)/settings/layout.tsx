@@ -1,27 +1,33 @@
-import SettingsPagesDropdown from "@/components/dropdown/settingsPages"
-import SettingsNavMenu from "@/components/layout/settingsNav"
+import SettingsPagesDropdown from "@/components/ui/dropdown/settingsPages"
+import SettingsNavMenu from "@/components/ui/navigation-menu/settingsNav"
 import SettingsBanner from "@/components/misc/settingsBanners"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/buttons/button"
 import { Separator } from "@/components/ui/separator"
 import { H2, Small, H3, Muted } from "@/components/ui/typography"
-import SettingsProvider, { SettingsContext } from "@/lib/context/settingsProvider"
+import SettingsProvider from "@/lib/context/settingsProvider"
 import { createSupabaseServerClient } from "@/lib/supabase/server"
 import { capitalizeEachWord, cn } from "@/lib/utils"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Image, { StaticImageData } from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
-import { PresetTable } from "../../../../types/query-results"
+import { Tables } from "../../../../types/supabase"
 
 function extractInitals(input: string | null): string {
   if (!input) return '';
   return input.split(' ').map(word => word[0]).join('');
 }
 
-export default async function DashboardLayout({ children, }: { children: React.ReactNode, }) {
+type Props = { 
+  children: React.ReactNode, 
+  searchParams?: { 
+    [key: string]: string | string[] | undefined 
+  },
+}
+
+export default async function DashboardLayout({ children, searchParams }: Props) {
   const supabase = await createSupabaseServerClient()
 
   const { data:{ session }} = await supabase.auth.getSession()
@@ -30,35 +36,34 @@ export default async function DashboardLayout({ children, }: { children: React.R
     redirect('/login')
   }
 
-  const profile_id = session.user.user_metadata.options.profile_id
+  const profile_id = session.user.user_metadata.profile_id
   const user = session.user
 
   const [{ data: profile }, { data: notificationPreferences }] = await Promise.all([
     supabase
-      .from('profile')
+      .from('profiles')
       .select('*')
       .eq('profile_id', profile_id)
       .single(),
     supabase
       .from('notifications_prefrences')
       .select('*')
-      .eq('user_id', user.id)
-      .single(),
-    supabase
+      .eq('profile_id', profile_id)
+      .single()
   ])
 
   if (!profile || !notificationPreferences) {
     redirect('/login')
   }
 
-  const { avatar, banner, bio, created_on, email, first_login, last_logon, name, user_id, username } = profile
+  const { avatar, banner, name, username } = profile
   const capitalized = capitalizeEachWord(name);
   const initials = extractInitals(capitalized);
 
   return (
     <div>
       <div className="">
-        <SettingsBanner src={banner} username={username} />
+        <SettingsBanner src={banner} username={username} user_id={user.id} />
         <div className="container max-w-screen-2xl">
           <div className="flex flex-col md:flex-row p-4 -translate-y-[106px] md:-translate-y-0">
             <div className="flex flex-col md:flex-row w-full md:h-[106px] items-center md:items-start">
@@ -96,7 +101,7 @@ export default async function DashboardLayout({ children, }: { children: React.R
         <Suspense fallback={<div>Loading...</div>}>
           <SettingsPagesDropdown />
         </Suspense>
-        <SettingsProvider notificationPreferencesData={notificationPreferences} profileData={profile} securityData={user}>
+        <SettingsProvider notificationPreferences={notificationPreferences} profile={profile} security={user}>
         <div className="col-span-9 pt-8 md:pr-4 pb-16">
           {children}
         </div>

@@ -15,10 +15,17 @@ export async function GET(request: NextRequest) {
   redirectTo.pathname = next
   
   if (token_hash && type) {
+    // if (type === 'recovery') {
+    //   redirectTo.pathname = '/forgot/new'
+    //   redirectTo.searchParams.set('token_hash', token_hash)
+    //   return NextResponse.redirect(redirectTo)
+    // }
+
     const { error } = await supabase.auth.verifyOtp({
       type,
       token_hash,
     })
+
     if (!error) {
       
       return NextResponse.redirect(redirectTo)

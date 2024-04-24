@@ -10,8 +10,10 @@ const getURL = () => {
   return url
 }
 
-export const CDNURL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/object/sign/images/"
+// Public CDN URL for supabase storage
+export const PUBLIIC_CDN_URL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/object/public/"
 
+export const AUTHENTICATE_CDN_URL = "https://mxmzlgtpvuwhhpsjmxip.supabase.co/storage/v1/object"
 export const baseURL = getURL()
 
 export const MAX_UPLOAD_SIZE = 1024 * 1024 * 30

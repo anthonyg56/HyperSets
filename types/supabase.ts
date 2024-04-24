@@ -16,7 +16,7 @@ export type Database = {
           last_updated: string | null
           likes: number
           preset_id: number
-          profile_id: number
+          profile_id: number | null
           text: string
         }
         Insert: {
@@ -25,7 +25,7 @@ export type Database = {
           last_updated?: string | null
           likes?: number
           preset_id: number
-          profile_id: number
+          profile_id?: number | null
           text?: string
         }
         Update: {
@@ -34,7 +34,7 @@ export type Database = {
           last_updated?: string | null
           likes?: number
           preset_id?: number
-          profile_id?: number
+          profile_id?: number | null
           text?: string
         }
         Relationships: [
@@ -42,29 +42,8 @@ export type Database = {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "fetch_notifications"
+            referencedRelation: "profiles"
             referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "public_comments_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["preset_id"]
           },
           {
             foreignKeyName: "public_comments_preset_id_fkey"
@@ -79,29 +58,25 @@ export type Database = {
         Row: {
           created_on: string
           download_id: number
+          downloaded: number
           preset_id: number
           profile_id: number | null
         }
         Insert: {
           created_on?: string
           download_id?: number
+          downloaded?: number
           preset_id: number
           profile_id?: number | null
         }
         Update: {
           created_on?: string
           download_id?: number
+          downloaded?: number
           preset_id?: number
           profile_id?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "downloads_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["preset_id"]
-          },
           {
             foreignKeyName: "downloads_preset_id_fkey"
             columns: ["preset_id"]
@@ -110,78 +85,33 @@ export type Database = {
             referencedColumns: ["preset_id"]
           },
           {
-            foreignKeyName: "downloads_profile_id_fkey"
+            foreignKeyName: "public_downloads_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "downloads_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "downloads_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
+            referencedRelation: "profiles"
             referencedColumns: ["profile_id"]
           },
         ]
       }
       effects: {
         Row: {
-          breathing: boolean
-          confetti: boolean
-          effect_id: number
+          id: number
+          name: Database["public"]["Enums"]["effect_type"]
           preset_id: number
-          screen_mirror: boolean
-          solid: boolean
-          sun: boolean
-          swipe: boolean
-          twilight: boolean
-          video_capture: boolean
-          wave: boolean
         }
         Insert: {
-          breathing?: boolean
-          confetti?: boolean
-          effect_id?: number
+          id?: number
+          name: Database["public"]["Enums"]["effect_type"]
           preset_id: number
-          screen_mirror?: boolean
-          solid?: boolean
-          sun?: boolean
-          swipe?: boolean
-          twilight?: boolean
-          video_capture?: boolean
-          wave?: boolean
         }
         Update: {
-          breathing?: boolean
-          confetti?: boolean
-          effect_id?: number
+          id?: number
+          name?: Database["public"]["Enums"]["effect_type"]
           preset_id?: number
-          screen_mirror?: boolean
-          solid?: boolean
-          sun?: boolean
-          swipe?: boolean
-          twilight?: boolean
-          video_capture?: boolean
-          wave?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "effects_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["preset_id"]
-          },
-          {
-            foreignKeyName: "effects_preset_id_fkey"
+            foreignKeyName: "public_effect_v2_preset_id_fkey"
             columns: ["preset_id"]
             isOneToOne: false
             referencedRelation: "presets"
@@ -238,31 +168,10 @@ export type Database = {
             referencedColumns: ["comment_id"]
           },
           {
-            foreignKeyName: "likes_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
-            referencedColumns: ["comment_id"]
-          },
-          {
             foreignKeyName: "likes_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "likes_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "likes_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
+            referencedRelation: "profiles"
             referencedColumns: ["profile_id"]
           },
         ]
@@ -291,13 +200,6 @@ export type Database = {
             foreignKeyName: "public_muted_presets_preset_id_fkey"
             columns: ["preset_id"]
             isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["preset_id"]
-          },
-          {
-            foreignKeyName: "public_muted_presets_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
             referencedRelation: "presets"
             referencedColumns: ["preset_id"]
           },
@@ -305,21 +207,7 @@ export type Database = {
             foreignKeyName: "public_muted_presets_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "public_muted_presets_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "public_muted_presets_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
+            referencedRelation: "profiles"
             referencedColumns: ["profile_id"]
           },
         ]
@@ -360,21 +248,7 @@ export type Database = {
             foreignKeyName: "notifications_retriver_id_fkey"
             columns: ["retriver_id"]
             isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "notifications_retriver_id_fkey"
-            columns: ["retriver_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "notifications_retriver_id_fkey"
-            columns: ["retriver_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
+            referencedRelation: "profiles"
             referencedColumns: ["profile_id"]
           },
           {
@@ -382,13 +256,6 @@ export type Database = {
             columns: ["comment_id"]
             isOneToOne: false
             referencedRelation: "comments"
-            referencedColumns: ["comment_id"]
-          },
-          {
-            foreignKeyName: "public_notifications_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
             referencedColumns: ["comment_id"]
           },
           {
@@ -415,8 +282,8 @@ export type Database = {
           email_notifications: boolean
           id: number
           like_notifications: boolean
+          profile_id: number
           push_notifications: boolean
-          user_id: string
         }
         Insert: {
           comment_notifications?: boolean
@@ -425,8 +292,8 @@ export type Database = {
           email_notifications?: boolean
           id?: number
           like_notifications?: boolean
+          profile_id: number
           push_notifications?: boolean
-          user_id?: string
         }
         Update: {
           comment_notifications?: boolean
@@ -435,16 +302,16 @@ export type Database = {
           email_notifications?: boolean
           id?: number
           like_notifications?: boolean
+          profile_id?: number
           push_notifications?: boolean
-          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_notifications_prefrences_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "public_notifications_prefrences_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -474,13 +341,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "games"
             referencedColumns: ["game_id"]
-          },
-          {
-            foreignKeyName: "public_preset_games_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["preset_id"]
           },
           {
             foreignKeyName: "public_preset_games_preset_id_fkey"
@@ -542,36 +402,25 @@ export type Database = {
             foreignKeyName: "public_presets_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "public_presets_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "public_presets_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
+            referencedRelation: "profiles"
             referencedColumns: ["profile_id"]
           },
         ]
       }
-      profile: {
+      profiles: {
         Row: {
           avatar: string | null
           banner: string | null
           bio: string | null
           created_on: string | null
+          discord: string | null
           email: string
           first_login: boolean
+          gmail: string | null
           last_logon: string | null
           name: string
           profile_id: number
+          twitter: string | null
           user_id: string
           username: string
         }
@@ -580,12 +429,15 @@ export type Database = {
           banner?: string | null
           bio?: string | null
           created_on?: string | null
+          discord?: string | null
           email?: string
           first_login?: boolean
+          gmail?: string | null
           last_logon?: string | null
           name: string
           profile_id?: number
-          user_id: string
+          twitter?: string | null
+          user_id?: string
           username: string
         }
         Update: {
@@ -593,19 +445,22 @@ export type Database = {
           banner?: string | null
           bio?: string | null
           created_on?: string | null
+          discord?: string | null
           email?: string
           first_login?: boolean
+          gmail?: string | null
           last_logon?: string | null
           name?: string
           profile_id?: number
+          twitter?: string | null
           user_id?: string
           username?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_profile_user_id_fkey"
+            foreignKeyName: "public_profiles_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -613,47 +468,33 @@ export type Database = {
       }
       ratings: {
         Row: {
-          comment_id: number | null
           created_on: string | null
           preset_id: number
-          profile_id: number
+          profile_id: number | null
           rating: number
+          rating_id: number
         }
         Insert: {
-          comment_id?: number | null
           created_on?: string | null
           preset_id: number
-          profile_id: number
+          profile_id?: number | null
           rating: number
+          rating_id?: number
         }
         Update: {
-          comment_id?: number | null
           created_on?: string | null
           preset_id?: number
-          profile_id?: number
+          profile_id?: number | null
           rating?: number
+          rating_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "public_ratings_comment_id_fkey"
-            columns: ["comment_id"]
+            foreignKeyName: "public_ratings_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["comment_id"]
-          },
-          {
-            foreignKeyName: "public_ratings_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
-            referencedColumns: ["comment_id"]
-          },
-          {
-            foreignKeyName: "ratings_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["preset_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "ratings_preset_id_fkey"
@@ -661,136 +502,12 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "presets"
             referencedColumns: ["preset_id"]
-          },
-          {
-            foreignKeyName: "ratings_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "ratings_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "ratings_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
-            referencedColumns: ["profile_id"]
           },
         ]
       }
     }
     Views: {
-      fetch_notifications: {
-        Row: {
-          avatar: string | null
-          comment_created_on: string | null
-          comment_id: number | null
-          comment_text: string | null
-          created_at: string | null
-          download_id: number | null
-          downloads: number | null
-          hardware: Database["public"]["Enums"]["hardware_type"] | null
-          like_id: number | null
-          likes: number | null
-          name: string | null
-          notification_id: number | null
-          photo_url: string | null
-          preset_created_on: string | null
-          preset_id: number | null
-          preset_name: string | null
-          profile_id: number | null
-          retriver_id: number | null
-          unread: boolean | null
-          username: string | null
-          youtube_id: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_retriver_id_fkey"
-            columns: ["retriver_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "notifications_retriver_id_fkey"
-            columns: ["retriver_id"]
-            isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "notifications_retriver_id_fkey"
-            columns: ["retriver_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
-            referencedColumns: ["profile_id"]
-          },
-          {
-            foreignKeyName: "public_notifications_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["comment_id"]
-          },
-          {
-            foreignKeyName: "public_notifications_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "top_comments"
-            referencedColumns: ["comment_id"]
-          },
-          {
-            foreignKeyName: "public_notifications_download_id_fkey"
-            columns: ["download_id"]
-            isOneToOne: false
-            referencedRelation: "downloads"
-            referencedColumns: ["download_id"]
-          },
-          {
-            foreignKeyName: "public_notifications_like_id_fkey"
-            columns: ["like_id"]
-            isOneToOne: false
-            referencedRelation: "likes"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      top_comments: {
-        Row: {
-          avatar: string | null
-          comment_id: number | null
-          likes: number | null
-          name: string | null
-          preset_id: number | null
-          profile_id: number | null
-          text: string | null
-          username: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_comments_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "presets"
-            referencedColumns: ["preset_id"]
-          },
-          {
-            foreignKeyName: "public_comments_preset_id_fkey"
-            columns: ["preset_id"]
-            isOneToOne: false
-            referencedRelation: "fetch_notifications"
-            referencedColumns: ["preset_id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
       [_ in never]: never
