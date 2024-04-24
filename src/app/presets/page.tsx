@@ -1,7 +1,6 @@
 import PresetCardList from "@/components/lists/presets";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Tables } from "../../../types/supabase";
-import { PresetCarousel } from "@/components/ui/carousels/presetCarousel";
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 
 

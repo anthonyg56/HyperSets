@@ -12,7 +12,6 @@ import { H1, H2, Lead, } from "@/components/ui/typography";
 
 /* Public Assets */
 import HeroImage from '../../public/alloys-origin-hero.png';
-import { PresetCarousel } from "@/components/ui/carousels/presetCarousel";
 
 /* Types */
 import { PresetCard, PresetCardQueryResults } from "@/components/ui/cards/presets/preset";

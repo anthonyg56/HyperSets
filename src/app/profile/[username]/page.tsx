@@ -12,7 +12,7 @@ import BackgroundImage from "@/components/misc/backgroundImage";
 import ToolTip from "@/components/reusables/toolTip";
 import Link from "next/link";
 import { Tables } from "../../../../types/supabase";
-import { PresetCardQueryResults } from "@/app/presets/page";
+import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 
 type Props = {
   params: {
@@ -46,7 +46,7 @@ export default async function Page({ params: { username } }: Props) {
     )
   }
   
-  const { data: presetsData } = await supabase.from('presets').select('*,profile:profile_id(username)').eq('profile_id', profile.profile_id).order('views', { ascending: false }).returns<PresetCardQueryResults[]>() 
+  const { data: presetsData } = await supabase.from('presets').select('*,profile:profile_id(username, avatar, name, profile_id)').eq('profile_id', profile.profile_id).order('views', { ascending: false }).returns<PresetCardQueryResults[]>() 
   const presets = presetsData || []
   
   return (

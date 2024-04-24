@@ -3,8 +3,7 @@ import { Enums } from "../../../types/supabase";
 import { H2, H4 } from "@/components/ui/typography";
 import { Button } from "@/components/ui/buttons/button";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
-import { PresetCardQueryResults } from "../presets/page";
-import { PresetCarousel } from "@/components/ui/carousels/presetCarousel";
+import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 
 type Props = {
   searchParams?: {
@@ -17,10 +16,10 @@ export default async function SearchPage({ searchParams }: Props) {
 
   let presetQuery = supabase
     .from('presets')
-    .select('*,profile:profile_id(username)')
+    .select('*,profile:profile_id(profile_id, username, avatar, name))')
     .order('created_on', { ascending: false })
   let profileQuery = supabase
-    .from('profilex')
+    .from('profiles')
     .select('*, presets(count)')
     .order('created_on', { ascending: false })
 
@@ -73,7 +72,6 @@ export default async function SearchPage({ searchParams }: Props) {
             <H4 classNames="ml-auto my-auto flex flex-row gap-x-1 border-b-[1px] border-muted hover:cursor-pointer">View More <ArrowRightIcon className="w-6 h-6"/></H4>
           </div>
           
-          <PresetCarousel multiple />
         </div>
       ))}
       {query !== null && profiles.length > 0 && profiles.map((profile) => (

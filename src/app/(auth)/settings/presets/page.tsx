@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { H3, Muted } from "@/components/ui/typography";
 import { Separator } from "@/components/ui/separator";
 import PresetCardList from "@/components/lists/presets";
-import { PresetCardQueryResults } from "@/app/presets/page";
+import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 
 export default async function Page() {
   const supabase = await createSupabaseServerClient()
