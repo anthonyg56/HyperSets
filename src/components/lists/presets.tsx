@@ -58,7 +58,7 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
 
   // Dynamically build the query based on where we are at in the app or what we are doing
   function buildQuery() {
-    console.log(games.length)
+    
     const selectClause = `*, profile:profile_id(*)${games.length > 0 || effects.length > 0 ? ',' : ''} ${games.length > 0 ? 'preset_games!inner(*)' : ''}${games.length > 0 && effects.length > 0 ? ',' : ''} ${effects.length > 0 ? 'effects!inner("name")' : ''}`
 
     // When building the query, we can either pass in a select clause or use the default select clause

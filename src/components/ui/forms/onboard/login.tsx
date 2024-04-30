@@ -55,9 +55,9 @@ export default function LoginForm() {
           setUnconfirmedEmail(values.email)
         }
 
-        throw new Error(baseURL.startsWith('http://localhost:3000/') === false ? "Please try again later." : error.message)
+        throw new Error(baseURL.startsWith('http://localhost:3000/') === false ? "Invalid username and password used." : error.message)
       } else if (!user) {
-        throw new Error(baseURL.startsWith('http://localhost:3000/') === false ? "Please try again later." : "User not found")
+        throw new Error(baseURL.startsWith('http://localhost:3000/') === false ? "Invalid username and password used." : "User not found")
       } else if (user.confirmed_at === null) {
         setUnconfirmedEmail(values.email)
         await supabase.auth.signOut()

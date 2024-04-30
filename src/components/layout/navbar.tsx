@@ -8,7 +8,6 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /* Types */
 import { Tables } from "../../../types/supabase";
-import MobileSearch from "../ui/dialogs/search";
 import MobleNav from "../ui/drawers/mobileNav";
 import DesktopNavMenu from "../ui/navigation-menu/desktopNavMenu";
 import ProfileController from "./profile-controller";

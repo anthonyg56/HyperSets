@@ -66,7 +66,7 @@ export default function PresetPreviewDialog({ presetId: preset_id, open, setOpen
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-[1000px] max-h-screen overflow-y-auto">
+      <DialogContent className="max-w-[1000px] max-h-[90svh] overflow-y-auto">
         {loading ? (
           <div className="w-full text-center py-10">
             <DialogTitle>Loading...</DialogTitle>

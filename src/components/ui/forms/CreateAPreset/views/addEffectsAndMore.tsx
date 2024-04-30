@@ -30,7 +30,8 @@ export default function AddEffectsAndMore({ form, currentFormView }: Props) {
   const data = effectsAndMoreData.filter((item) => item.hardware === hardwareType)[0]
 
   function buildTitle() {
-    const { hardware } = effectsAndMoreData.filter((item) => form.getValues('hardware') as Required<CreateAPresetSchema>['hardware'])[0]
+    const hardware = form.getValues('hardware')
+
     switch (currentEffectCard) {
       case 'Effects':
         return "Add The Effects"
@@ -57,7 +58,7 @@ export default function AddEffectsAndMore({ form, currentFormView }: Props) {
       // case 'Game Mode':
       //   return "Game Mode"
       default:
-        return `${capitalizeFirstLetter(hardware)}'s Specialized Details (Optional)`
+        return `${hardware !== null || hardware !== undefined ? capitalizeFirstLetter(hardware) : null} Specialized Details (Optional)`
     }
   }
 

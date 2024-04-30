@@ -66,7 +66,7 @@ export default function CommentSheet({ preset_id, profile_id, data, serverError 
         .limit(1, { referencedTable: 'profile.ratings' })
         .returns<CommentsQueryResults[] | null>()
 
-      console.log(data)
+      
     if (error) {
       
       toast({

@@ -13,8 +13,8 @@ type UserProfileHoverCardProps = {
 }
 
 export default function ProfileHoverCard({ profile_id, username, classNames }: UserProfileHoverCardProps) {
-  console.log('profile_id', profile_id)
-  console.log('username', username)
+  
+  
   if (!profile_id && !username) {
     return <Small classNames='line-through'>Deleted User</Small>
   }

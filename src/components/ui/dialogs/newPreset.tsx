@@ -20,8 +20,9 @@ import { Small } from "../typography"
 import { useToast } from "../use-toast"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./dialog"
 import { Form } from "../form"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 
-export default function NewPresetDialog({ preset_id, isOpen, setIsOpen }: Props) {
+export default function  NewPresetDialog({ preset_id, isOpen, setIsOpen }: Props) {
   const [currentFormView, setFormView] = useState<FormView>(FormView.AddHardware)
   const [formViewStatus, setFormViewStatus] = useState<boolean>(false) // Track if the next view is valid, if not disable the next button
 
@@ -38,7 +39,7 @@ export default function NewPresetDialog({ preset_id, isOpen, setIsOpen }: Props)
     defaultValues: {
       name: "",
       description: undefined,
-      hardware: "Keyboard",
+      hardware: undefined,
       youtubeId: undefined,
       photoUrl: undefined,
       downloadUrl: "",
@@ -448,11 +449,13 @@ function NewPresetDialogFooter({ currentFormView, updateView, loading, formViewS
 
   return (
     <div className="w-full flex flex-row gap-x-3">
-      <Button variant="secondary" className="w-full" type="button" onClick={(e) => handleNewView("Previous", e)}>
+      <Button variant="secondary" className="w-full gap-x-1 flex items-center" type="button" onClick={(e) => handleNewView("Previous", e)}>
+        <ArrowLeft className="w-5 h-5" />
         {prevText}
       </Button>
-      <Button className="w-full" type={btnType} disabled={btnDisabled} onClick={(e) => handleNewView("Next", e)}>
+      <Button className="w-full gap-x-1 flex items-center" type={btnType} disabled={btnDisabled} onClick={(e) => handleNewView("Next", e)}>
         {nextText}
+        <ArrowRight className="w-5 h-5" />
       </Button>
     </div>
   )

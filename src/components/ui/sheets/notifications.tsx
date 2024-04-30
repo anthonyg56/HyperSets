@@ -25,6 +25,7 @@ import NotificationsTabs from "../tabs/notifications/notifications";
 import { NotificationsQueryResults } from "@/components/layout/profile-controller";
 import { Button } from "../buttons/button";
 import { Tables } from "../../../../types/supabase";
+import ToolTip from "@/components/reusables/toolTip";
 
 export default function NotificationSheet({ profile_id, serverNotifications }: Props) {
   const [notifications, setnotifications] = useState<NotificationsQueryResults[]>(serverNotifications || []);
@@ -40,7 +41,7 @@ export default function NotificationSheet({ profile_id, serverNotifications }: P
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'notifications' },
         async (payload) => {
-          console.log(payload)
+          
 
           if (payload.new.retriver_id === profile_id) {
 
@@ -71,7 +72,7 @@ export default function NotificationSheet({ profile_id, serverNotifications }: P
 
       setLoading(true)
 
-      console.log(notification_id)
+      
       /* Build the query base on whether we are fetching a single notification or all notifications */
       let query = supabase
         .from("notifications")
@@ -129,16 +130,16 @@ export default function NotificationSheet({ profile_id, serverNotifications }: P
 
   if (!profile_id) return null;
 
-  console.log(notifications)
+  
   const unreadNotifications = notifications.filter(notification => notification.unread);
 
   return (
     <Sheet>
       <SheetTrigger className="relative px-2" asChild>
-        <Button size="icon" variant="ghost">
+        <ToolTip text="Notifications" size="icon" variant="ghost">
           <BellIcon className="h-[1.4rem] w-[1.4rem]" />
           {unreadNotifications.length > 0 && <DotFilledIcon className="absolute top-[1px] right-[4px] w-[1.2rem] h-[1.2rem] text-primary" />}
-        </Button>
+        </ToolTip>
       </SheetTrigger>
         <SheetContent className={cn([
           "flex flex-col gap-0 right-5 md:right-3 top-3 h-[calc(100%_-_24px)] rounded-md w-[90%] md:w-full !max-w-md",

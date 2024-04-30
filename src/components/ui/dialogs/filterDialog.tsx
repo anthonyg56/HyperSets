@@ -90,7 +90,7 @@ export default function FilterPresetsDialog({ currentGames, currentHardware, upd
         }}>
           <MixerVerticalIcon className="w-6 h-6" />
         </ToolTip>
-        <DialogContent>
+        <DialogContent className="max-h-[90svh] overflow-y-scroll">
           <H3 classNames="border-b-0">Filter Options</H3>
           <div className="space-y-3">
             <div className="space-y-2">

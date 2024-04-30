@@ -173,6 +173,10 @@ export const effectsAndMoreData = [
         name: "Effects" as const,
         type: "Select",
       },
+      {
+        name: "Game Compadiability" as const,
+        type: "Select",
+      },
     ]
   },
   {
@@ -229,6 +233,10 @@ export const effectsAndMoreData = [
       // },
       {
         name: "Effects" as const,
+        type: "Select",
+      },
+      {
+        name: "Game Compadiability" as const,
         type: "Select",
       },
     ]

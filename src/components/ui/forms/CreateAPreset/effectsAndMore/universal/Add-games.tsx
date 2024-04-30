@@ -113,7 +113,7 @@ function NewPresetGamesDispay({ selectedGames, popGameFromForm }: { selectedGame
 }
 
 export function FilterPreetGamesDisplay({ selectedGames, popGameFromForm }: { selectedGames: SelectorItem[], popGameFromForm: (game: string) => void }) {
-  console.log(selectedGames)
+  
   return selectedGames.map((item) => (
     <>
       <div key={`${item.key} - ${item.value}`} className="text-sm relative w-full flex flex-row items-center gap-x-1">

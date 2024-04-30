@@ -48,6 +48,7 @@ export default function RegisterForm() {
       avatar: undefined,
       banner: undefined,
     },
+    
   })
 
   async function onSubmit(values: SignupSchema) {
@@ -147,7 +148,7 @@ export default function RegisterForm() {
           <MailIcon width={20} height={20} className="mr-2" />Signup with Email
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[400px]">
+      <DialogContent className="w-[400px] max-h-[90svh] overflow-y-auto" onInteractOutside={e => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className="text-center font-">HyperSets</DialogTitle>
           <DialogDescription className="text-center">
@@ -165,7 +166,7 @@ export default function RegisterForm() {
               <Button className={cn(["w-full", { 'hidden': step === FormSteps.Security}])} disabled={loading === true} onClick={e => {
                 e.preventDefault()
                 setStep(step - 1)
-              }} variant='secondary'>Pevious</Button>
+              }} variant='secondary'>Previous</Button>
               <Button type={step === FormSteps.Profile ? "submit" : "button"} className="w-full" disabled={loading === true} onClick={e => {
                 e.preventDefault()
                 if (step === FormSteps.Profile) {

@@ -181,7 +181,7 @@ export default async function PresetDetailsPage({ params: { presetId }}: Props) 
   )
 }
 
-function calculateAverage(array: number[]) {
+export function calculateAverage(array: number[]) {
   const sum = array.reduce(function(a, b) {
     return a + b;
   }, 0);

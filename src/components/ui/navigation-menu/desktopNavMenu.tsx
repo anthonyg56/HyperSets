@@ -2,8 +2,7 @@
 import { usePathname, useSearchParams } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import { ListItem, NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./navigation-menu";
-import Avatar from "@/components/reusables/avatar";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "./navigation-menu";
 import { NavbarProfileQueryResults } from "@/components/layout/navbar";
 import { useEffect } from "react";
 import { useToast } from "../use-toast";
@@ -16,7 +15,7 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   const dynamicProfileHref = profile ? `/settings/profile` : `/login`
   const dynamicIsActive = isActiveDynamic()
-  const dynamicText = profile ? "Setttings" : "Sign In"
+  const dynamicText = profile ? "Settings" : "Sign In"
 
   // Show a toast depending on the query params
   useEffect(() => {

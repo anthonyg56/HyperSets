@@ -186,7 +186,7 @@ export default function Page() {
     // searchParams.delete('avatar')
     // searchParams.delete('banner')
 
-    console.log(response.profile)
+    
     
     resetForm(response.profile)
     setSubmitted(true)
@@ -396,14 +396,14 @@ export default function Page() {
             <Muted>Update your personal info here</Muted>
           </div>
           <div className="flex flex-row ml-auto gap-x-4">
-            {mode === 'view' && <Button variant="secondary" type="button" onClick={e => setMode('edit')}>edit</Button>}
-            {mode === 'edit' && <Button variant="secondary" type="submit" disabled={form.formState.isSubmitting === true}>Save Changes</Button>}
             {mode === 'edit' && <AreYouSure onConfirm={e => {
                 tmpAvatar && deleteImage('avatar')
                 tmpBanner && deleteImage('banner')
                 setMode('view')
               }}/>
             }
+            {mode === 'view' && <Button variant="secondary" type="button" onClick={e => setMode('edit')}>edit</Button>}
+            {mode === 'edit' && <Button variant="secondary" type="submit" disabled={form.formState.isSubmitting === true}>Save Changes</Button>}
           </div>
         </div>
 

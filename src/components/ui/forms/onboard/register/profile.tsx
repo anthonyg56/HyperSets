@@ -85,12 +85,14 @@ export default function ProfileInfo({ form }: Props) {
         <FormField
           control={form.control}
           name="name"
-          render={({ field }) => {
+          render={({ field, fieldState }) => {
+            const isValid = field.value !== undefined && field.value.length > 2
+
             return (
               <FormItem>
-                <FormLabel>Name<span className="text-primary">*</span></FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} ringPrimary />
+                  <Input placeholder="John Doe" {...field} ringSuccess={isValid}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -105,9 +107,9 @@ export default function ProfileInfo({ form }: Props) {
 
             return (
               <FormItem>
-                <FormLabel>Username<span className="text-primary">*</span></FormLabel>
+                <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="RGBFanatic369" {...field} ringPrimary ringSuccess={isValid} />
+                  <Input placeholder="RGBFanatic369" {...field} ringSuccess={isValid} />
                 </FormControl>
                   {isValid && (
                     <FormMessage className="!text-success">
@@ -125,9 +127,9 @@ export default function ProfileInfo({ form }: Props) {
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Bio</FormLabel>
+                <FormLabel>Bio (optional)</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Talk about your self" {...field} ringPrimary />
+                  <Textarea placeholder="Talk about yourself" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

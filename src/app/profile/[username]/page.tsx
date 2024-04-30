@@ -13,6 +13,7 @@ import ToolTip from "@/components/reusables/toolTip";
 import Link from "next/link";
 import { Tables } from "../../../../types/supabase";
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
+import { calculateAverage } from "@/app/presets/[presetId]/page";
 
 type Props = {
   params: {
@@ -46,8 +47,38 @@ export default async function Page({ params: { username } }: Props) {
     )
   }
   
-  const { data: presetsData } = await supabase.from('presets').select('*,profile:profile_id(username, avatar, name, profile_id)').eq('profile_id', profile.profile_id).order('views', { ascending: false }).returns<PresetCardQueryResults[]>() 
-  const presets = presetsData || []
+  const [ratings, presets] = await Promise.all([
+    supabase
+      .from('presets')
+      .select('ratings(rating)')
+      .eq('profile_id', profile.profile_id)
+      .then(({ data }) => {
+        // Find the average for each preset and save it in an array
+        let presetAverages: number[] = [];
+        
+        data ? data.forEach(({ ratings: presetRatings }) => {
+          let transformedArray = presetRatings.map(item => item.rating)
+          const avg = calculateAverage(transformedArray)
+
+          if (avg === 0)
+            return
+          else
+            return presetAverages.push(avg)
+        }) : [0]
+
+        const totalAverage = calculateAverage(presetAverages)
+
+        return totalAverage
+      }),
+    supabase
+      .from('presets')
+      .select('*,profile:profile_id(username, avatar, name, profile_id)')
+      .eq('profile_id', profile.profile_id)
+      .order('views', { ascending: false })
+      .returns<PresetCardQueryResults[]>()
+      .then(({ data }) => data ?? [])
+  ])
+  
   
   return (
     <BackgroundImage img={profile.banner} alt={`${profile.username}'s profile banner`} gradient>
@@ -86,7 +117,7 @@ export default async function Page({ params: { username } }: Props) {
               <div className="">
                 {/* Average Rating */}
                 <P>Average Rating</P>
-                <H2>4.5</H2>
+                <H2>{ratings}</H2>
               </div>
               <div className="">
                 {/* # of Presets Made */}

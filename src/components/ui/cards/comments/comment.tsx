@@ -83,6 +83,9 @@ export default function CommentCard({ comment, notification, profile_id, refresh
     }
   }
 
+  console.log(`Profile rating is null: ${comment.profile.ratings !== null}\nProfile Rating is undefined: ${comment.profile.ratings !== undefined}`)
+  
+  console.table(comment?.profile.ratings)
   return (
     <div className="flex flex-col px-5 py-6">
       <div className="flex flex-row items-center gap-x-2">
