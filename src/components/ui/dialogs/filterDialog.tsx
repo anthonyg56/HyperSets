@@ -84,13 +84,13 @@ export default function FilterPresetsDialog({ currentGames, currentHardware, upd
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <ToolTip variant="outline" size="default" classNames="flex flex-row gap-x-1 items-center" onClick={e => {
+        <Button variant="outline" size="default" className="flex flex-row gap-x-1 items-center ml-2" onClick={e => {
           // e.preventDefault()
           setOpen(true)
         }}>
-          <Small classNames="text-md">More Filters</Small>
-          <MixerVerticalIcon className="w-6 h-6" />
-        </ToolTip>
+          <Small classNames="text-sm">More Filters</Small>
+          <MixerVerticalIcon className="w-5 h-5" />
+        </Button>
         <DialogContent className="max-h-[90svh] overflow-y-scroll">
           <H3 classNames="border-b-0">Filter Options</H3>
           <div className="space-y-3">

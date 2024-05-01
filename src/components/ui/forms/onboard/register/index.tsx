@@ -7,14 +7,11 @@ import { baseURL } from "@/lib/constants"
 import { SignupSchema, signupSchemna } from "@/lib/schemas"
 import { createSupabaseClient } from "@/lib/supabase/client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { EnvelopeClosedIcon } from "@radix-ui/react-icons"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { set, z } from "zod"
 import SecurityInfo from "./security-info"
 import ProfileInfo from "./profile"
-import ImagesInfo from "../../CreateAPreset/views/uploadImage/dropzone"
 import { Form } from "@/components/ui/form"
 import { cn } from "@/lib/utils"
 import { Small } from "@/components/ui/typography"
@@ -145,15 +142,14 @@ export default function RegisterForm() {
     <Dialog defaultOpen={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         <Button>
-          <MailIcon width={20} height={20} className="mr-2" />Signup with Email
+          <MailIcon width={20} height={20} className="mr-2" />
+          Signup with Email
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[400px] max-h-[90svh] overflow-y-auto" onInteractOutside={e => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className="text-center font-">HyperSets</DialogTitle>
-          <DialogDescription className="text-center">
-            Join Today
-          </DialogDescription>
+          <DialogDescription className="text-center">Join Today</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
