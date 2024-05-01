@@ -115,7 +115,7 @@ export default async function PresetDetailsPage({ params: { presetId }}: Props) 
       ])}>
         <div className="col-span-6 justify-center flex flex-col space-y-3">
           <div className="w-full text-center md:text-start">
-            <H1 classNames="font-bold text-zinc-900 dark:text-white">{preset?.name}</H1>
+            <H1 classNames="font-bold text-white">{preset?.name}</H1>
             <Small classNames="text-muted-foreground">
               Created by <UserHoverCard profile_id={profile?.profile_id} username={profile?.username} />
             </Small>
@@ -141,35 +141,35 @@ export default async function PresetDetailsPage({ params: { presetId }}: Props) 
         <div className="col-span-6 md:my-auto">
           <div className="grid grid-cols-2 self-start pb-10">
             <div className="flex flex-col items-center">
-              <P classNames="!mt-0 text-zinc-900 dark:text-white">Downloads</P>
-              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{preset.downloads}</H2>
+              <P classNames="!mt-0 text-white">Downloads</P>
+              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-white">{preset.downloads}</H2>
             </div>
             <div className="flex flex-col items-center">
-              <P classNames="!mt-0 text-zinc-900 dark:text-white">Views</P>
-              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{preset.views}</H2>
+              <P classNames="!mt-0 text-white">Views</P>
+              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-white">{preset.views}</H2>
             </div>
           </div>
 
           <div className="grid grid-cols-2 self-start pb-10">
             <div className="flex flex-col items-center">
-              <P classNames="!mt-0 text-zinc-900 dark:text-white">Ratings</P>
-              <H2 classNames="flex flex-col md:flex-row text-center items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{averageRatings} out of 5<StarFilledIcon className="w-8 h-8 text-primary" /></H2>
+              <P classNames="!mt-0 text-white">Ratings</P>
+              <H2 classNames="flex flex-col md:flex-row text-center items-center justify-center gap-x-2 pb-0 text-white">{averageRatings} out of 5<StarFilledIcon className="w-8 h-8 text-primary" /></H2>
             </div>
             <div className="flex flex-col items-center">
-              <P classNames="text-zinc-900 dark:text-white">Hardware </P>
-              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-zinc-900 dark:text-white">{preset.hardware}</H2>
+              <P classNames="text-white">Hardware </P>
+              <H2 classNames="flex flex-row items-center justify-center gap-x-2 pb-0 text-white">{preset.hardware}</H2>
             </div>
           </div>
 
           <div className="grid grid-cols-2 self-start pb-10">
             {effectsText.length > 0 && (
               <div className="flex flex-col items-center">
-                <P classNames="!mt-0 text-zinc-900 dark:text-white">Effects</P>
-                <H2 classNames="text-zinc-900 dark:text-white">{effectsError ? 'There was an error fetching effects' : effectsText}</H2>
+                <P classNames="!mt-0 text-white">Effects</P>
+                <H2 classNames="text-white">{effectsError ? 'There was an error fetching effects' : effectsText}</H2>
               </div>
             )}
             {gamesText.length > 0 && (
-              <div>
+              <div className="flex flex-col items-center">
                 <P>Games</P>
                 <H2>{gamesError ? 'There was an error fetching games' : gamesText}</H2>
               </div>

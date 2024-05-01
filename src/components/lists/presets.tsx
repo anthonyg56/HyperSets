@@ -58,7 +58,7 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
 
   // Dynamically build the query based on where we are at in the app or what we are doing
   function buildQuery() {
-    
+    // Depending on the filters selected, the select clause will be built based on it
     const selectClause = `*, profile:profile_id(*)${games.length > 0 || effects.length > 0 ? ',' : ''} ${games.length > 0 ? 'preset_games!inner(*)' : ''}${games.length > 0 && effects.length > 0 ? ',' : ''} ${effects.length > 0 ? 'effects!inner("name")' : ''}`
 
     // When building the query, we can either pass in a select clause or use the default select clause
@@ -110,6 +110,10 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
     }])}>
       <div className="flex flex-row w-full items-center relative pb-4 md:pb-1 gap-x-[2px]">
         <H2 classNames="border-b-0">All Presets</H2>
+      </div>
+      <div className="hidden md:flex md:flex-row items-center pt-1">
+        <HardwareToggleGroup currentHardware={hardwares} updateHardware={setHardwares} />
+        <SortPresetsDropdownMenu sort={sort} setSort={setSort} />
         <FilterPresetsDialog
           sort={sort}
           currentGames={games}
@@ -120,10 +124,6 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
           updateHardware={setHardwares}
           setSort={setSort}
         />
-      </div>
-      <div className="hidden md:flex md:flex-row items-center pt-1">
-        <HardwareToggleGroup currentHardware={hardwares} updateHardware={setHardwares} />
-        <SortPresetsDropdownMenu sort={sort} setSort={setSort} />
       </div>
       <PresetsCardMap presets={presets} loading={loading} />
     </div>

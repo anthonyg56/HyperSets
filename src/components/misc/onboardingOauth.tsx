@@ -8,13 +8,14 @@ import { baseURL } from "@/lib/constants";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useToast } from "../ui/use-toast";
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function OnboardingOauth() {
   const supabase = createSupabaseClient()
 
+  const router = useRouter();
   const searchParams = useSearchParams()
-
+  
   const error = searchParams.get('error')
 
   const { toast, dismiss } = useToast()
@@ -46,6 +47,8 @@ export default function OnboardingOauth() {
         description: "There was an error, please try to resend again",
       })
     })
+
+    router.refresh()
   }
 
   return (

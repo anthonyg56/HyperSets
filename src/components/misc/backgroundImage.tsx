@@ -32,8 +32,8 @@ export default function BackgroundImage({ img, children, gradient, overlay }: Pr
         ])}
       />
       <div className={cn(["w-full h-full", {
-        'bg-gradient-to-b md:bg-gradient-to-l from-transparent from-0% to-background to-40% md:to-70% text-white': overlay,
-        'bg-gradient-to-b from-transparent from-0% to-background to-[18%] md:to-50%': gradient,
+        'bg-gradient-to-b md:bg-gradient-to-l from-transparent from-0% to-[#0a0a0a] to-40% md:to-70% text-white': overlay,
+        'bg-gradient-to-b from-transparent from-0% to-[#0a0a0a] to-[18%] md:to-50%': gradient,
       } ])}>
         {children}
       </div>

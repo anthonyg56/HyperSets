@@ -9,7 +9,7 @@ import { Button } from "../buttons/button"
 import { DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "../drawers/drawer"
 import { SortPresetsDropdownMenu } from "../dropdown/sortPresets"
 import HardwareToggleGroup from "../toggleGroups/hardware-toggle-group"
-import { H3, H4 } from "../typography"
+import { H3, H4, Small } from "../typography"
 import { Dialog, DialogContent, DialogFooter } from "./dialog"
 import ToolTip from "@/components/reusables/toolTip"
 import { Drawer } from "../drawers/drawer"
@@ -84,10 +84,11 @@ export default function FilterPresetsDialog({ currentGames, currentHardware, upd
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <ToolTip text="Filter Options" variant="ghost" size="icon" onClick={e => {
+        <ToolTip variant="outline" size="default" classNames="flex flex-row gap-x-1 items-center" onClick={e => {
           // e.preventDefault()
           setOpen(true)
         }}>
+          <Small classNames="text-md">More Filters</Small>
           <MixerVerticalIcon className="w-6 h-6" />
         </ToolTip>
         <DialogContent className="max-h-[90svh] overflow-y-scroll">

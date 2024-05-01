@@ -71,7 +71,7 @@ export default function LoginForm() {
         toast({
           title: "Success, you're logged in! Welcome back!",
         })
-        router.push(`/`)
+        router.refresh()
       }
     } catch (error: any) {
       if (error.message === "Email address not verified. Press button to send new email" || error.message === "Email not confirmed") {
