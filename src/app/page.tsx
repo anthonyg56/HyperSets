@@ -29,7 +29,7 @@ export default async function Home() {
     .returns<PresetCardQueryResults[]>()
 
   const presetCardsMap = presets?.map((preset, index) => {
-    return <PresetCard key={`${preset.name}-${index}`} preset={preset} featured />
+    return <PresetCard key={`${preset.name}-${index}`} preset={preset} />
   })
 
   return (

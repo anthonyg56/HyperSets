@@ -36,7 +36,7 @@
   }
 
   .dark {
-    --background: rgb(38, 38, 38);
+    --background: rgb(24 24 27);
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;

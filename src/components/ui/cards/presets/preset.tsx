@@ -24,6 +24,7 @@ import { BackgroundGradient } from "../../background-gradient";
 export function PresetCard({ classNames, preset, featured }: PresetCardProps) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isPresetFormOpen, setPresetFormOpen] = useState(false);
+  const [shouldAnimate, setShouldAnimate] = useState(false)
 
   const router = useRouter();
   const pathName = usePathname();
@@ -60,7 +61,7 @@ export function PresetCard({ classNames, preset, featured }: PresetCardProps) {
   return (
     <div className="col-span-4 group xl:col-span-3">
       {featured !== undefined && featured === true ? (
-        <BackgroundGradient animate>
+        <BackgroundGradient>
           <Card className={cn(["relative col-span-3 overflow-hidden group-hover:cursor-pointer bg-transparent w-full h-[200px] lg:h-[322px] z-10", classNames])} onClick={handleCardClick}>
             <div className="col-span-2 w-full h-full relative">
               <Image
