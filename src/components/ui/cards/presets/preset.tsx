@@ -19,8 +19,9 @@ import PresetPreviewDialog from "@/components/ui/dialogs/presetPeview";
 /* Types */
 import NewPresetDialog from "../../dialogs/newPreset";
 import { Tables } from "../../../../../types/supabase";
+import { BackgroundGradient } from "../../background-gradient";
 
-export function PresetCard({ classNames, preset }: PresetCardProps) {
+export function PresetCard({ classNames, preset, featured }: PresetCardProps) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isPresetFormOpen, setPresetFormOpen] = useState(false);
 
@@ -58,27 +59,53 @@ export function PresetCard({ classNames, preset }: PresetCardProps) {
 
   return (
     <div className="col-span-4 group xl:col-span-3">
-      <Card className={cn(["relative col-span-3 overflow-hidden group-hover:cursor-pointer bg-transparent w-full h-[200px] lg:h-[322px] z-10", classNames])} onClick={handleCardClick}>
-        <div className="col-span-2 w-full h-full relative">
-          <Image
-            src={imgSrc}
-            alt={`cover photo`}
-            fill
-            className="h-full w-full object-cover -z-10"
-          />
-          <div className="absolute left-4 top-4 flex flex-row gap-x-2 z-10">
-            <Small classNames="frosted flex flex-row gap-x-[2px] items-center">
-              {downloads}<DownloadIcon width={16} height={16} className="" />
-            </Small>
-            <div className="frosted flex flex-row gap-x-[2px] items-center" onClick={handlePreviewClick}>
-              <VideoIcon width={16} height={16} />
-              <Small>Preview</Small>
-            </div>
+      {featured !== undefined && featured === true ? (
+        <BackgroundGradient animate>
+          <Card className={cn(["relative col-span-3 overflow-hidden group-hover:cursor-pointer bg-transparent w-full h-[200px] lg:h-[322px] z-10", classNames])} onClick={handleCardClick}>
+            <div className="col-span-2 w-full h-full relative">
+              <Image
+                src={imgSrc}
+                alt={`cover photo`}
+                fill
+                className="h-full w-full object-cover -z-10"
+              />
+              <div className="absolute left-4 top-4 flex flex-row gap-x-2 z-10">
+                <Small classNames="frosted flex flex-row gap-x-[2px] items-center">
+                  {downloads}<DownloadIcon width={16} height={16} className="" />
+                </Small>
+                <div className="frosted flex flex-row gap-x-[2px] items-center" onClick={handlePreviewClick}>
+                  <VideoIcon width={16} height={16} />
+                  <Small>Preview</Small>
+                </div>
 
-            <Small classNames="frosted">{hardware}</Small>
+                <Small classNames="frosted">{hardware}</Small>
+              </div>
+            </div>
+          </Card>
+        </BackgroundGradient>
+      ) : (
+        <Card className={cn(["relative col-span-3 overflow-hidden group-hover:cursor-pointer bg-transparent w-full h-[200px] lg:h-[322px] z-10", classNames])} onClick={handleCardClick}>
+          <div className="col-span-2 w-full h-full relative">
+            <Image
+              src={imgSrc}
+              alt={`cover photo`}
+              fill
+              className="h-full w-full object-cover -z-10"
+            />
+            <div className="absolute left-4 top-4 flex flex-row gap-x-2 z-10">
+              <Small classNames="frosted flex flex-row gap-x-[2px] items-center">
+                {downloads}<DownloadIcon width={16} height={16} className="" />
+              </Small>
+              <div className="frosted flex flex-row gap-x-[2px] items-center" onClick={handlePreviewClick}>
+                <VideoIcon width={16} height={16} />
+                <Small>Preview</Small>
+              </div>
+
+              <Small classNames="frosted">{hardware}</Small>
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      )}
       <div className="pt-0 pb-3">
         <P classNames="font-medium translate-y-[6px]">{capitalizeFirstLetter(name)}</P>
         <Small classNames="transform text-xs text-muted-foreground translate-y-[-15px]">by @{profile?.username ?? 'deleteUser'}</Small>
@@ -90,8 +117,9 @@ export function PresetCard({ classNames, preset }: PresetCardProps) {
 }
 
 type PresetCardProps = {
-  preset: PresetCardQueryResults;
+  featured?: boolean;
   classNames?: string;
+  preset: PresetCardQueryResults;
 }
 
 export interface PresetCardQueryResults extends Tables<'presets'> {
