@@ -108,9 +108,6 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
     <div className={cn(["flex flex-col justify-center mb-[196px] w-full relative z-10", {
       "container max-w-screen-2xl": !pathname.startsWith("/settings"),
     }])}>
-      <div className="flex flex-row w-full items-center justify-center relative pb-4 md:pb-1 gap-x-[2px]">
-        <H2 classNames="border-b-0">All Presets</H2>
-      </div>
       <div className="hidden md:flex md:flex-row items-center pt-1">
         <HardwareToggleGroup currentHardware={hardwares} updateHardware={setHardwares} />
         <SortPresetsDropdownMenu sort={sort} setSort={setSort} />

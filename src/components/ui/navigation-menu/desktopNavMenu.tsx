@@ -44,7 +44,7 @@ export default function DesktopNavMenu({ profile }: Props) {
     }
   }
 
-  function isActive(path: '/' | '/about' | '/l') {
+  function isActive(path: '/' |'/l') {
     return path === pathname
   }
 
@@ -85,13 +85,6 @@ export default function DesktopNavMenu({ profile }: Props) {
             navigationMenuTriggerStyle(),
           ])}>
             Presets
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/about" active={isActive('/about')} className={cn([
-            navigationMenuTriggerStyle()
-          ])}>
-            About
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
