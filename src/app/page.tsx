@@ -53,9 +53,9 @@ export default async function Home() {
           /> */}
           <AuroraBackground>
             <div className="flex flex-col gap-[10px] pb-40 md:pb-0 text-center">
-              <H1 classNames="dark:text-white">HyperSets</H1>
-              <Lead>A community collection of HyperX NGenuity <span className="rainbowText">RGB</span> presets</Lead>
-              <Button className="self-start mx-auto dark:text-white" variant="outline">
+              <H1 classNames="dark:text-white !text-[80px]">HyperSets</H1>
+              <Lead classNames="text-2xl">A community collection of HyperX NGenuity <span className="rainbowText text-2xl">RGB</span> presets</Lead>
+              <Button className="mx-auto dark:text-white z-30" variant="outline">
                 <Link href="/presets">
                   Explore Our Presets
                 </Link>
