@@ -31,7 +31,7 @@ export default function NewPresetHeroButton({ session }: Props) {
 
   return (
     <>
-      <Button size="lg" variant="outline" onClick={handleClick}>
+      <Button size="lg" variant="default" onClick={handleClick}>
         Submit a new preset
       </Button>
       <NewPresetDialog isOpen={open} setIsOpen={setOpen} />
