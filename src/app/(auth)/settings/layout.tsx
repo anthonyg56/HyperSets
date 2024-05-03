@@ -79,7 +79,7 @@ export default async function DashboardLayout({ children, searchParams }: Props)
               </div>
             </div>
             <div className="flex justify-center md:justify-end items-center">
-              <Button variant="secondary" type="button"><Link href={`/profile/${profile_id}`}>View Profile</Link></Button>
+              <Button variant="secondary" type="button"><Link href={`/profile/${profile.username}`}>View Profile</Link></Button>
             </div>
           </div>
           <div className="-translate-y-[106px] md:-translate-y-0">

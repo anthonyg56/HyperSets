@@ -26,9 +26,9 @@ export default function PreviewMediaDialog({ youtube_id, photo_url }: Props) {
           {youtube_id ? (
             <iframe
               src={`${YOUTUBE_EMBED_URL}${youtube_id}`}
-              className="w-full h-full"
+              className="w-full h-[500px]"
               width="100%"
-              height="100%"
+              height="500"
               allowFullScreen
               frameBorder="0"
             />

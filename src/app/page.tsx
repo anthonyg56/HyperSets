@@ -41,7 +41,7 @@ export default async function Home() {
         " md:items-center ",
         "lg:overflow-visible"
         ])}> */}
-          {/* <Image
+      {/* <Image
             src={HeroImage}
             alt="Alloys orgiins hero"
             quality={100}
@@ -51,30 +51,30 @@ export default async function Home() {
               'lg:top-[-50px] lg:right-[-550px]'
             ])}
           /> */}
-          <AuroraBackground>
-            <div className="flex flex-col gap-[10px] pb-40 md:pb-0 text-center">
-              <H1 classNames="dark:text-white !text-[80px]">HyperSets</H1>
-              <Lead classNames="text-2xl">A community collection of HyperX NGenuity <span className="rainbowText text-2xl">RGB</span> presets</Lead>
-              <Button className="mx-auto dark:text-white z-30" variant="outline">
-                <Link href="/presets">
-                  Explore Our Presets
-                </Link>
-              </Button>
-            </div>
-          </AuroraBackground>
+      <AuroraBackground>
+        <div className="flex flex-col gap-[10px] pb-40 md:pb-0 text-center">
+          <H1 classNames="dark:text-white !text-[80px]">HyperSets</H1>
+          <Lead classNames="text-2xl">A community collection of HyperX NGenuity <span className="rainbowText text-2xl">RGB</span> presets</Lead>
+          <Button className="mx-auto dark:text-white z-30" variant="default">
+            <Link href="/presets">
+              Explore Our Presets
+            </Link>
+          </Button>
+        </div>
+      </AuroraBackground>
       {/* </div> */}
-      <div className="w-full ">
+      <div className="w-full">
         <div className="container max-w-screen-2xl w-full text-center space-y-4 py-12 relative">
           <H2 classNames="border-b-0">Featured Presets</H2>
           <div className={cn(["flex flex-col pt-8 md:flex-none md:grid md:grid-cols-12 gap-4"])}>
             {presetCardsMap}
           </div>
-          <Button variant='outline' >
+          <Button variant='default' >
             <Link href="/presets">View All</Link>
           </Button>
-        </div>        
+        </div>
       </div>
-      <div className="w-full">
+      <div className="w-full h-[100vh] grid justify-center">
         <div className="container max-w-screen-2xl w-full text-center space-y-4 py-12 relative">
           <div className="flex flex-col w-full items-center justify-center relative py-24 gap-x-[2px]">
             <Small classNames="pb-2">Features</Small>
@@ -84,9 +84,9 @@ export default async function Home() {
           <div>
             <Card className="bg-secondary">
               <CardContent className="grid grid-cols-12 pt-6">
-              <div className="col-span-6 grid justify-center items-center w-full">
-                  <div className="w-1/2 mx-auto">
-                    <H4 classNames="border-b-0">Discover new profiles.</H4>
+                <div className="col-span-6 grid justify-center items-center w-full">
+                  <div className="w-2/3 mx-auto">
+                    <H4 classNames="border-b-0">Centralize Collection of Custom Preset.</H4>
                     <Lead classNames="pb-2">No more searching through multiple websites and google pages to find the right preset for your needs. </Lead>
                   </div>
                 </div>
@@ -99,14 +99,13 @@ export default async function Home() {
           <div>
             <Card className="bg-secondary">
               <CardContent className="grid grid-cols-12 pt-6">
-
                 <div className="col-span-6">
 
                 </div>
                 <div className="col-span-6 grid justify-center items-center w-full">
-                  <div className="w-1/2 mx-auto">
-                    <H4 classNames="border-b-0">Flex your setup</H4>
-                    <Lead classNames="pb-2">We offer a centralized hub for you to store, explore, and illuminate your hardware with a spectrum of RGB profiles that are as unique as you are.</Lead>
+                  <div className="w-2/3 mx-auto">
+                    <H4 classNames="border-b-0">Personal Storage</H4>
+                    <Lead classNames="pb-2">Dont worry about losing your custom made presets anymore.</Lead>
                   </div>
                 </div>
               </CardContent>
@@ -116,26 +115,27 @@ export default async function Home() {
             <Card className="bg-secondary">
               <CardContent className="grid grid-cols-12 pt-6">
                 <div className="col-span-6 grid justify-center items-center w-full">
-                  <div className="w-1/2 mx-auto">
-                  <H4 classNames="border-b-0">Centralize Storage</H4>
-                  <Lead classNames="pb-2">Dont worry about losing your custom made presets anymore.</Lead>
+                  <div className="w-2/3 mx-auto">
+                    <H4 classNames="border-b-0">Get Paid to Share</H4>
+                    <Lead classNames="pb-2">More on this comming soon..</Lead>
                   </div>
-
                 </div>
                 <div className="col-span-6">
 
                 </div>
+
               </CardContent>
             </Card>
           </div>
+
         </div>
       </div>
-      <div className="w-full">
+      <div className="w-full h-[100vh] grid justify-center">
         <div className="container max-w-screen-2xl w-full text-center space-y-4 py-12 relative">
           <div className="flex flex-col w-full items-center justify-center relative py-24 gap-x-[2px]">
             <Small classNames="pb-2">Options</Small>
             <H2 classNames="border-b-0">More than just RGB</H2>
-            <Lead classNames="pb-2">Take advantage of the power of NGenuity by exploring out options outside of just RGB lights.</Lead>
+            <Lead classNames="pb-2">Take advantage of the power of NGenuity by exploring options outside of just RGB lights.</Lead>
           </div>
           <div className="grid grid-cols-12 gap-6">
             {presetConfigurationOptions.map((option, index) => {
@@ -150,6 +150,17 @@ export default async function Home() {
               )
             })}
           </div>
+        </div>
+      </div>
+      <div className="w-full h-[100vh] grid justify-center">
+        <div className="container max-w-screen-2xl w-full text-center space-y-4 flex flex-col justify-center">
+          <H2 classNames="border-b-0">Signup today</H2>    
+          <Lead classNames="pb-2 w-1/2 mx-auto">HyperSets is currently in its MVP phase, meaning this is just the beginning. Sign up today by (a date a week away from launch date) for free access to premium for a month.</Lead>
+          <Button className="mx-auto dark:text-white z-30" variant="default">
+            <Link href="/register">
+              Sign up
+            </Link>
+          </Button>
         </div>
       </div>
     </>
@@ -169,7 +180,7 @@ const presetConfigurationOptions = [
   },
   {
     title: "Extensive Game Library",
-    description: "With over 50+ games to choose, presets can be meticulously crafted to align with a games aesthetic, thus providing a more rich and immersive experience.",
+    description: "With over 50+ games to choose, presets can be meticulously crafted to align with a games aesthetic to provide a more rich and immersive experience.",
     icon: <GameLibrarySVG className="w-12 h-12" />
   },
   {
