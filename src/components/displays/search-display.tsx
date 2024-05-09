@@ -26,7 +26,7 @@ export default function SearchDisplay({ presets, profiles, loading }: Props) {
     <>
       <PresetsCommandGroupMap presetItems={presetItems} />
       <CommandGroup heading="Profiles">
-        <ProfilesMap profiles={profiles} />
+        <ProfilesCommandGroupMap profiles={profiles} />
       </CommandGroup>
     </>
   )
@@ -56,7 +56,7 @@ function PresetsCommandGroupMap({ presetItems }: { presetItems: {
   })
 }
 
-function ProfilesMap({ profiles }: { profiles: ProfileSearchQuery[] }) {
+function ProfilesCommandGroupMap({ profiles }: { profiles: ProfileSearchQuery[] }) {
   const router = useRouter()
   return profiles.map((profile) => (
     <CommandItem key={profile.profile_id} value={profile.username} className="gap-x-3 flex flex-row hover:cursor-pointer" onSelect={e => router.push(`/profile/${profile.username}`)}>

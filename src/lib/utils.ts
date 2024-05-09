@@ -38,6 +38,11 @@ export function extractYouTubeVideoId(url: string | undefined) {
   }
 }
 
+export function extractInitals(input: string | null): string {
+  if (!input) return '';
+  return input.split(' ').map(word => word[0]).join('');
+}
+
 export function checkFileType(file: File) { // Verifies that the file type is an image
   if (file?.name) {
     const fileType = file.name.split(".").pop();

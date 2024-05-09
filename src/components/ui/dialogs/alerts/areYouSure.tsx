@@ -13,7 +13,7 @@ type Props = {
   setOpen?: (open: boolean) => void;
 }
 
-export default function AreYouSure({ onConfirm, onCancel, open, setOpen, hidden, triggerText = "cancel", message = "This action cannot be undone, are you sure you want to continue?" }: Props) {
+export default function AreYouSure({ onConfirm, onCancel, open, setOpen, hidden, triggerText = "Cancel", message = "This action cannot be undone, are you sure you want to continue?" }: Props) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen} >
       <AlertDialogTrigger asChild className={cn([{

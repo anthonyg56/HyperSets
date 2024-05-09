@@ -111,7 +111,19 @@ export enum Effects {
   Solid = "Solid",
   Wave = "Wave",
   ScreenMirror = "Screen Mirror",
+}
 
+export enum ToastTitles {
+  Success = "Success! 🎉",
+  Error = "Error",
+  Warning = "Warning ⚠️",
+  Loading = "Loading..."
+  
+}
+
+export enum ToastDescriptions {
+  InvalidSubmission = "It looks like some fields were not filled out properly. Please correct them and try again.",
+  FailedSubmission = "An error occured, please try again later."
 }
 
 export const effectsVals = Object.values(Effects)

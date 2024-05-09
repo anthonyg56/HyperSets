@@ -17,20 +17,20 @@ import { notificationsFieldDataGroup } from "@/components/ui/forms/settings/fiel
 import { NotificationsFormField } from "@/components/ui/forms/settings/form-fields";
 import { SettingsContext } from "@/lib/context/settingsProvider";
 
-export default function Page() {
+export default function NotificationPrefrencesSection() {
   const [mode, setMode] = useState<'edit' | 'view'>('view')
 
   const supabase = createSupabaseClient()
   const { session } = useAuth() as { session: Session | null }
-  const { notificationPreferences } = useContext(SettingsContext)
+  const { notificationPref } = useContext(SettingsContext)
   const form = useForm<NotificationsFormSchema>({
     resolver: zodResolver(NotificationsFormSchema),
     defaultValues: {
-      push: notificationPreferences?.push_notifications,
-      email: notificationPreferences?.email_notifications,
-      comments: notificationPreferences?.comment_notifications,
-      likes: notificationPreferences?.like_notifications,
-      downloads: notificationPreferences?.like_notifications,
+      push: notificationPref?.push_notifications,
+      email: notificationPref?.email_notifications,
+      comments: notificationPref?.comment_notifications,
+      likes: notificationPref?.like_notifications,
+      downloads: notificationPref?.like_notifications,
       muted: [],
     },
   });

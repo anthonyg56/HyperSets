@@ -4,6 +4,7 @@ import ToolTip from "@/components/reusables/toolTip"
 import { ToggleGroup, ToggleGroupItem } from "./toggle-group"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
+import { effectsIcons } from "@/components/displays/effects-icon"
 
 export default function ToggleGroups({ data, value, onValueChange, tooltip }: Props) {
   /* Needed to create a state for the values to render and update */
@@ -19,9 +20,9 @@ export default function ToggleGroups({ data, value, onValueChange, tooltip }: Pr
     return data.map((item, index) => {
       return (
         <ToggleGroupItem value={item.name}>
-          <ToolTip text={item.name} variant="ghost" size="icon" type="button" classNames={cn([{ "flex flex-row gap-x-2": item.icon && item.text }])}>
+          <ToolTip text={item.name} variant="ghost" size="icon" type="button" classNames={cn([{ "flex flex-row gap-x-2": item.icon && item.name }])}>
             {item.icon}
-            {item.text}
+            {item.name}
           </ToolTip>
         </ToggleGroupItem>
       )
@@ -31,9 +32,9 @@ export default function ToggleGroups({ data, value, onValueChange, tooltip }: Pr
   function ToggleItemsWithoutTooltip() {
     return data.map((item, index) => {
       return (
-        <ToggleGroupItem value={item.name} className={cn(["flex flex-row items-center justify-center", { "flex flex-row gap-4": item.icon && item.text }])} type="button">
+        <ToggleGroupItem value={item.name} className={cn(["flex flex-row items-center justify-center", { "flex flex-row gap-4": item.icon && item.name }])} type="button">
           {item.icon}
-          {item.text}
+          {item.name}
         </ToggleGroupItem>
       )
     })
@@ -51,14 +52,8 @@ export default function ToggleGroups({ data, value, onValueChange, tooltip }: Pr
 }
 
 type Props = {
-  data: ToggleData,
+  data: typeof effectsIcons,
   tooltip?: boolean,
   value: string[] | undefined,
   onValueChange(value: string[]): void,
 }
-
-type ToggleData = {
-  name: string,
-  text?: string,
-  icon?: JSX.Element,
-}[]

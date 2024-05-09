@@ -160,7 +160,7 @@ export const profileFormSchema = z.object({
       required_error: "First name is required",
       invalid_type_error: "Please enter a valid string"
     })
-    .min(2, "First name must be at least 2 characters long")
+    .min(3, "First name must be at least 2 characters long")
     .max(50, "First name must be less than 50 characters long"),
   username: usernameSchema,
   // Make sure to validate username and email uniqueness

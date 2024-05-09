@@ -27,7 +27,7 @@ import { Button } from "../buttons/button";
 import { Tables } from "../../../../types/supabase";
 import ToolTip from "@/components/reusables/toolTip";
 
-export default function NotificationSheet({ profile_id, serverNotifications }: Props) {
+export default function NotificationSheet({ profile_id, serverNotifications, notificationPreferences }: Props) {
   const [notifications, setnotifications] = useState<NotificationsQueryResults[]>(serverNotifications || []);
 
   const [loading, setLoading] = useState(false);
@@ -156,6 +156,7 @@ export default function NotificationSheet({ profile_id, serverNotifications }: P
 type Props = {
   profile_id?: number;
   serverNotifications: NotificationsQueryResults[] | null;
+  notificationPreferences: Tables<'notifications_prefrences'> | null;
 }
 
 enum NotificationMessage {

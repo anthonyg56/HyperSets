@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
 import { baseURL } from "../constants"
 import { SignupSchema } from "../schemas"
+import { ToastDescriptions, ToastTitles } from "../data"
+import { capitalizeFirstLetter } from "../utils"
 
 export default function useAuth() {
   const [session, setSession] = useState<Session | null>(null)
@@ -51,7 +53,7 @@ export default function useAuth() {
 
       return {
         valid: false,
-        message: "Email or password is incorrect.",
+        message: "Incorrect credentials provided.",
       }
     }
 
@@ -133,24 +135,27 @@ export default function useAuth() {
   }
 
   async function disconnectOAuthProvider(identity: UserIdentity) {
-    const { error } = await supabase.auth.unlinkIdentity(identity)
+    const { data, error } = await supabase.auth.unlinkIdentity(identity)
 
     if (error) {
       toast({
-        title: 'Error disconnecting provider',
+        title: ToastTitles.Error,
+        description: ToastDescriptions.FailedSubmission,
+        variant: 'destructive'
       })
       return false
     }
 
     toast({
-      title: 'Provider disconnected',
+      title: ToastTitles.Success,
+      description: `${capitalizeFirstLetter(identity.provider)} has successfully been disconnected from your email address`
     })
 
-    return null
+    return true
   }
 
   async function connectOAuthProvider(provider: Provider) {
-    const { error } = await supabase.auth.linkIdentity({
+    const { data, error } = await supabase.auth.linkIdentity({
       provider,
       options: {
         redirectTo: `${baseURL}/api/confirm`
@@ -204,23 +209,23 @@ export default function useAuth() {
   }
 
   async function addPassword({ password }: { password: string }) {
-    const { error } = await supabase.auth.updateUser({
+    const { data: { user }, error } = await supabase.auth.updateUser({
       password,
       data: {
-        options: {
-          passwordCreated: true,
-        }
+        passwordCreated: true,
       }
     })
     
     if (error) {
       return {
         valid: false,
+        data: null,
         message: error.message,
       }
     }
 
     return {
+      data: user,
       valid: true,
       message: 'Password added successfully.',
     }

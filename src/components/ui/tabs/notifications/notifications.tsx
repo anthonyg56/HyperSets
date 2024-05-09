@@ -24,7 +24,7 @@ export default function NotificationsTabs({ notifications, unreadNotifications, 
         <TabsTrigger value='Unread' disabled={unreadNotifications.length <= 0} className={cn(['border-b-transparent border-b-2 relative rounded-none px-5 py-3', {
           'border-b-zinc-700 dark:border-b-white': tab === 'Unread'
         }])}>Unread {unreadNotifications.length > 0 && <span className='translate-x-[-4px] translate-y-[4px] py-[0px] px-[8px] scale-90 rounded-[1000px] text-[10px] font-bold text-white bg-primary absolute top-0 right-0 flex items-center justify-center'>{unreadNotifications.length}</span>}</TabsTrigger>
-        <ToolTip text='Notification Settings' variant='ghost' size='sm' classNames="ml-auto">
+        <ToolTip text='Notification Settings' variant='ghost' size='sm' classNames="ml-auto mr-5">
           <Link href='/settings/notifications'>
             <GearIcon className="w-[18px] h-[18px]" />
           </Link>

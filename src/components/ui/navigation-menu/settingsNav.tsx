@@ -9,62 +9,62 @@ import { Button } from "../buttons/button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createSupabaseClient } from "@/lib/supabase/client";
 
-export type TSettingsSections = 'profile' | 'profile' | 'presets' | 'notifications' | 'security' 
+export type TSettingsSections = 'profile' | 'presets' | 'notifications' | 'security' 
 
 const sections = [
   {
-    pathname: 'profile',
+    section: 'profile',
     icon: faUser,
   },
   {
-    pathname: 'security',
+    section: 'security',
     icon: faShieldHalved,
   },
+  // {
+  //   section: 'notifications',
+  //   icon: faExclamation,
+  // },
   {
-    pathname: 'notifications',
-    icon: faExclamation,
-  },
-  {
-    pathname: 'presets',
+    section: 'presets',
     icon: faSliders,
   },
 ]
 
 export default function SettingsNavMenu() {
-  const supabase = createSupabaseClient()
-  const pathname = usePathname()
-  const router = useRouter()
+  const supabase = createSupabaseClient();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  function isActive(path: TSettingsSections) {
-    return pathname.includes(path)
+  const sectionParam = searchParams.get('section') || ''
+
+  function handleRoute(section: string) {
+    router.replace(`/settings?section=${section}`);
   }
 
   async function handleLogout(e: any) {
-    e.preventDefault()
+    e.preventDefault();
     
-    await supabase.auth.signOut()
-    router.refresh()
+    await supabase.auth.signOut();
+    router.refresh();
   }
 
   return (
     <NavigationMenu orientation="vertical" className="hidden shrink md:flex col-span-2 max-w-full justify-start mx-auto mt-8 self-start">
       <NavigationMenuList className="gap-y-2">
         {
-          sections.map(({ pathname, icon }) => (
-            <NavigationMenuItem key={pathname} className="w-full">
-              <Link href={{ pathname: `/settings/${pathname}`}} legacyBehavior passHref>
-                <NavigationMenuLink active={isActive(pathname as TSettingsSections)} className={cn([
-                  navigationMenuTriggerStyle(),
-                  "w-full justify-start",
-                ])}>
-                  <FontAwesomeIcon icon={icon} className="w-[18px] h-[18px] pr-4" />
-                  {capitalizeEachWord(pathname)}
-                </NavigationMenuLink>
-              </Link>
+          sections.map(({ section, icon }) => (
+            <NavigationMenuItem key={section} className={cn(["w-full hover:cursor-pointer", 
+              "group inline-flex h-9 items-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:bg-zinc-100 focus:text-zinc-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:focus:bg-zinc-800 dark:focus:text-zinc-50 w-full justify-start",
+              {
+                "dark:bg-zinc-800/50 bg-zinc-100/50": section === sectionParam
+              }
+            ])} onClick={e => handleRoute(section)}>
+              <FontAwesomeIcon icon={icon} className="w-[18px] h-[18px] pr-4" />
+              {capitalizeEachWord(section)}
             </NavigationMenuItem>
           ))
         }
-        <NavigationMenuItem key={pathname} className="w-full">
+        <NavigationMenuItem key='logout' className="w-full">
           <FontAwesomeIcon icon={faArrowRightFromBracket} className="rotate-180 w-[18px] h-[18px] pr-4 text-primary hover:underline translate-y-[3px]"/>
           <Button variant="link" onClick={handleLogout}>Logout</Button>
         </NavigationMenuItem>

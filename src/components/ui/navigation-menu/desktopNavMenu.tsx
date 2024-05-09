@@ -13,7 +13,7 @@ export default function DesktopNavMenu({ profile }: Props) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const dynamicProfileHref = profile ? `/settings/profile` : `/login`
+  const dynamicProfileHref = profile ? `/settings?section=profile` : `/login`
   const dynamicIsActive = isActiveDynamic()
   const dynamicText = profile ? "Settings" : "Sign In"
 

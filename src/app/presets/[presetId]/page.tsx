@@ -24,6 +24,7 @@ import DownloadPresetButton from "@/components/ui/buttons/download";
 /* Types */
 import PreviewMediaDialog from "@/components/ui/dialogs/previewMedia";
 import { Tables } from "../../../../types/supabase";
+import EffectsIconsDisplay from "@/components/displays/effects-icon";
 
 export default async function PresetDetailsPage({ params: { presetId }}: Props) {
   const supabase = await createSupabaseServerClient()
@@ -165,7 +166,7 @@ export default async function PresetDetailsPage({ params: { presetId }}: Props) 
             {effectsText.length > 0 && (
               <div className="flex flex-col items-center">
                 <P classNames="!mt-0 text-white">Effects</P>
-                <H2 classNames="text-white">{effectsError ? 'There was an error fetching effects' : effectsText}</H2>
+                <EffectsIconsDisplay effects={effects ?? []} /> 
               </div>
             )}
             {gamesText.length > 0 && (

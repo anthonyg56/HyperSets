@@ -88,11 +88,7 @@ export default async function Page({ params: { username } }: Props) {
             <div className="flex flex-col items-center space-y-5">
               <div className="flex flex-col justify-end items-center">
                 <Avatar avatar={profile.avatar} name={profile.name} username={profile.username} classNames={'w-[160px] h-[160px]'} />
-                <H2 classNames="mt-4 relative">{profile.name} {currentUser && profile.profile_id === currentUser.user?.user_metadata.profile_id && (
-                  <ToolTip size="icon" variant='outline' text="Edit your profile" classNames="absolute top-[-5px] right-[-15%]">
-                    <Link href="/settings/profile"><FontAwesomeIcon icon={faPencil} className="w-[1.05rem h-[1.05rem]"/></Link>
-                  </ToolTip>
-                )}</H2>
+                <H2 classNames="mt-4 relative">{profile.name}</H2>
                 <Small classNames="text-muted-foreground">@{profile.username}</Small>
               </div>
               <div className="md:w-full justify-center gap-x-2 h-full flex-col md:flex-row space-y-2 hidden md:flex">

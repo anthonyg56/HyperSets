@@ -1,7 +1,7 @@
 "use client"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTwitter, faDiscord, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faTwitter, faDiscord, faGoogle, faTwitch } from "@fortawesome/free-brands-svg-icons";
 
 import { Button } from "../ui/buttons/button";
 import { baseURL } from "@/lib/constants";
@@ -33,7 +33,7 @@ export default function OnboardingOauth() {
   }, [])
 
 
-  async function handleOAuthSignIn(e: any, provider: "discord" | "google" | "twitter") {
+  async function handleOAuthSignIn(e: any, provider: "discord" | "google" | "twitch") {
     e.preventDefault()
     await supabase.auth.signInWithOAuth({
       provider: provider,
@@ -53,8 +53,8 @@ export default function OnboardingOauth() {
 
   return (
     <div className="flex flex-row w-full gap-x-4 pt-2">
-      <Button variant="outline" size="icon" className="w-full" onClick={(e) => handleOAuthSignIn(e, 'twitter')}>
-        <FontAwesomeIcon icon={faTwitter} className="w-[20px] h-[20px]" />
+      <Button variant="outline" size="icon" className="w-full" onClick={(e) => handleOAuthSignIn(e, 'twitch')}>
+        <FontAwesomeIcon icon={faTwitch} className="w-[20px] h-[20px]" />
       </Button>
       <Button variant="outline" size="icon" className="w-full"  onClick={(e) => handleOAuthSignIn(e, 'discord')}>
         <FontAwesomeIcon icon={faDiscord} className="w-[20px] h-[20px]" />

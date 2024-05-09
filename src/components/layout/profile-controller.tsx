@@ -16,24 +16,31 @@ export default async function ProfileController({ profile }: Props) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: notifications } = await supabase
-    .from("notifications")
-    .select(`
-      *,
-      downloads:download_id(
-        *, profile:profile_id(*), preset:preset_id(*)
-      ),
-      comments:comment_id(
-        *, profile:profile_id(*), preset:preset_id(*), ratings:profile_id(ratings!inner(rating))
-      ),
-      likes:like_id(
-        *,  profile:profile_id(*), comments:comment_id(*, preset:preset_id!inner(*), ratings:profile_id(ratings!inner(rating))) 
-      )
-    `)
-    .eq("retriver_id", user?.user_metadata.profile_id)
-    .order("created_at", { ascending: false })
-    .returns<NotificationsQueryResults[]>()
-  
+  const [{ data: notifications }, { data: notificationPreferences }] = await Promise.all([
+    supabase
+      .from("notifications")
+      .select(`
+        *,
+        downloads:download_id(
+          *, profile:profile_id(*), preset:preset_id(*)
+        ),
+        comments:comment_id(
+          *, profile:profile_id(*), preset:preset_id(*), ratings:profile_id(ratings!inner(rating))
+        ),
+        likes:like_id(
+          *,  profile:profile_id(*), comments:comment_id(*, preset:preset_id!inner(*), ratings:profile_id(ratings!inner(rating))) 
+        )
+      `)
+      .eq("retriver_id", user?.user_metadata.profile_id)
+      .order("created_at", { ascending: false })
+      .returns<NotificationsQueryResults[]>(),
+    supabase
+      .from("notifications_prefrences")
+      .select('*')
+      .eq('profile_id', user?.user_metadata.profile_id)
+      .single()
+  ]);
+
   if (!profile) return (
     <div className="min-w-[127.4px]">
       <SearchButton />
@@ -41,10 +48,10 @@ export default async function ProfileController({ profile }: Props) {
   )
 
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row items-center ml-auto md:ml-0">
       <NewPresetButton />
       <SearchButton />
-      <NotificationSheet profile_id={profile?.profile_id} serverNotifications={notifications} />
+      <NotificationSheet profile_id={profile?.profile_id} serverNotifications={notifications} notificationPreferences={notificationPreferences} />
       <Link href={`/profile/${profile.username}`}>
         <Avatar
           avatar={profile.avatar}

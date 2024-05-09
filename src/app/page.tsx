@@ -152,10 +152,10 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full h-[100vh] grid justify-center">
+      <div className="w-full h-[100vh] md:grid justify-center">
         <div className="container max-w-screen-2xl w-full text-center space-y-4 flex flex-col justify-center">
           <H2 classNames="border-b-0">Signup today</H2>    
-          <Lead classNames="pb-2 w-1/2 mx-auto">HyperSets is currently in its MVP phase, meaning this is just the beginning. Sign up today by (a date a week away from launch date) for free access to premium for a month.</Lead>
+          <Lead classNames="pb-2 lg:w-1/2 mx-auto">HyperSets is currently in its MVP phase, meaning this is just the beginning. Sign up today by (a date a week away from launch date) for free access to premium for a month.</Lead>
           <Button className="mx-auto dark:text-white z-30" variant="default">
             <Link href="/register">
               Sign up
@@ -199,3 +199,21 @@ const presetConfigurationOptions = [
     icon: <MultipleHardwareSVG className="w-12 h-12" />
   }
 ]
+
+const platformFeatures = [
+  {
+    title: "",
+    description: "",
+    photo: null,
+  },
+  {
+    title: "",
+    description: "",
+    photo: null,
+  },
+  {
+    title: "",
+    description: "",
+    photo: null,
+  },
+] 

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useToast } from "../use-toast"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./alerts/alert-dialog"
 import { Button } from "../buttons/button"
+import { ToastTitles } from "@/lib/data"
 
 type Props = {
   provider: Provider,
@@ -29,7 +30,7 @@ export default function ConnectOAuthProviderAlertDialog({ provider, mode }: Prop
 
     if (!response.valid) {
       toast({
-        title: 'Error connecting to provider',
+        title: ToastTitles.Error,
       })
     }
   }
