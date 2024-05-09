@@ -28,7 +28,6 @@ import { H3, Muted } from "@/components/ui/typography";
 import Reauthenticate from "@/components/ui/dialogs/alerts/reauthenticate";
 import ConnectOAuthProviderAlertDialog from "@/components/ui/dialogs/connectOAuthProvider";
 import { SettingsContext } from "@/lib/context/settingsProvider";
-import OAuthFormField from "@/components/form-fields/o-auth-identities";
 import EmailFormField from "../form-fields/email";
 import { ToastDescriptions, ToastTitles } from "@/lib/data";
 
