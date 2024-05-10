@@ -4,15 +4,17 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "../navigation-menu";
 import { NavbarProfileQueryResults } from "@/components/layout/navbar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "../use-toast";
 import { useRouter } from "next/navigation";
 
 
 export default function DesktopNavMenu({ profile }: Props) {
+  const [hasRefreshed, setHasRefresh] = useState(false)
+
   const { toast } = useToast()
   
-  const { push } = useRouter()
+  const { push, refresh } = useRouter()
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -24,20 +26,17 @@ export default function DesktopNavMenu({ profile }: Props) {
   // Show a toast depending on the query params
   useEffect(() => {
     const isOAuth = typeof searchParams.get('code') === 'string'
-    const hasRefreshed = typeof searchParams.get('refreshed') === 'string'
 
-    if (isOAuth && !hasRefreshed) {
-      const params = new URLSearchParams(searchParams)
-
-      params.append('refreshed', 'yerrr')
-      push(`${pathname}?${params.toString()}`)
+    if (isOAuth && hasRefreshed === false) {
+      refresh()
+      setHasRefresh(true)
     } else
       searchParams.forEach((value, key) => {
         setTimeout(() => {
           handleQueryParams(key)
         })
       })
-  }, [])
+  }, [hasRefreshed])
 
   // Controls all notifications that appear on a screen
   function handleQueryParams(param: string) {
