@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 export default function DesktopNavMenu({ profile }: Props) {
   const { toast } = useToast()
   
-  const { refresh } = useRouter()
+  const { replace, refresh } = useRouter()
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -23,26 +23,28 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   // Show a toast depending on the query params
   useEffect(() => {
-    searchParams.forEach((value, key) => {
-      setTimeout(() => {
-        handleQueryParams(key)
+    const hasRefreshed = searchParams.get('refreshed') !== null
+    const isOAuth = searchParams.get('code') === null
+
+    if (isOAuth && !hasRefreshed) {
+      const url = new URLSearchParams(window.location.href)
+
+      url.set('refreshed', 'yerrr')
+      
+      refresh()
+    } else
+      searchParams.forEach((value, key) => {
+        setTimeout(() => {
+          handleQueryParams(key)
+        })
       })
-    })
   }, [searchParams])
 
   // Controls all notifications that appear on a screen
   function handleQueryParams(param: string) {
     switch (param) {
       case 'code':
-        const hasRefreshed = searchParams.get('refreshed') !== null
 
-        if (!hasRefreshed) {
-          const url = new URLSearchParams(window.location.href)
-
-          url.append('refreshed', 'yerrr')
-          refresh()
-          return
-        }
         return toast({
           title: "Welcome back!",
           description: "You have successfully logged in.",
