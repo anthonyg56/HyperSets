@@ -119,6 +119,7 @@ export default function NavbarProvider({ initalNotifications, initalNotification
     }
   }
 
+  // Fetches all notifications for a user
   async function fetchNotifications() {
     try {
       setLoading(true)
@@ -204,10 +205,16 @@ export default function NavbarProvider({ initalNotifications, initalNotification
           .single<NavbarProfileQueryResults>()
 
         setProfile(data)
-        toast({
-          title: "Welcome back!",
-          description: "You have successfully logged in.",
-        })
+        if (data !== null)
+          toast({
+            title: "Welcome back!",
+            description: "You have successfully logged in.",
+          })
+        else
+          toast({
+            title: ToastTitles.Error,
+            description: "Invalid login attempt",
+          })
         return
       case 'error':
         return toast({
