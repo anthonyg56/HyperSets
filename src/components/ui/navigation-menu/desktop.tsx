@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 export default function DesktopNavMenu({ profile }: Props) {
   const { toast } = useToast()
 
+  const { refresh } = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -32,10 +33,11 @@ export default function DesktopNavMenu({ profile }: Props) {
   function handleQueryParams(param: string) {
     switch (param) {
       case 'code':
-        return toast({
+        toast({
           title: "Welcome back!",
           description: "You have successfully logged in.",
         })
+        return refresh
       case 'error':
         return toast({
           title: "Error",
