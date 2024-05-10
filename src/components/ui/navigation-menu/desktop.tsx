@@ -23,10 +23,10 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   // Show a toast depending on the query params
   useEffect(() => {
-    const hasRefreshed = searchParams.get('refreshed') !== null
-    const isOAuth = searchParams.get('code') !== null
-
-    if (isOAuth && !hasRefreshed) {
+    const isOAuth = searchParams.get('code')
+    const hasRefreshed = searchParams.get('refreshed')
+    
+    if (isOAuth !== null && hasRefreshed === null) {
       const url = new URLSearchParams(window.location.href)
 
       url.set('refreshed', 'yerrr')
