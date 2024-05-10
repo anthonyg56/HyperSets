@@ -1,67 +1,20 @@
 "use client"
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "../navigation-menu";
 import { NavbarProfileQueryResults } from "@/components/layout/navbar";
-import { useEffect, useState } from "react";
-import { useToast } from "../use-toast";
-import { useRouter } from "next/navigation";
-import { createSupabaseClient } from "@/lib/supabase/client";
+import { NavbarContext, TNavbarContext } from "@/context/navbar-provider";
+import { useContext } from "react";
 
-
-export default function DesktopNavMenu({ profile: initalProfile }: Props) {
-  const supabase = createSupabaseClient()
-
-  const [profile, setProfile] = useState(initalProfile)
-
-  const { toast } = useToast()
-
-  const { refresh } = useRouter()
+export default function DesktopNavMenu() {
+  const { profile } = useContext(NavbarContext) as TNavbarContext
+  
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
   const dynamicProfileHref = profile ? `/settings?section=profile` : `/login`
   const dynamicIsActive = isActiveDynamic()
   const dynamicText = profile ? "Settings" : "Sign In"
-
-  // Show a toast depending on the query params
-  useEffect(() => {
-    setTimeout(() => {
-      searchParams.forEach((value, key) => {
-        handleQueryParams(key)
-      })
-    })
-  }, [])
-
-  // Controls all notifications that appear on a screen
-  async function handleQueryParams(param: string) {
-    switch (param) {
-      case 'code':
-        const { data: { session }} = await supabase.auth.getSession()
-
-        const { data } = await supabase
-          .from('profiles')
-          .select('username, avatar, profile_id, name')
-          .eq('profile_id', session?.user.user_metadata.profile_id)
-          .single<NavbarProfileQueryResults>()
-        
-        setProfile(data)      
-        toast({
-          title: "Welcome back!",
-          description: "You have successfully logged in.",
-        })
-        return
-      case 'error':
-        return toast({
-          title: "Error",
-          description: "An error occurred while logging in.",
-          variant: "destructive",
-        })
-      default:
-        return
-    }
-  }
 
   function isActiveDynamic() {
     if (pathname.startsWith('/profile')) {
