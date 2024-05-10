@@ -15,11 +15,17 @@ import ProfileController from "./profile-controller";
 export default async function Navbar() {
   const supabase = await createSupabaseServerClient()
 
-  const { data: { user }} = await supabase.auth.getUser()
+  const { data: { session }} = await supabase.auth.getSession()
+
+  let profile_id = ""
+
+  if (session !== null)
+    profile_id = session.user.user_metadata.profile_id
+
   const { data: profile } = await supabase
     .from('profiles')
     .select('username, avatar, profile_id, name')
-    .eq('profile_id', user?.user_metadata.profile_id)
+    .eq('profile_id', profile_id)
     .single<NavbarProfileQueryResults>()
 
   return (
