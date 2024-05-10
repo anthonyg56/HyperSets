@@ -15,7 +15,7 @@ import ProfileController from "./profile-controller";
 export default async function Navbar() {
   const supabase = await createSupabaseServerClient()
 
-  const { data: { session }} = await supabase.auth.getSession()
+  const { data: { session }} = await supabase.auth.refreshSession()
 
   let profile_id = ""
 
