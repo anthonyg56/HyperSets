@@ -10,11 +10,11 @@ import { useRouter } from "next/navigation";
 
 
 export default function DesktopNavMenu({ profile }: Props) {
-  const [hasRefreshed, setHasRefresh] = useState(false)
+  const [hasRefreshed, setHasRefreshed] = useState(false)
 
   const { toast } = useToast()
   
-  const { refresh } = useRouter()
+  const { push } = useRouter()
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -28,14 +28,15 @@ export default function DesktopNavMenu({ profile }: Props) {
     const isOAuth = typeof searchParams.get('code') === 'string'
 
     if (isOAuth === true && hasRefreshed === false) {
-      refresh()
+      setHasRefreshed(false)
+      push(window.location.href)
     } else
       searchParams.forEach((value, key) => {
         setTimeout(() => {
           handleQueryParams(key)
         })
       })
-  }, [])
+  }, [hasRefreshed])
 
   // Controls all notifications that appear on a screen
   function handleQueryParams(param: string) {
