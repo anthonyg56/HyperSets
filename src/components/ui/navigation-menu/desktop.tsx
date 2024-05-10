@@ -25,11 +25,20 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   // Show a toast depending on the query params
   useEffect(() => {
-    searchParams.forEach((value, key) => {
-      setTimeout(() => {
-        handleQueryParams(key)
+    const isOAuth = typeof searchParams.get('code') === 'string'
+    const hasRefreshed = typeof searchParams.get('refreshed') === 'string'
+
+    if (isOAuth && !hasRefreshed) {
+      const url = new URLSearchParams(searchParams)
+
+      url.append('refreshed', 'yerrr')
+      refresh()
+    } else
+      searchParams.forEach((value, key) => {
+        setTimeout(() => {
+          handleQueryParams(key)
+        })
       })
-    })
   }, [])
 
   // Controls all notifications that appear on a screen
