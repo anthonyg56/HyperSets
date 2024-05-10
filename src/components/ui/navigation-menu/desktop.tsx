@@ -27,10 +27,10 @@ export default function DesktopNavMenu({ profile }: Props) {
     const hasRefreshed = typeof searchParams.get('refreshed') === 'string'
 
     if (isOAuth && !hasRefreshed) {
-      const url = new URLSearchParams(searchParams)
+      const params = new URLSearchParams(searchParams)
 
-      url.append('refreshed', 'yerrr')
-      refresh()
+      params.append('refreshed', 'yerrr')
+      replace(`${pathname}?${params.toString()}`)
     } else
       searchParams.forEach((value, key) => {
         setTimeout(() => {
@@ -53,11 +53,14 @@ export default function DesktopNavMenu({ profile }: Props) {
           description: "An error occurred while logging in.",
           variant: "destructive",
         })
-      case "refresh":
-        const params = new URLSearchParams(searchParams)
+      // case "refresh":
+      //   const params = new URLSearchParams(searchParams)
 
-        params.delete("refreshed")
-        break;
+      //   params.delete("refreshed")
+      //   params.delete("code")
+
+      //   replace(`${pathname}?${params.toString()}`)
+      //   break;
       default:
         return
     }
