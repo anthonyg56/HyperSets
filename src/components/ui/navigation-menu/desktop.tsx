@@ -25,13 +25,14 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   // Show a toast depending on the query params
   useEffect(() => {
-    const isOAuth = typeof searchParams.get('code') === 'string'
-    const hasRefreshed = typeof searchParams.get('refreshed') === 'string'
+    const isOAuth = searchParams.get('code')
+    const hasRefreshed = searchParams.get('refreshed')
+    
+    if (isOAuth !== null && hasRefreshed === null) {
+      const url = new URLSearchParams(window.location.href)
 
-    if (isOAuth && !hasRefreshed) {
-      const url = new URLSearchParams(searchParams)
-
-      url.append('refreshed', 'yerrr')
+      url.set('refreshed', 'yerrr')
+      
       refresh()
     } else
       searchParams.forEach((value, key) => {
@@ -39,13 +40,13 @@ export default function DesktopNavMenu({ profile }: Props) {
           handleQueryParams(key)
         })
       })
-  }, [])
+  }, [searchParams])
 
   // Controls all notifications that appear on a screen
   function handleQueryParams(param: string) {
     switch (param) {
       case 'code':
-        refresh()
+
         return toast({
           title: "Welcome back!",
           description: "You have successfully logged in.",
