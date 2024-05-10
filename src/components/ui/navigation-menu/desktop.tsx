@@ -14,7 +14,7 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   const { toast } = useToast()
   
-  const { push, refresh } = useRouter()
+  const { replace, refresh } = useRouter()
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -27,7 +27,7 @@ export default function DesktopNavMenu({ profile }: Props) {
   useEffect(() => {
     const isOAuth = typeof searchParams.get('code') === 'string'
 
-    if (isOAuth && hasRefreshed === false) {
+    if (isOAuth === true && hasRefreshed === false) {
       refresh()
       setHasRefresh(true)
     } else
@@ -36,7 +36,7 @@ export default function DesktopNavMenu({ profile }: Props) {
           handleQueryParams(key)
         })
       })
-  }, [hasRefreshed])
+  }, [hasRefreshed, searchParams])
 
   // Controls all notifications that appear on a screen
   function handleQueryParams(param: string) {
@@ -44,28 +44,23 @@ export default function DesktopNavMenu({ profile }: Props) {
 
     switch (param) {
       case 'code':
+        params.delete("code")
+        replace(`${pathname}?${params.toString()}`)
         return toast({
           title: "Welcome back!",
           description: "You have successfully logged in.",
         })
       case 'error':
         params.delete("error")
-
+        replace(`${pathname}?${params.toString()}`)
         return toast({
           title: "Error",
           description: "An error occurred while logging in.",
           variant: "destructive",
         })
-      case "refresh":
-        params.delete("refreshed")
-        params.delete("code")
-
-        break;
       default:
         return
     }
-
-    push(`${pathname}?${params.toString()}`)
   }
 
   function isActiveDynamic() {
