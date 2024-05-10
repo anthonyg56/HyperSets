@@ -7,9 +7,14 @@ import { NavbarProfileQueryResults } from "@/components/layout/navbar";
 import { useEffect, useState } from "react";
 import { useToast } from "../use-toast";
 import { useRouter } from "next/navigation";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 
-export default function DesktopNavMenu({ profile }: Props) {
+export default function DesktopNavMenu({ profile: initalProfile }: Props) {
+  const supabase = createSupabaseClient()
+
+  const [profile, setProfile] = useState(initalProfile)
+
   const { toast } = useToast()
 
   const { refresh } = useRouter()
@@ -30,14 +35,23 @@ export default function DesktopNavMenu({ profile }: Props) {
   }, [])
 
   // Controls all notifications that appear on a screen
-  function handleQueryParams(param: string) {
+  async function handleQueryParams(param: string) {
     switch (param) {
       case 'code':
+        const { data: { session }} = await supabase.auth.getSession()
+
+        const { data } = await supabase
+          .from('profiles')
+          .select('username, avatar, profile_id, name')
+          .eq('profile_id', session?.user.user_metadata.profile_id)
+          .single<NavbarProfileQueryResults>()
+        
+        setProfile(data)      
         toast({
           title: "Welcome back!",
           description: "You have successfully logged in.",
         })
-        return refresh()
+        return
       case 'error':
         return toast({
           title: "Error",
