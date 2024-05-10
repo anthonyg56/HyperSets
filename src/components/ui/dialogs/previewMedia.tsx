@@ -1,8 +1,8 @@
 /* Packages */
 import Image from "next/image"
 import { ImageIcon, VideoIcon } from "lucide-react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./dialog"
-import { Button } from "../buttons/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../dialog"
+import { Button } from "../button"
 
 export default function PreviewMediaDialog({ youtube_id, photo_url }: Props) {
   const text = youtube_id ? "Watch Video" : "View Image"

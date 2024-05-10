@@ -1,13 +1,13 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { capitalizeEachWord, cn, extractInitals } from "@/lib/utils";
 import { redirect } from "next/navigation";
-import SettingsHeader from "../../../components/pages/settings/settings-header";
-import SettingsProvider from "@/lib/context/settingsProvider";
+import SettingsHeader from "../../../components/misc/pages/settings/settings-header";
+import SettingsProvider from "@/context/settingsProvider";
 import { Separator } from "@/components/ui/separator";
 import { Suspense } from "react";
-import SettingsNavMenu from "@/components/ui/navigation-menu/settingsNav";
+import SettingsNavMenu from "@/components/ui/navigation-menu/settings";
 import SettingsPagesDropdown from "@/components/ui/dropdown/settingsPages";
-import SettingsFormSections from "../../../components/pages/settings/settings-form";
+import SettingsFormSections from "../../../components/misc/pages/settings/settings-form";
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 
 export default async function Page() {

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /* ShadCN UI Components */
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { H1, H2, H4, Lead, Small, } from "@/components/ui/typography";
 
 /* Public Assets */
@@ -16,8 +16,8 @@ import Banner from '../../public/cozy-setup.jpg';
 /* Types */
 import { PresetCard, PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 import { AuroraBackground } from "@/components/ui/aurora-background";
-import { Card, CardContent } from "@/components/ui/cards/card";
-import { EffectsSVG, KeybindSVG, GameLibrarySVG, TargetSVG, MicSVG, MultipleHardwareSVG } from "@/components/svgs";
+import { Card, CardContent } from "@/components/ui/card";
+import { EffectsSVG, KeybindSVG, GameLibrarySVG, TargetSVG, MicSVG, MultipleHardwareSVG } from "@/components/misc/svgs";
 
 export default async function Home() {
   const supabase = await createSupabaseServerClient()

@@ -1,18 +1,18 @@
 "use client"
 
-import { Button } from "@/components/ui/buttons/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import useAuth from "@/lib/hooks/useAuth"
+import useAuth from "@/hooks/useAuth"
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { useContext, useEffect, useState } from "react";
 import { LoaderCircle } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./alerts/alert-dialog";
-import { SettingsContext, TSettingsContext } from "@/lib/context/settingsProvider";
+import { SettingsContext, TSettingsContext } from "@/context/settingsProvider";
 import { z } from "zod";
 import { ToastDescriptions, ToastTitles } from "@/lib/data";
-import { FormMode } from "@/components/pages/settings/settings-form";
+import { FormMode } from "@/components/misc/pages/settings/settings-form";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Title } from "@radix-ui/react-toast";
 

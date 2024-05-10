@@ -13,18 +13,18 @@ import {
   P, 
   Small 
 } from "@/components/ui/typography";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import CommentSheet from "@/components/ui/sheets/comment";
 
 /* Custom UI Components */
-import UserHoverCard from "@/components/ui/hovercards/profileHoverCard";
-import BackgroundImage from "@/components/misc/backgroundImage";
+import UserHoverCard from "@/components/ui/hover-card/profile-hover-card";
+import BackgroundImage from "@/components/misc/background-image";
 import DownloadPresetButton from "@/components/ui/buttons/download";
 
 /* Types */
 import PreviewMediaDialog from "@/components/ui/dialogs/previewMedia";
 import { Tables } from "../../../../types/supabase";
-import EffectsIconsDisplay from "@/components/displays/effects-icon";
+import EffectsIconsDisplay from "@/components/misc/displays/effects-icon";
 
 export default async function PresetDetailsPage({ params: { presetId }}: Props) {
   const supabase = await createSupabaseServerClient()

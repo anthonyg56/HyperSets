@@ -4,9 +4,10 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
 import { cn } from "@/lib/utils";
 import { ClassNameValue } from "tailwind-merge";
+import { passwordRules } from "@/lib/data";
 
 type Props = {
-  text: string | string[];
+  text: string | string[] | typeof passwordRules;
   width?: number;
   height?: number;
   classNames?: ClassNameValue;

@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Enums } from "../../../types/supabase";
 import { H2, H4 } from "@/components/ui/typography";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 

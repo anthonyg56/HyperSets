@@ -1,8 +1,8 @@
 "use client"
-import PasswordResetConfirmationDisplay from "@/components/displays/passwordResetEmailConfirmation";
-import Title from "@/components/reusables/title";
+import PasswordResetConfirmationDisplay from "@/components/misc/displays/password-reset-confirmation";
+import Title from "@/components/misc/title";
 import InfoTooltip from "@/components/ui/tooltips/info-tooltip";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";

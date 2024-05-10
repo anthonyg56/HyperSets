@@ -2,9 +2,9 @@
 
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons"
 import { useState } from "react"
-import { Button } from "./button"
+import { Button } from "../button"
 import SearchBar from "@/components/misc/search"
-import ToolTip from "@/components/reusables/toolTip"
+import ToolTip from "@/components/misc/tool-tip"
 
 type Props = {
 

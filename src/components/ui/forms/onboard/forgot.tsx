@@ -15,9 +15,9 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-import Title from "@/components/reusables/title";
+import Title from "@/components/misc/title";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { Small } from "@/components/ui/typography";
 
 import { PasswordSentDisplay } from "./sentDisplays";

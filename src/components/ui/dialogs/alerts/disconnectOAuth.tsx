@@ -1,10 +1,10 @@
 
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { UserIdentity } from "@supabase/supabase-js";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./alert-dialog";
-import useAuth from "@/lib/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import { useContext, useState } from "react";
-import { SettingsContext, TSettingsContext } from "@/lib/context/settingsProvider";
+import { SettingsContext, TSettingsContext } from "@/context/settingsProvider";
 
 type Props = {
   mode: "view" | "edit",

@@ -1,10 +1,10 @@
 "use client"
 
-import ToolTip from "@/components/reusables/toolTip"
-import { ToggleGroup, ToggleGroupItem } from "./toggle-group"
+import ToolTip from "@/components/misc/tool-tip"
+import { ToggleGroup, ToggleGroupItem } from "../toggle-group"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
-import { effectsIcons } from "@/components/displays/effects-icon"
+import { effectsIcons } from "@/components/misc/displays/effects-icon"
 
 export default function ToggleGroups({ data, value, onValueChange, tooltip }: Props) {
   /* Needed to create a state for the values to render and update */

@@ -1,7 +1,7 @@
-import ToolTip from "@/components/reusables/toolTip";
+import ToolTip from "@/components/misc/tool-tip";
 import { H4 } from "@/components/ui/typography";
 import { Crosshair2Icon, MagicWandIcon } from "@radix-ui/react-icons";
-import { Card, CardContent } from "../card";
+import { Card, CardContent } from "../../card";
 
 export type EffectCardNames = keyof typeof effectCardsIcons
 

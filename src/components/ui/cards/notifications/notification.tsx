@@ -5,9 +5,9 @@ import moment from "moment";
 import CommentCard from "../comments/comment";
 import { PresetCard } from "../presets/preset";
 import { CommentsQueryResults } from "@/app/presets/[presetId]/page";
-import Avatar from "@/components/reusables/avatar";
+import Avatar from "@/components/misc/avatar";
 import { H4, P, Small } from "../../typography";
-import { Card, CardContent } from "../card";
+import { Card, CardContent } from "../../card";
 import { NotificationsQueryResults } from "@/components/layout/profile-controller";
 import { Tables } from "../../../../../types/supabase";
 

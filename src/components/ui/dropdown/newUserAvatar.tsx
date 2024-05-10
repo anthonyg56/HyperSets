@@ -8,9 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "./dropdown-menu";
-import { Button } from "../buttons/button";
+import { Button } from "../button";
 import { useState } from "react";
-import ToolTip from "../../reusables/toolTip";
+import ToolTip from "../../misc/tool-tip";
 
 type Props = {
   avatars: string[];

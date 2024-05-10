@@ -12,7 +12,7 @@ import { UseFormReturn } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
 import { Small } from "@/components/ui/typography"
-import ToolTip from "@/components/reusables/toolTip"
+import ToolTip from "@/components/misc/tool-tip"
 
 type Buckets = DefaultBuckets & CustomBuckets
 type DefaultBuckets = "default_avatars" | "default_banners"

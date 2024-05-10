@@ -1,8 +1,8 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import Title from "@/components/reusables/title";
+import Title from "@/components/misc/title";
 import { SeparatorWithText } from "@/components/misc/separators";
-import OnboardingOauth from "@/components/misc/onboardingOauth";
+import OnboardingOauth from "@/components/ui/forms/onboard/misc/onboardingOauth";
 import RegisterForm from "@/components/ui/forms/onboard/register";
 import Link from "next/link";
 import { Small } from "@/components/ui/typography";

@@ -1,7 +1,7 @@
 
 "use client"
 
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./dropdown-menu";

@@ -1,16 +1,16 @@
 "use client"
 
-import { Button } from "@/components/ui/buttons/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import useAuth from "@/lib/hooks/useAuth"
+import useAuth from "@/hooks/useAuth"
 import { passwordSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { KeyboardEventHandler, useContext, useEffect, useState } from "react";
 import { LoaderCircle } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./alert-dialog";
-import { SettingsContext, TSettingsContext } from "@/lib/context/settingsProvider";
+import { SettingsContext, TSettingsContext } from "@/context/settingsProvider";
 import { SafeParseReturnType } from "zod";
 
 type Props = {

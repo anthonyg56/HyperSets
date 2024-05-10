@@ -1,9 +1,9 @@
 import LoginForm from "@/components/ui/forms/onboard/login";
-import Title from "@/components/reusables/title";
+import Title from "@/components/misc/title";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SeparatorWithText } from "@/components/misc/separators";
-import OnboardingOauth from "@/components/misc/onboardingOauth";
+import OnboardingOauth from "@/components/ui/forms/onboard/misc/onboardingOauth";
 
 export default async function Page() {
   const supabase = await createSupabaseServerClient()

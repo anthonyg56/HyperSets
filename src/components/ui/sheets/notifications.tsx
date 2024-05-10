@@ -20,12 +20,12 @@ import {
 } from "../sheet";
 import { useToast } from "../use-toast";
 import { Separator } from "../separator";
-import MarkAsReadButton from "../buttons/markAsRead";
+import MarkAsReadButton from "../buttons/mark-as-read";
 import NotificationsTabs from "../tabs/notifications/notifications";
 import { NotificationsQueryResults } from "@/components/layout/profile-controller";
-import { Button } from "../buttons/button";
+import { Button } from "../button";
 import { Tables } from "../../../../types/supabase";
-import ToolTip from "@/components/reusables/toolTip";
+import ToolTip from "@/components/misc/tool-tip";
 
 export default function NotificationSheet({ profile_id, serverNotifications, notificationPreferences }: Props) {
   const [notifications, setnotifications] = useState<NotificationsQueryResults[]>(serverNotifications || []);

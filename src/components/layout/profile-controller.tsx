@@ -1,9 +1,9 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server"
-import Avatar from "../reusables/avatar"
+import Avatar from "../misc/avatar"
 import NotificationSheet from "../ui/sheets/notifications"
 import { NavbarProfileQueryResults } from "./navbar"
 import { Tables } from "../../../types/supabase"
-import NewPresetButton from "../ui/buttons/newPresetButton"
+import NewPresetButton from "../ui/buttons/new-preset"
 import Link from "next/link"
 import SearchButton from "../ui/buttons/search-button"
 

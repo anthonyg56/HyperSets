@@ -10,8 +10,7 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { CreateAPresetSchema } from "@/lib/schemas";
 import { UploadViews } from "./uploadImage";
-import { YoutubeSVG } from "@/components/svgs";
-import useThumbnail from "@/lib/hooks/useYoutubeThumbnail";
+import { YoutubeSVG } from "@/components/misc/svgs";
 
 type Props = {
   currentUploadView: UploadViews,

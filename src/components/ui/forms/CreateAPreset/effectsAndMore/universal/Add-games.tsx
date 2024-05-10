@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { CreateAPresetSchema } from "@/lib/schemas"
 import { UseFormReturn } from "react-hook-form"
 import { Badge } from "lucide-react"
-import { CancelSVG } from "@/components/svgs"
+import { CancelSVG } from "@/components/misc/svgs"
 
 export default function AddGames({ updateGames, currentGames, display }: Props) {
   const [availableGames, setAvailableGames] = useState<SelectorItem[]>([])

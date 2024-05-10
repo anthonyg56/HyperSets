@@ -3,7 +3,7 @@ import { H3, Muted } from "@/components/ui/typography";
 import {  z } from "zod";
 import { EHardware } from "@/lib/data";
 import { UseFormReturn } from "react-hook-form";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { CreateAPresetSchema, hardwareSchema } from "@/lib/schemas";
 import { useEffect } from "react";
 import { FormView } from "@/components/ui/dialogs/newPreset";

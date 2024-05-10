@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "../ui/command";
-import Avatar from "../reusables/avatar";
+import Avatar from "./avatar";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import { Small } from "../ui/typography";
 import { NavbarProfileQueryResults } from "../layout/navbar";
 import { Tables } from "../../../types/supabase";
-import SearchDisplay from "../displays/search-display";
+import SearchDisplay from "./displays/search-display";
 
 export default function SearchBar({ isOpen, setIsOpen}: Props) {
   const supabase = createSupabaseClient()

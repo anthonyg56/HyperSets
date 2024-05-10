@@ -1,10 +1,10 @@
-import PresetCardList from "@/components/lists/presets";
+import PresetCardList from "@/components/misc/lists/presets";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Tables } from "../../../types/supabase";
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 import { H2, Lead } from "@/components/ui/typography";
 import { Vortex } from "@/components/ui/vortex";
-import NewPresetHeroButton from "@/components/ui/buttons/new-preset-hero-button";
+import NewPresetHeroButton from "@/components/ui/buttons/new-preset-hero";
 
 
 export default async function Page() {

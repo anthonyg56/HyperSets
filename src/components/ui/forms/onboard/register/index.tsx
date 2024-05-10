@@ -1,7 +1,7 @@
 "use client"
 
-import { Button } from "@/components/ui/buttons/button"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialogs/dialog"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useToast } from "@/components/ui/use-toast"
 import { baseURL } from "@/lib/constants"
 import { SignupSchema, signupSchemna } from "@/lib/schemas"

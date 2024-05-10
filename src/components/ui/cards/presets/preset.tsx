@@ -10,7 +10,7 @@ import { DownloadIcon, VideoIcon } from "@radix-ui/react-icons";
 import { capitalizeFirstLetter, cn } from "@/lib/utils";
 
 /* ShadCN UI Components */
-import { Card } from "../card";
+import { Card } from "../../card";
 import { H4, P, Small } from "../../typography";
 
 /* Custom UI Components */

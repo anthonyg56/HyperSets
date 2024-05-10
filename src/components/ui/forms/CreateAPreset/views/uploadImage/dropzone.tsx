@@ -16,7 +16,7 @@ import { UploadViews } from './uploadImage'
 import { useToast } from '@/components/ui/use-toast'
 import { ImageOffIcon } from 'lucide-react'
 import Image from 'next/image'
-import { CancelSVG, LoadingSVG } from '@/components/svgs'
+import { CancelSVG, LoadingSVG } from '@/components/misc/svgs'
 
 type Props = {
   currentUploadView: UploadViews | null,

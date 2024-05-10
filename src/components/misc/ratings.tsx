@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { Tables } from "../../../types/supabase";
 import { P, Small } from "../ui/typography";
 import { Label } from "../ui/label";
-import { Button } from "../ui/buttons/button";
+import { Button } from "../ui/button";
 
 export default function Ratings({ profile_id, preset_id, fetchComments, switchView }: RatingsProps) {
   const supabase = createSupabaseClient();

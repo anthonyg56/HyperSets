@@ -2,9 +2,9 @@
 
 import { H3, Muted } from "@/components/ui/typography";
 import { Separator } from "@/components/ui/separator";
-import PresetCardList from "@/components/lists/presets";
+import PresetCardList from "@/components/misc/lists/presets";
 import { useContext } from "react";
-import { SettingsContext, TSettingsContext } from "@/lib/context/settingsProvider";
+import { SettingsContext, TSettingsContext } from "@/context/settingsProvider";
 
 export default async function PresetsSection() {
   const { presets, security: { user_metadata } } = useContext(SettingsContext) as TSettingsContext;

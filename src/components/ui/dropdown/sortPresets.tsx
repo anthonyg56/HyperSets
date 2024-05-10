@@ -10,11 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown/dropdown-menu"
 import { Small } from "../typography"
-import { Button } from "../buttons/button"
+import { Button } from "../button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import { cn } from "@/lib/utils"
-import { PresetCardSorts } from "../../lists/presets"
+import { PresetCardSorts } from "../../misc/lists/presets"
 
 type Props = {
   dialog?: boolean;

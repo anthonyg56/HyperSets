@@ -7,12 +7,12 @@ import Image from "next/image";
 
 /* Types */
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "./dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../dialog";
 import { Tables } from "../../../../types/supabase";
-import { Button } from "../buttons/button";
-import TopCommentCard from "../cards/comments/topComment";
+import { Button } from "../button";
+import TopCommentCard from "../cards/comments/top-comment";
 import { H3 } from "../typography";
-import ProfileHoverCard from "../hovercards/profileHoverCard";
+import ProfileHoverCard from "../hover-card/profile-hover-card";
 
 export default function PresetPreviewDialog({ presetId: preset_id, open, setOpen }: Props) {
   const supabase = createSupabaseClient()

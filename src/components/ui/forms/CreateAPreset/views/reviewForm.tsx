@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/buttons/button"
+import { Button } from "@/components/ui/button"
 import { FormView } from "@/components/ui/dialogs/newPreset"
 import { H3, Muted, H4, H2 } from "@/components/ui/typography"
 import { CreateAPresetSchema } from "@/lib/schemas"

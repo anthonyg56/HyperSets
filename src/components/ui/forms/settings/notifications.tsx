@@ -14,7 +14,7 @@ import { NotificationsFormField } from "./form-fields";
 import { notificationsFieldDataGroup } from "./field-data";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Session } from "@supabase/supabase-js";
-import useAuth from "@/lib/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import { Tables } from "../../../../../types/supabase";
 
 type Props = {

@@ -17,17 +17,17 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { Provider, UserIdentity } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
-import useAuth from "@/lib/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import DisconnectOAuthProviderAlert from "@/components/ui/dialogs/alerts/disconnectOAuth";
 import { H3, Muted } from "@/components/ui/typography";
 import Reauthenticate from "@/components/ui/dialogs/alerts/reauthenticate";
 import ConnectOAuthProviderAlertDialog from "@/components/ui/dialogs/connectOAuthProvider";
-import { SettingsContext } from "@/lib/context/settingsProvider";
+import { SettingsContext } from "@/context/settingsProvider";
 import EmailFormField from "../form-fields/email";
 import { ToastDescriptions, ToastTitles } from "@/lib/data";
 
@@ -97,7 +97,7 @@ export default function SecuritySection() {
     if (!res) {
       toast({
         title: ToastTitles.Error,
-        description: ToastDescriptions.FailedSubmission,
+        description: ToastDescriptions.FailedRequest,
         variant: "destructive"
       })
 

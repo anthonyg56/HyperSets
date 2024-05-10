@@ -1,4 +1,4 @@
-import useDefaultImages from "@/lib/hooks/useDefaultImages"
+import useDefaultImages from "@/hooks/useDefaultImages"
 import { CreateAPresetSchema } from "@/lib/schemas"
 import { UseFormReturn } from "react-hook-form"
 import { UploadViews } from "./uploadImage"
@@ -7,9 +7,9 @@ import Image from "next/image"
 import { PUBLIIC_CDN_URL } from "@/lib/constants"
 import { useEffect, useState } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import ToolTip from "@/components/reusables/toolTip"
+import ToolTip from "@/components/misc/tool-tip"
 import { capitalizeEachWord } from "@/lib/utils"
-import { Button } from "@/components/ui/buttons/button"
+import { Button } from "@/components/ui/button"
 import { CheckIcon } from "lucide-react"
 
 type Props = {

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
  
 import { Label } from "../../label"
 import { Textarea } from "../../textarea"
-import { Button } from "../../buttons/button"
+import { Button } from "../../button"
 import { createSupabaseClient } from "@/lib/supabase/client"
 import { useToast } from "../../use-toast"
 import { Small } from "../../typography"

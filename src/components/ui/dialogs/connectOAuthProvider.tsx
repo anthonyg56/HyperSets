@@ -2,12 +2,12 @@ import { Provider } from "@supabase/supabase-js"
 
 import { useState } from "react"
 import { capitalizeFirstLetter } from "@/lib/utils"
-import useAuth from "@/lib/hooks/useAuth"
+import useAuth from "@/hooks/useAuth"
 
 import { useRouter } from "next/navigation"
 import { useToast } from "../use-toast"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./alerts/alert-dialog"
-import { Button } from "../buttons/button"
+import { Button } from "../button"
 import { ToastTitles } from "@/lib/data"
 
 type Props = {
@@ -31,6 +31,7 @@ export default function ConnectOAuthProviderAlertDialog({ provider, mode }: Prop
     if (!response.valid) {
       toast({
         title: ToastTitles.Error,
+        description: "There was an error trying to connect to" + provider + ". Please try again."
       })
     }
   }

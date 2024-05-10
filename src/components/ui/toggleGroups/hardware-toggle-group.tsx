@@ -2,7 +2,7 @@
 
 import { ClassNameValue } from "tailwind-merge";
 import { cn } from "@/lib/utils";
-import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
 import { Enums } from "../../../../types/supabase";
 
 type ToggleGroupVals = Enums<'hardware_type'>;

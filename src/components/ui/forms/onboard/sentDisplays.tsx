@@ -1,8 +1,8 @@
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { Small } from "@/components/ui/typography";
-import Title from "@/components/reusables/title";
-import { Button } from "../../buttons/button";
+import Title from "@/components/misc/title";
+import { Button } from "../../button";
 
 type Props = {
   resetView: () => void

@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../tabs';
 import { useState } from 'react';
 import { Separator } from '../../separator';
 import { cn } from '@/lib/utils';
-import ToolTip from '../../../reusables/toolTip';
+import ToolTip from '../../../misc/tool-tip';
 import Link from 'next/link';
 import { GearIcon } from '@radix-ui/react-icons';
 

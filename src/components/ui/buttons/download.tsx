@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";

@@ -3,14 +3,14 @@
 import CommentCardDropDown from "@/components/ui/dropdown/commentOptions";
 import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import moment from "moment";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { HeartFilledIcon, HeartIcon, StarFilledIcon } from "@radix-ui/react-icons";
 import { use, useEffect, useRef, useState } from "react";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { CommentsQueryResults } from "@/app/presets/[presetId]/page";
 import { H4, P } from "../../typography";
-import Avatar from "@/components/reusables/avatar";
+import Avatar from "@/components/misc/avatar";
 import Link from "next/link";
 import { StarIcon } from "lucide-react";
 

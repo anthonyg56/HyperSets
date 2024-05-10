@@ -8,8 +8,8 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /* Types */
 import { Tables } from "../../../types/supabase";
-import MobleNav from "../ui/drawers/mobileNav";
-import DesktopNavMenu from "../ui/navigation-menu/desktopNavMenu";
+import MobleNav from "../ui/drawers/mobile-nav";
+import DesktopNavMenu from "../ui/navigation-menu/desktop";
 import ProfileController from "./profile-controller";
 
 export default async function Navbar() {

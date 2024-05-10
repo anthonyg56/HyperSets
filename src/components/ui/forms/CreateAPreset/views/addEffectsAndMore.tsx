@@ -6,7 +6,7 @@ import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import EffectsToggleGroup from "../effectsAndMore/universal/effects-toggle-group";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import GameCompadibilitySelector from "../../../../misc/selector";
 import EffectsCard, { EffectCardNames } from "@/components/ui/cards/misc/effectsCard";
 import { FormView } from "@/components/ui/dialogs/newPreset";

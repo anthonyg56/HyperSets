@@ -1,9 +1,9 @@
 import Link from "next/link"
-import useProfile from "@/lib/hooks/useProfile"
+import useProfile from "@/hooks/useProfile"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { H4, P, Small } from "../../typography"
-import Avatar from "@/components/reusables/avatar"
+import Avatar from "@/components/misc/avatar"
 import { Tables } from "../../../../../types/supabase"
 
 type Props = {

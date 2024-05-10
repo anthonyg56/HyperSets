@@ -16,7 +16,7 @@ import {
   SheetTitle,
   SheetTrigger
 } from "../sheet";
-import { Button } from "../buttons/button";
+import { Button } from "../button";
 import { useToast } from "../use-toast";
 import { Separator } from "../separator";
 import { ScrollArea } from "../scroll-area";

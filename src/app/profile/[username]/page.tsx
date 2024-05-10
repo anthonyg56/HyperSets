@@ -1,15 +1,15 @@
 
 import { P, H2, Small, } from "@/components/ui/typography";
-import { Button } from "@/components/ui/buttons/button";
+import { Button } from "@/components/ui/button";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PresetCardList from "@/components/lists/presets";
+import PresetCardList from "@/components/misc/lists/presets";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import Avatar from "@/components/reusables/avatar";
+import Avatar from "@/components/misc/avatar";
 import { convertDate } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import BackgroundImage from "@/components/misc/backgroundImage";
-import ToolTip from "@/components/reusables/toolTip";
+import BackgroundImage from "@/components/misc/background-image";
+import ToolTip from "@/components/misc/tool-tip";
 import Link from "next/link";
 import { Tables } from "../../../../types/supabase";
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";

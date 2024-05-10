@@ -7,11 +7,11 @@ import { H3, H4, Muted, P, Small } from "@/components/ui/typography"
 import UploadAnImage from './dropzone'
 import { cn } from '@/lib/utils'
 import { ArrowLeftIcon } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/cards/card'
+import { Card, CardContent } from '@/components/ui/card'
 import UploadYoutubeURL from './uploadYoutubeUrl'
-import { DeviantartSVG, YoutubeSVG, ImageSVG, InfoSVG } from "@/components/svgs";
+import { DeviantartSVG, YoutubeSVG, ImageSVG, InfoSVG } from "@/components/misc/svgs";
 import { FormView } from '@/components/ui/dialogs/newPreset'
-import ToolTip from '@/components/reusables/toolTip'
+import ToolTip from '@/components/misc/tool-tip'
 import UploadDefaultImages from './defaultImages'
 type Props = {
   currentFormView: FormView,
