@@ -155,10 +155,10 @@ export default function useAuth() {
   }
 
   async function connectOAuthProvider(provider: Provider) {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const {  error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${baseURL}/api/confirm`,
+        redirectTo: `${baseURL}/api/oauth`,
       } 
     })
     .then(data => data)

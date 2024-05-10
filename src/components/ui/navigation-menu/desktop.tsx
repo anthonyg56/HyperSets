@@ -6,10 +6,14 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { NavbarProfileQueryResults } from "@/components/layout/navbar";
 import { useEffect } from "react";
 import { useToast } from "../use-toast";
+import { useRouter } from "next/navigation";
 
 
 export default function DesktopNavMenu({ profile }: Props) {
   const { toast } = useToast()
+  
+  const { replace, refresh } = useRouter()
+
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -19,6 +23,12 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   // Show a toast depending on the query params
   useEffect(() => {
+    if (searchParams.get('code') !== null && searchParams.get('refreshed') === null) {
+      const url = new URLSearchParams(window.location.href)
+
+      url.append('refreshed', 'yerrr')
+      refresh()
+    } else
     searchParams.forEach((value, key) => {
       setTimeout(() => {
         handleQueryParams(key)

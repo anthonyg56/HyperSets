@@ -1,40 +1,21 @@
 "use client"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTwitter, faDiscord, faGoogle, faTwitch } from "@fortawesome/free-brands-svg-icons";
+import { faDiscord, faGoogle, faTwitch } from "@fortawesome/free-brands-svg-icons";
 
 import { Button } from "../../../button";
-import { baseURL } from "@/lib/constants";
-import { createSupabaseClient } from "@/lib/supabase/client";
 import { useToast } from "../../../use-toast";
-import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ToastDescriptions, ToastTitles, toastObjects } from "@/lib/data";
+import { useRouter } from "next/navigation";
+import { OAuthProviders, toastObjects } from "@/lib/data";
 import useAuth from "@/hooks/useAuth";
 
 export default function OnboardingOauth() {
-  const supabase = createSupabaseClient()
-
   const { connectOAuthProvider } = useAuth()
 
+  const { toast } = useToast();
   const router = useRouter();
-  const searchParams = useSearchParams()
-  
-  const error = searchParams.get('error')
 
-  const { toast } = useToast()
-
-  
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        toast(toastObjects.failedRequests)
-      })
-    }
-  }, [])
-
-
-  async function handleOAuthSignIn(e: any, provider: "discord" | "google" | "twitch") {
+  async function handleOAuthSignIn(e: any, provider: OAuthProviders) {
     e.preventDefault()
     const response = await connectOAuthProvider(provider)
 

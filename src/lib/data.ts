@@ -1,3 +1,5 @@
+export type OAuthProviders = "discord" | "google" | "twitch"
+
 export const passwordRules = [
   'Must be at least 8 characters',
   'Must contain at least one uppercase character',
@@ -30,7 +32,7 @@ export enum ToastTitles {
   Success = "Success! 🎉",
   Error = "Error",
   Warning = "Warning ⚠️",
-  Loading = "Loading..."
+  Loading = "Loading...",
 }
 
 export enum ToastDescriptions {
@@ -44,7 +46,6 @@ export const toastObjects = {
     description: ToastDescriptions.FailedRequest,
     variant: "destructive" as const
   },
-  
 }
 
 export const effectsAndMoreData = [
