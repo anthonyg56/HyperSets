@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 export default function DesktopNavMenu({ profile }: Props) {
   const { toast } = useToast()
   
-  const { replace, refresh } = useRouter()
+  const { refresh } = useRouter()
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -34,7 +34,7 @@ export default function DesktopNavMenu({ profile }: Props) {
         handleQueryParams(key)
       })
     })
-  }, [])
+  }, [window.location.href])
 
   // Controls all notifications that appear on a screen
   function handleQueryParams(param: string) {
