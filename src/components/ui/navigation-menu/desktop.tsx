@@ -14,7 +14,7 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   const { toast } = useToast()
   
-  const { replace, refresh } = useRouter()
+  const { refresh } = useRouter()
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -29,19 +29,16 @@ export default function DesktopNavMenu({ profile }: Props) {
 
     if (isOAuth === true && hasRefreshed === false) {
       refresh()
-      setHasRefresh(true)
     } else
       searchParams.forEach((value, key) => {
         setTimeout(() => {
           handleQueryParams(key)
         })
       })
-  }, [hasRefreshed, searchParams])
+  }, [])
 
   // Controls all notifications that appear on a screen
   function handleQueryParams(param: string) {
-    const params = new URLSearchParams(searchParams)
-
     switch (param) {
       case 'code':
         return toast({
