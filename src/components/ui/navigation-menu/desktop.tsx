@@ -37,7 +37,7 @@ export default function DesktopNavMenu({ profile }: Props) {
           title: "Welcome back!",
           description: "You have successfully logged in.",
         })
-        return refresh
+        return refresh()
       case 'error':
         return toast({
           title: "Error",
