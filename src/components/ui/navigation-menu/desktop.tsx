@@ -44,15 +44,11 @@ export default function DesktopNavMenu({ profile }: Props) {
 
     switch (param) {
       case 'code':
-        params.delete("code")
-        replace(`${pathname}?${params.toString()}`)
         return toast({
           title: "Welcome back!",
           description: "You have successfully logged in.",
         })
       case 'error':
-        params.delete("error")
-        replace(`${pathname}?${params.toString()}`)
         return toast({
           title: "Error",
           description: "An error occurred while logging in.",
