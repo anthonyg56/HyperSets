@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 export default function DesktopNavMenu({ profile }: Props) {
   const { toast } = useToast()
   
-  const { replace, refresh } = useRouter()
+  const { push } = useRouter()
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -30,8 +30,7 @@ export default function DesktopNavMenu({ profile }: Props) {
       const params = new URLSearchParams(searchParams)
 
       params.append('refreshed', 'yerrr')
-      replace(`${pathname}?${params.toString()}`)
-      refresh()
+      push(`${pathname}?${params.toString()}`)
     } else
       searchParams.forEach((value, key) => {
         setTimeout(() => {
@@ -67,7 +66,7 @@ export default function DesktopNavMenu({ profile }: Props) {
         return
     }
 
-    replace(`${pathname}?${params.toString()}`)
+    push(`${pathname}?${params.toString()}`)
   }
 
   function isActiveDynamic() {

@@ -10,7 +10,7 @@ export default async function Page() {
   const { data: { session }} = await supabase.auth.getSession()
 
   if (session) {
-    redirect(`/settings/profile`)
+    redirect(`/settings?section=profile`)
   }
 
   return (
