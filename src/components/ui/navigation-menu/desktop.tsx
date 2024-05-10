@@ -31,6 +31,7 @@ export default function DesktopNavMenu({ profile }: Props) {
 
       params.append('refreshed', 'yerrr')
       replace(`${pathname}?${params.toString()}`)
+      refresh()
     } else
       searchParams.forEach((value, key) => {
         setTimeout(() => {
@@ -41,6 +42,8 @@ export default function DesktopNavMenu({ profile }: Props) {
 
   // Controls all notifications that appear on a screen
   function handleQueryParams(param: string) {
+    const params = new URLSearchParams(searchParams)
+
     switch (param) {
       case 'code':
         return toast({
@@ -48,22 +51,23 @@ export default function DesktopNavMenu({ profile }: Props) {
           description: "You have successfully logged in.",
         })
       case 'error':
+        params.delete("error")
+
         return toast({
           title: "Error",
           description: "An error occurred while logging in.",
           variant: "destructive",
         })
-      // case "refresh":
-      //   const params = new URLSearchParams(searchParams)
+      case "refresh":
+        params.delete("refreshed")
+        params.delete("code")
 
-      //   params.delete("refreshed")
-      //   params.delete("code")
-
-      //   replace(`${pathname}?${params.toString()}`)
-      //   break;
+        break;
       default:
         return
     }
+
+    replace(`${pathname}?${params.toString()}`)
   }
 
   function isActiveDynamic() {
