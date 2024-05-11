@@ -89,6 +89,7 @@ export default function ProfileSection() {
       setSubmitted(false)
   }, [mode])
 
+  // Clears the tmp images on component unmount
   useEffect(() => {
     return () => {
       if (tmpAvatar !== null)
@@ -183,8 +184,6 @@ export default function ProfileSection() {
   async function updateProfile(values: ProfileFormSchema, profile: Tables<'profiles'>) {
     const avatar = typeof values.avatar === 'object' ? await uploadImage('avatar', values.avatar) : null
     const banner = typeof values.banner === 'object' ? await uploadImage('banner', values.banner) : null
-
-    
 
     const { data, error } = await supabase
       .from('profiles')
@@ -295,6 +294,7 @@ export default function ProfileSection() {
     }
   }
 
+  // Adds an image client side only
   function addImage(image: File, field: 'avatar' | 'banner') {
 
     form.setValue(field, image)
@@ -302,9 +302,9 @@ export default function ProfileSection() {
     updateImages(field, imageUrl)
   }
 
+  // Removes an image client side only
   function removeImage(e: any | null, field: 'avatar' | 'banner') {
     e?.preventDefault()
-
 
     form.setValue(field, undefined)
     updateImages(field, null)
@@ -315,6 +315,7 @@ export default function ProfileSection() {
       bannerRef.current.value = ''
   }
 
+  // Used for after a successful submit or after the user goes back to view mode
   function resetImage() {
     form.setValue('banner', undefined)
     form.setValue('avatar', undefined)
@@ -341,7 +342,6 @@ export default function ProfileSection() {
             {mode === 'edit' && form.formState.isDirty === true && <AreYouSure onConfirm={onCancel} />}
             {mode === 'edit' && form.formState.isDirty === false && <Button variant="destructive" type="button" onClick={e => setMode('view')}>Cancel</Button>}
             {mode === 'view' && <Button variant="secondary" type="button" onClick={e => setMode('edit')}>Edit</Button>}
-            {mode === 'edit' && <Button variant="secondary" type="submit" disabled={form.formState.isSubmitting === true || form.formState.isDirty === false}>Save Changes</Button>}
           </div>
         </div>
 
@@ -493,6 +493,18 @@ export default function ProfileSection() {
 
             </div>
           </div>
+        </div>
+        <div className="w-full grid items-end pt-8">
+          {mode === 'edit' && (
+            <Button
+              variant="secondary" 
+              type="submit"
+              className="justify-self-end"
+              disabled={form.formState.isSubmitting === true || form.formState.isDirty === false}
+            >
+              Save Changes
+            </Button>
+          )}
         </div>
         <Separator className="w-full my-8" />
       </form>

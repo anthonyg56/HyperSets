@@ -147,33 +147,35 @@ export default function RegisterForm() {
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[400px] max-h-[90svh] overflow-y-auto" onInteractOutside={e => e.preventDefault()}>
-        <DialogHeader>
-          <DialogTitle className="text-center font-">HyperSets</DialogTitle>
-          <DialogDescription className="text-center">Join Today</DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              {step !== FormSteps.Review && <Small classNames="pt-8 text-muted-foreground text-xs">Step {step + 1} of 2</Small>}
-              {step === FormSteps.Security && <SecurityInfo form={form} />}
-              {step === FormSteps.Profile && <ProfileInfo form={form} />}
-            </div>
-            <div className="flex flex-row gap-x-4">   
-              <Button className={cn(["w-full", { 'hidden': step === FormSteps.Security}])} disabled={loading === true} onClick={e => {
-                e.preventDefault()
-                setStep(step - 1)
-              }} variant='secondary'>Previous</Button>
-              <Button type={step === FormSteps.Profile ? "submit" : "button"} className="w-full" disabled={loading === true} onClick={e => {
-                e.preventDefault()
-                if (step === FormSteps.Profile) {
-                  form.handleSubmit(onSubmit)()
-                } else {
-                  updateView()
-                }
-              }}>{loading ? loader : submitNext}</Button>
-            </div>
-          </form>
-        </Form>
+        <div className="h-full">
+          <DialogHeader>
+            <DialogTitle className="text-center font-">HyperSets</DialogTitle>
+            <DialogDescription className="text-center">Join Today</DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div>
+                {step !== FormSteps.Review && <Small classNames="pt-8 text-muted-foreground text-xs">Step {step + 1} of 2</Small>}
+                {step === FormSteps.Security && <SecurityInfo form={form} />}
+                {step === FormSteps.Profile && <ProfileInfo form={form} />}
+              </div>
+              <div className="flex flex-row gap-x-4">   
+                <Button className={cn(["w-full", { 'hidden': step === FormSteps.Security}])} disabled={loading === true} onClick={e => {
+                  e.preventDefault()
+                  setStep(step - 1)
+                }} variant='secondary'>Previous</Button>
+                <Button type={step === FormSteps.Profile ? "submit" : "button"} className="w-full" disabled={loading === true} onClick={e => {
+                  e.preventDefault()
+                  if (step === FormSteps.Profile) {
+                    form.handleSubmit(onSubmit)()
+                  } else {
+                    updateView()
+                  }
+                }}>{loading ? loader : submitNext}</Button>
+              </div>
+            </form>
+          </Form>
+        </div>
       </DialogContent>
     </Dialog>
   )

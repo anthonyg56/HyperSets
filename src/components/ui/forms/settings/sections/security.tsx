@@ -29,8 +29,6 @@ import { SettingsContext } from "@/context/settingsProvider";
 import ConnectedAccounts from "../misc/connect-accounts";
 import { ToastDescriptions, ToastTitles } from "@/lib/data";
 
-const currentProviders: Provider[] = ["google", "discord", "twitch"]
-
 export default function SecuritySection() {
   const { security: user } = useContext(SettingsContext)
 
@@ -139,7 +137,7 @@ export default function SecuritySection() {
           </div>
           <div className="flex flex-row ml-auto gap-x-4">
             {mode === 'edit' && <Button variant="destructive" type="button" onClick={e => updateMode('view')}>Cancel</Button>}
-            {mode === 'edit' && <Button variant="secondary" type="submit" disabled={form.formState.isSubmitting || form.formState.isDirty === false}>Save Changes</Button>}
+            
             {mode === 'view' && <Reauthenticate setMode={setMode} />}
           </div>
         </div>
@@ -215,6 +213,10 @@ export default function SecuritySection() {
                   </FormItem>
                 )}
               />
+              <div className="grid w-full">
+                {mode === 'edit' && <Button variant="secondary" type="submit" className="justify-self-end" disabled={form.formState.isSubmitting || form.formState.isDirty === false}>Save Changes</Button>}
+              </div>
+              
             </div>
           </div>
           <Separator className="w-full my-8" />
