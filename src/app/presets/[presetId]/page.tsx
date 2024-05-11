@@ -25,6 +25,12 @@ import DownloadPresetButton from "@/components/ui/buttons/download";
 import PreviewMediaDialog from "@/components/ui/dialogs/previewMedia";
 import { Tables } from "../../../../types/supabase";
 import EffectsIconsDisplay from "@/components/misc/displays/effects-icon";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Community Presets - HyperSets",
+  description: "An online archieve of RGB profiles for HyperX NGenuity capable hardware made by the HyperXFamily.",
+};
 
 export default async function PresetDetailsPage({ params: { presetId }}: Props) {
   const supabase = await createSupabaseServerClient()

@@ -14,10 +14,24 @@ import Link from "next/link";
 import { Tables } from "../../../../types/supabase";
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 import { calculateAverage } from "@/app/presets/[presetId]/page";
+import { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
   params: {
     username: string
+  }
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const username = params.username
+ 
+  return {
+    title: `@${username} Profile - HyperSets`,
+    description: "Explore HyperX presets made and uploaded by " + username
   }
 }
 

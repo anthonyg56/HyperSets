@@ -5,7 +5,12 @@ import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 import { H2, Lead } from "@/components/ui/typography";
 import { Vortex } from "@/components/ui/vortex";
 import NewPresetHeroButton from "@/components/ui/buttons/new-preset-hero";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Community Presets - HyperSets",
+  description: "Explore and download a preset from our online archieve of RGB profiles for HyperX NGenuity capable hardware.",
+};
 
 export default async function Page() {
   const supabase = await createSupabaseServerClient()

@@ -10,6 +10,7 @@ import SettingsPagesDropdown from "@/components/ui/dropdown/settingsPages";
 import SettingsFormSections from "../../../components/misc/pages/settings/settings-form";
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset";
 
+
 export default async function Page() {
   const supabase = await createSupabaseServerClient();
 
