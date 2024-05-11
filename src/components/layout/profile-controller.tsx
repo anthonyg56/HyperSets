@@ -17,7 +17,7 @@ export default function ProfileController() {
   const { profile } = useContext(NavbarContext) as TNavbarContext
 
   if (!profile) return (
-    <div className="min-w-[127.4px]">
+    <div className="min-w-[127.4px] ml-auto md:ml-0">
       <SearchButton />
     </div>
   )
