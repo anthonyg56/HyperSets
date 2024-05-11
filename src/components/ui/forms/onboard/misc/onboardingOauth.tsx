@@ -13,7 +13,6 @@ export default function OnboardingOauth() {
   const { connectOAuthProvider } = useAuth()
 
   const { toast } = useToast();
-  const router = useRouter();
 
   async function handleOAuthSignIn(e: any, provider: OAuthProviders) {
     e.preventDefault()
@@ -21,8 +20,6 @@ export default function OnboardingOauth() {
 
     if (response.valid === false) {
       toast(toastObjects.failedRequests)
-    } else {
-      router.refresh()
     }
   }
 

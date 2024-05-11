@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
   const token_hash = searchParams.get('token_hash')
   const type = searchParams.get('type') as EmailOtpType | null
   const next = searchParams.get('next') ?? '/'
-  const code = searchParams.get('code')
 
   const redirectTo = request.nextUrl.clone()
   redirectTo.pathname = next
@@ -23,29 +22,13 @@ export async function GET(request: NextRequest) {
 
     const { error } = await supabase.auth.verifyOtp({
       type,
-      token_hash,
-      options: {
-        redirectTo: ""
-      }
+      token_hash
     })
 
     if (!error) {
       
       return NextResponse.redirect(redirectTo)
     }
-  }
-
-  // The only time a code should be available is for OAuth
-  if (code) {
-    const { data: { user }, error } = await supabase.auth.exchangeCodeForSession(code)
-
-    if (!user) {
-      redirectTo.pathname = '/login'
-      return NextResponse.redirect(redirectTo)
-    }
-
-    redirectTo.pathname = `/presets`
-    return NextResponse.redirect(redirectTo)
   }
 
   // return the user to an error page with some instructions

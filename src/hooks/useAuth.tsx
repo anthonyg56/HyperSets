@@ -183,7 +183,6 @@ export default function useAuth() {
         redirectTo: `${baseURL}api/oauth`,
       } 
     })
-    .then(data => data)
 
     if (error) {
       toast(toastObjects.failedRequests)
