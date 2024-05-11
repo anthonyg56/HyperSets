@@ -8,6 +8,12 @@ import { useSearchParams } from "next/navigation"
 
 export type FormMode = 'edit' | 'view';
 
+/**
+ * This has to be its own component due to the fact the search params will be dynamic and thus,
+ * can only be read client side.
+ * 
+ * @returns 
+ */
 export default function SettingsFormSections() {
   const searchParams = useSearchParams()
 
