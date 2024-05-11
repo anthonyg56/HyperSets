@@ -120,12 +120,12 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
           setSort={setSort}
         />
       </div>
-      <PresetsCardMap presets={presets} loading={loading} />
+      <PresetsCardMap fetchPresets={fetchPresets} presets={presets} loading={loading} />
     </div>
   )
 }
 
-function PresetsCardMap({ presets, loading }: { presets: PresetCardQueryResults[], loading: boolean }) {
+function PresetsCardMap({ presets, loading, fetchPresets }: { presets: PresetCardQueryResults[], loading: boolean, fetchPresets(): Promise<void> }) {
   if (loading === true) return (
     // Build a loading skeleton for when the preset filters are update, will be different from the page loading skeleton
     <div className="flex flex-col justify-center items-center w-full h-[500px]">
@@ -135,7 +135,7 @@ function PresetsCardMap({ presets, loading }: { presets: PresetCardQueryResults[
 
   return (
     <div className={cn(["flex flex-col pt-8 md:flex-none md:grid md:grid-cols-12 gap-4"])}>
-      {presets.map((data, index) => <PresetCard key={`${index} - ${data.name} preset`} preset={data} />)}
+      {presets.map((data, index) => <PresetCard fetchPresets={fetchPresets} key={`${index} - ${data.name} preset`} preset={data} />)}
     </div>
   )
 }

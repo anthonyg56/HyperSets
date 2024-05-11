@@ -6,7 +6,7 @@ import PresetCardList from "@/components/misc/lists/presets";
 import { useContext } from "react";
 import { SettingsContext, TSettingsContext } from "@/context/settingsProvider";
 
-export default async function PresetsSection() {
+export default function PresetsSection() {
   const { presets, security: { user_metadata } } = useContext(SettingsContext) as TSettingsContext;
 
   return (

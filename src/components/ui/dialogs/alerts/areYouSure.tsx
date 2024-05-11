@@ -1,3 +1,4 @@
+"use client"
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,12 +12,13 @@ type Props = {
   onCancel?: (e: any) => void;
   onConfirm?: (e: any) => void;
   setOpen?: (open: boolean) => void;
+  classNames?: string;
 }
 
-export default function AreYouSure({ onConfirm, onCancel, open, setOpen, hidden, triggerText = "Cancel", message = "This action cannot be undone, are you sure you want to continue?" }: Props) {
+export default function AreYouSure({ classNames, onConfirm, onCancel, open, setOpen, hidden, triggerText = "Cancel", message = "This action cannot be undone, are you sure you want to continue?" }: Props) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen} >
-      <AlertDialogTrigger asChild className={cn([{
+      <AlertDialogTrigger asChild className={cn([classNames, {
         'hidden': hidden && hidden === true
       }])}>
         <Button variant="destructive" type="button">

@@ -7,6 +7,8 @@ import { Tables } from "../../types/supabase"
 import { PUBLIIC_CDN_URL } from "../lib/constants"
 import { PresetCardQueryResults } from "@/components/ui/cards/presets/preset"
 import { FormMode } from "@/components/misc/pages/settings/settings-form"
+import { ToastTitles } from "@/lib/data"
+import { useToast } from "@/components/ui/use-toast"
 
 export type TSettingsContext = {
   mode: FormMode,
@@ -17,8 +19,10 @@ export type TSettingsContext = {
   profile: Tables<'profiles'>,
   presets: PresetCardQueryResults[],
   notificationPref: Tables<'notifications_prefrences'>,
+  removePreset(preset_id: number): void
   updateData<T extends keyof TSettingsContext, D = TSettingsContext[T]>(type: T, data: D): void,
-  updateImages(type: 'avatar' | 'banner', path: string | null): void
+  updateImages(type: 'avatar' | 'banner', path: string | null): void,
+  refreshPresets(): Promise<void>
 }
 
 export const SettingsContext = createContext<Partial<TSettingsContext>>({})
@@ -32,6 +36,8 @@ type Props = {
 }
 
 export default function SettingsProvider({ children, notificationPreferences, profile: initialProfile, security: initalSecurity, presets: initalPresets }: Props) {
+  const supabase = createSupabaseClient()
+
   const [mode, setMode] = useState<FormMode>('view')
 
   const [notificationPref, setNotitifcationPref] = useState(notificationPreferences)
@@ -44,6 +50,8 @@ export default function SettingsProvider({ children, notificationPreferences, pr
 
   const [tmpIdentities, setTmpIdentities] = useState<UserIdentity[]>([])
   
+  const { toast } = useToast()
+
   function updateData<T extends keyof TSettingsContext, D = TSettingsContext[T]>(type: T, data: D) {
     switch(type) {
       case 'notificationPref':
@@ -83,6 +91,23 @@ export default function SettingsProvider({ children, notificationPreferences, pr
     }
   }
 
+  async function refreshPresets() {
+    if (security === null || security.user_metadata.profile_id)
+      return
+
+    const { data, error } = await supabase
+      .from('presets')
+      .select('*, profile:profile_id(profile_id, username, avatar, name)')
+      .eq('profile_id', security.user_metadata.profile_id)
+      .returns<PresetCardQueryResults[] | null>()
+    
+    setPresets(data ?? [])
+  }
+
+  function removePreset(preset_id: number) {
+    const newArray = presets.filter(preset => preset.preset_id !== preset_id)
+    setPresets(newArray)
+  }
   return (
     <SettingsContext.Provider value={{
       mode,
@@ -94,7 +119,9 @@ export default function SettingsProvider({ children, notificationPreferences, pr
       updateImages,
       tmpBanner,
       notificationPref,
-      tmpIdentities
+      tmpIdentities,
+      refreshPresets,
+      removePreset
     }}>
       {children}
     </SettingsContext.Provider>

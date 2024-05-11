@@ -31,7 +31,7 @@ export default function NewPresetHeroButton({ session }: Props) {
 
   return (
     <>
-      <Button size="lg" variant="default" onClick={handleClick}>
+      <Button size="lg" variant="default" className="mt-2" onClick={handleClick}>
         Submit a new preset
       </Button>
       <NewPresetDialog isOpen={open} setIsOpen={setOpen} />
@@ -49,7 +49,7 @@ function LoginButton() {
   }
 
   return (
-    <Button onClick={handleClick} variant="outline">
+    <Button onClick={handleClick} variant="outline" >
       Login
     </Button>
   )

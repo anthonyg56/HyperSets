@@ -23,9 +23,9 @@ export default async function Page() {
   
   return (
     <div className="min-h-[calc(100vh_-_57px)] flex flex-col pt-6">
-      <div className="flex flex-col w-full items-center justify-center relative py-24 gap-x-[2px]">
-        <H2 classNames="border-b-0">All Presets</H2>
-        <Lead classNames="pb-2">Explore our communities presets and find the right aesthetic for your hardware to enhance your experince.</Lead>
+      <div className="flex flex-col w-full items-center justify-center relative py-24 gap-x-[2px] container">
+        <H2 classNames="border-b-0">Community Presets</H2>
+        <Lead classNames="pb-2 text-center">Explore our communities presets and find the right aesthetic for your hardware to enhance your experince.</Lead>
         <NewPresetHeroButton session={session} />
       </div>
 

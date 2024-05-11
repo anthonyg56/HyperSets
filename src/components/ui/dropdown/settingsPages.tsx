@@ -35,6 +35,7 @@ export default function SettingsPagesDropdown() {
   async function routePage(section: SettingsSections) {
     if (section === 'Sign out') {
       await signOut()
+      refresh()
       return
     }
 
