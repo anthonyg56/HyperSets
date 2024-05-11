@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { SelectLabel } from "@radix-ui/react-select";
 import { Separator } from "../separator";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import useAuth from "@/hooks/useAuth";
 
 export type SettingsSections = "Profile" | "Security" | "Presets" | "Sign out"
 export const settingsSections = ["Profile", "Security", "Presets", "Sign out"]
@@ -18,7 +19,9 @@ export default function SettingsPagesDropdown() {
   const [open, setOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(capitalizeFirstLetter(section ?? ""))
 
-  const router = useRouter()
+  const { signOut } = useAuth()
+
+  const { replace, refresh } = useRouter()
 
   useEffect(() => {
     const capitalizedSection = capitalizeFirstLetter(section ?? "")
@@ -29,9 +32,14 @@ export default function SettingsPagesDropdown() {
       setCurrentPage(capitalizeFirstLetter(section))
   }, [section])
 
-  function routePage(section: SettingsSections) {
+  async function routePage(section: SettingsSections) {
+    if (section === 'Sign out') {
+      await signOut()
+      return
+    }
+
     setCurrentPage(section)
-    router.replace(`/settings?section=${section.toLocaleLowerCase()}`)
+    replace(`/settings?section=${section.toLocaleLowerCase()}`)
   }
 
   
