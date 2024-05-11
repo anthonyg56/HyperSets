@@ -100,7 +100,7 @@ export default function useAuth() {
       email: cleansedEmail,
       password,
       options: {
-        emailRedirectTo: `${baseURL}/api/confirm`,
+        emailRedirectTo: `${baseURL}api/confirm`,
         data: metaData
       }
     })
@@ -180,7 +180,7 @@ export default function useAuth() {
     const {  error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${baseURL}/api/oauth`,
+        redirectTo: `${baseURL}api/oauth`,
       } 
     })
     .then(data => data)
