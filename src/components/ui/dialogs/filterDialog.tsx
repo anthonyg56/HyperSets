@@ -123,46 +123,50 @@ export default function FilterPresetsDialog({ currentGames, currentHardware, upd
 
   return (
     <Drawer  open={open} onOpenChange={setOpen}>
-        <ToolTip text="Filter Options" variant="ghost" size="icon" onClick={e => {
-          // e.preventDefault()
-          setOpen(true)
-        }}>
-          <MixerVerticalIcon className="w-6 h-6" />
-        </ToolTip>
+      <Button variant="outline" size="default" className="flex flex-row gap-x-1 items-center ml-2" onClick={e => {
+        // e.preventDefault()
+        setOpen(true)
+      }}>
+        <Small classNames="text-sm">More Filters</Small>
+        <MixerVerticalIcon className="w-5 h-5" />
+      </Button>
 
-      <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Filter Options</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="space-y-3 px-4">
-          <div className="space-y-2">
-            <H4>Hardware</H4>
-            <HardwareToggleGroup currentHardware={tmpHardware} updateHardware={setTmpHardware} classNames="justify-start !ml-0" />
+      <DrawerContent className="overflow-y-auto max-h-[90svh]">
+        <div className="h-full z-10">
+          <DrawerHeader className="text-left">
+            <DrawerTitle>Filter Options</DrawerTitle>
+            <DrawerDescription>
+              Make changes to your profile here. Click save when you&apos;re done.
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="space-y-3 px-4">
+            <div className="space-y-2">
+              <H4>Hardware</H4>
+              <HardwareToggleGroup currentHardware={tmpHardware} updateHardware={setTmpHardware} classNames="justify-start !ml-0" />
+            </div>
+            <div className="space-y-2">
+              <H4>Sort By:</H4>
+              <SortPresetsDropdownMenu dialog sort={tmpSort} setSort={setTmpSort} classNames="justify-start !ml-0" />
+            </div>
+            <div className="space-y-2">
+              <H4>Effects</H4>
+              <NewPresetEffectsToggleGroup selectedEffects={tmpEffect} updateEffect={setTmpEffect} />
+            </div>
+            <div className="space-y-2">
+              <H4>Games</H4>
+              <AddGames display="Filter" updateGames={setTmpGameFilter} currentGames={tmpGameFilter} />
+            </div>
           </div>
-          <div className="space-y-2">
-            <H4>Sort By:</H4>
-            <SortPresetsDropdownMenu dialog sort={tmpSort} setSort={setTmpSort} classNames="justify-start !ml-0" />
-          </div>
-          <div className="space-y-2">
-            <H4>Effects</H4>
-            <NewPresetEffectsToggleGroup selectedEffects={tmpEffect} updateEffect={setTmpEffect} />
-          </div>
-          <div className="space-y-2">
-            <H4>Games</H4>
-            <AddGames display="Filter" updateGames={setTmpGameFilter} currentGames={tmpGameFilter} />
-          </div>
+
+          <DrawerFooter className="pt-2">
+            <Button variant="outline" onClick={resetFilters}>Reset</Button>
+            <DrawerClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DrawerClose>
+            <Button variant="default" onClick={updateFilters}>Save</Button>
+          </DrawerFooter>
         </div>
 
-        <DrawerFooter className="pt-2">
-          <Button variant="outline" onClick={resetFilters}>Reset</Button>
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-          <Button variant="default">Save</Button>
-        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

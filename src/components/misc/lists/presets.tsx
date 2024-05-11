@@ -106,19 +106,21 @@ export default function PresetCardList({ profile_id, serverPresets }: PresetCard
     <div className={cn(["flex flex-col justify-center mb-[196px] w-full relative z-10", {
       "container max-w-screen-2xl": !pathname.startsWith("/settings"),
     }])}>
-      <div className="hidden md:flex md:flex-row items-center pt-1">
+      <div className="flex flex-col-reverse justify-center md:justify-start md:flex-row md:items-center pt-1">
         <HardwareToggleGroup currentHardware={hardwares} updateHardware={setHardwares} />
-        <SortPresetsDropdownMenu sort={sort} setSort={setSort} />
-        <FilterPresetsDialog
-          sort={sort}
-          currentGames={games}
-          currentEffect={effects}
-          currentHardware={hardwares}
-          updateGameFilter={setGames}
-          updateEffect={setEffects}
-          updateHardware={setHardwares}
-          setSort={setSort}
-        />
+        <div className="flex flex-row md:ml-auto pb-3 md:pb-0">
+          <SortPresetsDropdownMenu sort={sort} setSort={setSort} />
+          <FilterPresetsDialog
+            sort={sort}
+            currentGames={games}
+            currentEffect={effects}
+            currentHardware={hardwares}
+            updateGameFilter={setGames}
+            updateEffect={setEffects}
+            updateHardware={setHardwares}
+            setSort={setSort}
+          />
+        </div>
       </div>
       <PresetsCardMap fetchPresets={fetchPresets} presets={presets} loading={loading} />
     </div>

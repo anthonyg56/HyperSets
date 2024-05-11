@@ -34,12 +34,12 @@ export function SortPresetsDropdownMenu({ dialog, sort, setSort, classNames }: P
 
 
   return (
-    <div className={cn(["flex flex-row ml-auto items-center", classNames])}>
-      {!dialog && <Small classNames="mr-2">Sort By</Small>}
+    <div className={cn(["flex flex-row items-center mx-auto md:mx-0", classNames])}>
+      {/* {!dialog && <Small classNames="mr-2"></Small>} */}
       <DropdownMenu defaultOpen={open} open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant={'outline'} onClick={handleImageDirection}>
-            {sort} <FontAwesomeIcon icon={faChevronDown} className={cn([
+          Sort By: {sort} <FontAwesomeIcon icon={faChevronDown} className={cn([
               "ml-2 w-4 h-4",
               {
                 "rotate-180": open === true,
