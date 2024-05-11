@@ -8,8 +8,8 @@ import { SelectLabel } from "@radix-ui/react-select";
 import { Separator } from "../separator";
 import { capitalizeFirstLetter } from "@/lib/utils";
 
-export type SettingsSections = "Profile" | "Security" | "Presets"
-export const settingsSections = ["Profile", "Security", "Presets"]
+export type SettingsSections = "Profile" | "Security" | "Presets" | "Sign out"
+export const settingsSections = ["Profile", "Security", "Presets", "Sign out"]
 
 export default function SettingsPagesDropdown() {
   const searchParams = useSearchParams()
@@ -49,6 +49,7 @@ export default function SettingsPagesDropdown() {
             <SelectItem value="Profile">Profile</SelectItem>
             <SelectItem value="Security">Security</SelectItem>
             <SelectItem value="Presets">Presets</SelectItem>
+            <SelectItem value="Sign out" className="text-primary">Sign Out</SelectItem>
             {/* <SelectItem value="/settings?section=notifications">Notifications</SelectItem> */}
           </SelectGroup>
         </SelectContent>
