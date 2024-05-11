@@ -20,15 +20,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-import { Provider, UserIdentity } from "@supabase/supabase-js";
+import { Provider } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
 import useAuth from "@/hooks/useAuth";
-import DisconnectOAuthProviderAlert from "@/components/ui/dialogs/alerts/disconnectOAuth";
 import { H3, Muted } from "@/components/ui/typography";
 import Reauthenticate from "@/components/ui/dialogs/alerts/reauthenticate";
-import ConnectOAuthProviderAlertDialog from "@/components/ui/dialogs/connectOAuthProvider";
 import { SettingsContext } from "@/context/settingsProvider";
-import EmailFormField from "../form-fields/email";
+import ConnectedAccounts from "../misc/connect-accounts";
 import { ToastDescriptions, ToastTitles } from "@/lib/data";
 
 const currentProviders: Provider[] = ["google", "discord", "twitch"]
@@ -36,11 +34,8 @@ const currentProviders: Provider[] = ["google", "discord", "twitch"]
 export default function SecuritySection() {
   const { security: user } = useContext(SettingsContext)
 
-  const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState<'edit' | 'view'>('view')
-
-  const [confirmValid, setConfirmValid] = useState<boolean | null>(null)
-  const [passwordValid, setPasswordValid] = useState<boolean | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const { toast } = useToast()
   const { updateSecurityInfo, checkEmail } = useAuth()
@@ -53,63 +48,48 @@ export default function SecuritySection() {
       email: user?.email ?? "",
     },
   })
-
-  useEffect(() => {
-    const subscription = form.watch(async ({ email }, { name, type }) => {
-      if (name === "email" && type === "change") {
-        const usernameValid = await form.trigger("email")
-
-        if (!usernameValid) return
-
-        const response = await checkEmail(email)
-
-        if (response.valid === false) {
-          form.setError('email', { message: response.message })
-          return
-        }
-
-        form.clearErrors('email')
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
   
   async function onSubmit(values: SecurityFormSchema) {
     try {
+      setLoading(true)
+      toast({
+        title: ToastTitles.Change,
+        description: ToastDescriptions.Wait,
+      })
 
+      const res = await updateSecurityInfo({
+        email: values.email.trim().toLowerCase(),
+        password: values.password,
+      })
+  
+      if (!res) {
+        toast({
+          title: ToastTitles.Error,
+          description: ToastDescriptions.FailedRequest,
+          variant: "destructive"
+        })
+  
+        return
+      }
+  
+      toast({
+        title: ToastTitles.Success,
+        description: "Your account's security information was updated. Please check your email to confirm the changes.",
+      })
+      resetForm()
     } catch (error: any) {
-
+      toast({
+        title: ToastTitles.Error,
+        description: ToastDescriptions.FailedRequest,
+        variant: "destructive",
+      })
     } finally {
-
+      setLoading(false)
     }
     
     toast({
       title: "Updating...",
     })
-
-    const res = await updateSecurityInfo({
-      email: values.email.trim().toLowerCase(),
-      password: values.password,
-    })
-
-    if (!res) {
-      toast({
-        title: ToastTitles.Error,
-        description: ToastDescriptions.FailedRequest,
-        variant: "destructive"
-      })
-
-      return
-    }
-
-    toast({
-      title: ToastTitles.Success,
-      description: "Your account's security information was updated. Please check your email to confirm the changes.",
-    })
-
-    resetForm()
   }
 
   function onInvalid() {
@@ -129,8 +109,6 @@ export default function SecuritySection() {
     })
 
     setMode('view')
-    setConfirmValid(null)
-    setPasswordValid(null)
   }
 
   function isPasswordValid(password?: string) {
@@ -138,7 +116,6 @@ export default function SecuritySection() {
   }
 
   function isConfirmPasswordValid(confirm?: string) {
-
     const password = form.getValues("password")
 
     const results = passwordSchema.safeParse(confirm)
@@ -149,9 +126,8 @@ export default function SecuritySection() {
     setMode(mode)
   }
 
-  if (user === undefined) return <div>Loading...</div>
-
-  const unusedIdentities = currentProviders.filter(provider => !user?.identities?.map(identity => identity.provider).includes(provider))
+  if (user === undefined)
+    return <div>Loading...</div>
 
   return (
     <Form {...form}>
@@ -242,7 +218,7 @@ export default function SecuritySection() {
             </div>
           </div>
           <Separator className="w-full my-8" />
-          <EmailFormField form={form} mode={mode} />
+          <ConnectedAccounts form={form} mode={mode} />
         </div>    
       </form>
     </Form>

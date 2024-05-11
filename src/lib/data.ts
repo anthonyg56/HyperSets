@@ -1,4 +1,5 @@
 export type OAuthProviders = "discord" | "google" | "twitch"
+export const oAuthProviders: OAuthProviders[] = ["twitch", "google", "discord"]
 
 export const passwordRules = [
   'Must be at least 8 characters',
@@ -33,11 +34,14 @@ export enum ToastTitles {
   Error = "Error",
   Warning = "Warning ⚠️",
   Loading = "Loading...",
+  Updating = "Updating...",
+  Change = "Making changes.."
 }
 
 export enum ToastDescriptions {
   InvalidSubmission = "It looks like some fields were not filled out properly. Please correct them and try again.",
-  FailedRequest = "An error occured, please try again later."
+  FailedRequest = "An error occured, please try again later.",
+  Wait = "Please wait."
 }
 
 export const toastObjects = {

@@ -24,13 +24,12 @@ const schema = z.string({
 
 type Props = {
   mode: FormMode,
-  email: string,
-  isEmail: boolean,
 }
-export default function ConnectEmail({ mode, isEmail, email: currentEmail }: Props) {
+export default function ConnectEmail({ mode }: Props) {
   const supabase = createSupabaseClient()
-  
-  const [email, setEmail] = useState(currentEmail)
+  const { security: user, updateData } = useContext(SettingsContext) as TSettingsContext
+
+  const [email, setEmail] = useState(user.email ?? "")
   
   // Email meta state
   const [isAvailable, setIsAvailable] = useState(false)
@@ -43,7 +42,11 @@ export default function ConnectEmail({ mode, isEmail, email: currentEmail }: Pro
   const { toast } = useToast()
   const { updateSecurityInfo } = useAuth()
 
-  const { security: user, updateData } = useContext(SettingsContext) as TSettingsContext
+  const emailConnected = user.identities !== undefined && user.identities.some(({ provider }) => provider === 'email')
+  const multipleIdentities = user.identities !== undefined && user.identities.length > 1
+  
+  const newEmail = user.new_email
+  const currentEmail = user.email
 
   useEffect(() => {
     if (open === false) {
@@ -169,7 +172,7 @@ export default function ConnectEmail({ mode, isEmail, email: currentEmail }: Pro
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="secondary" type="button" disabled={mode === 'view'}>
-          {isEmail ? "Change" : "Connect"}
+          {emailConnected || newEmail ? "Change" : "Connect"}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="w-[80%] md:w-full">

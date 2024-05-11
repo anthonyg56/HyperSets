@@ -18,9 +18,9 @@ function Title({ title, subTitle, center, classNames, ...iconProps }: NewProps) 
 
   return (
     <div className={cn([classNames, {
-      "text-center": center
+      "text-center flex justify-center flex-col": center
     }])}>
-      {iconProps && iconProps.iconProps && iconProps.iconProps.icon !== undefined && <FontAwesomeIcon icon={iconProps.iconProps.icon} className='pb-2 text-hyper-dark-grey w-10 h-10' {...iconProps} />}
+      {iconProps && iconProps.iconProps && iconProps.iconProps.icon !== undefined && <FontAwesomeIcon icon={iconProps.iconProps.icon} className={cn(['pb-2 text-hyper-dark-grey w-10 h-10', iconProps.iconProps.className])} {...iconProps} />}
       <H3>{titleText}</H3>
       {subTitle && <Muted>{subTitle}</Muted>}
       <br />

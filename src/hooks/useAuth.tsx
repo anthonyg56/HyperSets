@@ -29,6 +29,28 @@ export default function useAuth() {
     setSession(session)
   }
 
+  async function resendValidationEmail(email: string, redirect: string) {
+    return await supabase.auth.resend({
+      type: 'email_change',
+      email,
+      options: {
+        emailRedirectTo: redirect
+      }
+    })
+    .then(error => {
+      if (error)
+        return {
+          valid: false,
+          error: 'We encountered an error sending the validation email. Please try again later.'
+        }
+
+      return {
+        valid: true,
+        error: null
+      }
+    })
+  }
+
   async function signOut() {
     const { error } = await supabase.auth.signOut()
     if (error) {
@@ -236,6 +258,7 @@ export default function useAuth() {
     updateSecurityInfo,
     signIn,
     sighUp,
+    resendValidationEmail,
     sendPasswordResetEmail,
     disconnectOAuthProvider,
     connectOAuthProvider,
