@@ -59,7 +59,7 @@ export default function useAuth() {
       })
       return
     }
-    router.push('/login')
+    router.refresh()
   }
 
   async function signIn({ email, password }: { email: string, password: string }) {
