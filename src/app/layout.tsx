@@ -14,7 +14,7 @@ export const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "HyperSets",
-  description: "An online archieve of RGB profiles for HyperX NGenuity capable hardware made by the HyperXFamily.",
+  description: "Share, discover, and illuminate your HyperX NGenuity setup. Welcome to HyperSets, an online archieve of RGB profiles made by the HyperXFamily.",
 };
 
 
