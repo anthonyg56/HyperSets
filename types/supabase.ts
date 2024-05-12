@@ -121,22 +121,22 @@ export type Database = {
       }
       games: {
         Row: {
-          franchise: string
+          franchise: string | null
           game_id: number
           game_name: string
-          publisher: string
+          publisher: string | null
         }
         Insert: {
-          franchise: string
+          franchise?: string | null
           game_id?: number
           game_name: string
-          publisher: string
+          publisher?: string | null
         }
         Update: {
-          franchise?: string
+          franchise?: string | null
           game_id?: number
           game_name?: string
-          publisher?: string
+          publisher?: string | null
         }
         Relationships: []
       }
@@ -369,7 +369,7 @@ export type Database = {
         }
         Insert: {
           created_on?: string
-          description: string
+          description?: string
           download_url: string
           downloads?: number
           featured?: boolean
@@ -420,7 +420,7 @@ export type Database = {
           last_logon: string | null
           name: string
           profile_id: number
-          twitter: string | null
+          twitch: string | null
           user_id: string
           username: string
         }
@@ -436,7 +436,7 @@ export type Database = {
           last_logon?: string | null
           name: string
           profile_id?: number
-          twitter?: string | null
+          twitch?: string | null
           user_id?: string
           username: string
         }
@@ -452,7 +452,7 @@ export type Database = {
           last_logon?: string | null
           name?: string
           profile_id?: number
-          twitter?: string | null
+          twitch?: string | null
           user_id?: string
           username?: string
         }

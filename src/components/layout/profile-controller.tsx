@@ -8,6 +8,7 @@ import Link from "next/link"
 import SearchButton from "../ui/buttons/search-button"
 import { useContext } from "react"
 import { NavbarContext, TNavbarContext } from "@/context/navbar-provider"
+import ToolTip from "../misc/tool-tip"
 
 type Props = {
 
@@ -27,14 +28,16 @@ export default function ProfileController() {
       <NewPresetButton />
       <SearchButton />
       <NotificationSheet />
-      <Link href={`/profile/${profile.username}`}>
-        <Avatar
-          avatar={profile.avatar}
-          name={profile.name}
-          username={profile.username}
-          classNames="w-[30px] h-[30px] ml-2"
-        />
-      </Link>
+      <ToolTip text="My Profile" size="icon" variant="ghost">
+        <Link href={`/profile/${profile.username}`}>
+          <Avatar
+            avatar={profile.avatar}
+            name={profile.name}
+            username={profile.username}
+            classNames="w-[30px] h-[30px] ml-2"
+          />
+        </Link>
+      </ToolTip>
     </div>
   )
 }

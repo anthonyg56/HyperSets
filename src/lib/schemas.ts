@@ -44,10 +44,10 @@ export const createAPresetSchema = z.object({
   description: z.string({
     required_error: "Name is required",
     invalid_type_error: "Input must be a string",
-  }).min(5, {
-    message: "Description must be atleast 5 characters"
-  }).max(140, {
-    message: "Description must be less than 140 characters"
+  }).min(3, {
+    message: "Description must be atleast 3 characters"
+  }).max(600, {
+    message: "Description must be less than 600 characters"
   }),
   hardware: z.union([
     z.literal("Keyboard"),
