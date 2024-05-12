@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/context/themeProvider";
 import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/layout/navbar";
+import { Analytics } from "@vercel/analytics/react"
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
   title: "HyperSets",
   description: "An online archieve of RGB profiles for HyperX NGenuity capable hardware made by the HyperXFamily.",
 };
+
+
 
 export default function RootLayout({
   children,
@@ -36,6 +39,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Toaster />
+          <Analytics/> 
         </ThemeProvider>
       </body>
     </html>
