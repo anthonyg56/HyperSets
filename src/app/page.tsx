@@ -151,8 +151,8 @@ export default async function Home() {
       </div>
       <div className="w-full md:grid justify-center py-24">
         <div className="container max-w-screen-2xl w-full text-center space-y-4 flex flex-col justify-center">
-          <H2 classNames="border-b-0">Signup today</H2>    
-          <Lead classNames="pb-2 lg:w-1/2 mx-auto">HyperSets is currently in its MVP phase, meaning this is just the beginning. Sign up today by (a date Two week away from launch date) for free access to premium for a month.</Lead>
+          <H2 classNames="border-b-0">Signup today</H2>
+          <Lead classNames="pb-2 lg:w-1/2 mx-auto">HyperSets is currently in its MVP phase, meaning this is just the beginning. Sign up today by May 26th, 20204 for free access to premium for a month.</Lead>
           <Button className="mx-auto dark:text-white z-30" variant="default">
             <Link href="/register">
               Sign up
