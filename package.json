@@ -53,13 +53,11 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.0",
-    "react-image-crop": "^11.0.5",
     "simplex-noise": "^4.0.1",
     "supabase": "^1.136.3",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "tus-js-client": "^4.0.1",
-    "uuid": "^9.0.1",
     "vaul": "^0.8.9",
     "zod": "^3.22.4"
   },
