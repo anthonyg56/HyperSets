@@ -35,7 +35,7 @@ There are talented people creating cool profiles, but dont have a platform to sh
 
 I theorized that if users had a platform to upload, share, and download custom RGB profiles; along with an incentive of getting paid per download, then the number of profiles availables would increase. This would make it easier to find custom presets not only for my self, but the HyperX community as a whole. 
 
-I also at the time wanted to move away from non-relational databases and learn SQL to. So i figured this would be a great opprotunity to do so.
+I also at the time wanted to move away from non-relational databases and learn SQL. So i figured this would be a great opprotunity to do so.
 
 ## Tech Stack
 
@@ -55,8 +55,8 @@ I also at the time wanted to move away from non-relational databases and learn S
 
 - Light/dark mode toggle.
 - Server side rendering.
-- SEO
-- Scehma Validation for form submissions
+- SEO.
+- Scehma Validation for form submissions.
 - Forgot password/password resets.
 - Open Authentication (OAuth) for both sign up and login with providers Google, Discord, and Twitch.
 - Email and password authentication.
@@ -64,14 +64,14 @@ I also at the time wanted to move away from non-relational databases and learn S
 - Multistep form that is accessible on every page but carefully possitioned to seamless fit within the ui.
 - Toast notifications for specific events on client like an invalid login attempt, or successfull upload.
 - Realtime notification system for when a member interacts with a preset (like, comment, download).
-- Feedback system on all content related to presets via comments, likes, and ratings
-- Profile page for members to share *all* of their creations via url
-- Cloud storage for uploading images
-- Image optimization via Next.js <Image /> component
-- Search display to find the exact preset you need
+- Feedback system on all content related to presets via comments, likes, and ratings.
+- Profile page for members to share *all* of their creations via url.
+- Cloud storage for uploading images.
+- Image optimization via Next.js <Image /> component.
+- Search display to find the exact preset you need.
 - Preset feed that can be filtered via hardware, game, and effects; as well as sorted by date uploaded, download amount, or views.
 - Settings where a user can tweak the their profile info, security info, as well as presets.
-- PostgreSQL RLS policies for added database security
+- PostgreSQL RLS policies for added database security.
 
 ## Screenshots
 
@@ -95,17 +95,17 @@ I also at the time wanted to move away from non-relational databases and learn S
 
 ## Lessons Learned
 
-Out of all my projects, I'm most proud of this one and its helped me grow as a developer the most. There's alot to take away from the journey of building HyperSets to the point I would need to write 2 blog posts to cover everything. For the time being, i'll try to highlight some key points I learned and believe is could help others to know.
+Out of all my projects, Hypersets has helped me grow as a developer the most due to its scope. There's alot to take away to the point that I would need to write 2 blog posts to cover everything. For the time being, I'll try to highlight some key points I learned and believe is could help others to know.
 
 #### Entrepreneurial lessons:
 
-The biggest entrepreneurial takeaway that I got after launch covers how I could have done better to validate the idea and why its important to **properly**: 
+The biggest entrepreneurial takeaways I want to share covers how I could have done better to validate the idea and why its important to **properly**: 
 
-- **Build an audience before launch** - It very quickly became apparent that blindlessly expecting an audience to love any product, with out solid proof its 100% what they want, is a bad idea. At launch time, I was completely lost on how to get users because no one knew about it outside of my inner circle. When it came time to sharing, people did not like it as much as I'd hope.
+- **Build an audience before launch** - It quickly became apparent that blindlessly hoping my target audience would love the product, with out solid proof its 100% what they want, was a bad idea. At launch time, I was completely lost on how to get users because no one knew about it outside of my inner circle. When it came time to sharing, people did not like it as much as I'd hope.
 
-- **Do *extensive* market research** - I naievely was under the the impression that HyperSets was first to market with the idea and paid the price. After reaching out to someone that had done something similar on reddit, they informed me about an application called SignalsRGB that is doing almost exactly what HyperSets is aiming for. Except theres already an audience for their platform, software build for desktop that syncs led's effects with both pc periphreals and tower components, as well as an inhouse marketplace to download custom profiles. 
+- **Do *extensive* market research** - I naievely was under the impression that HyperSets was first to market and paid the price. After reaching out to someone who has done something similar on reddit, they informed me about an application called SignalsRGB that is doing almost exactly what HyperSets is aiming for. Except theres already an audience for their platform, software build for desktop to syncs led's effects for both pc periphreals and tower components, as well as an inhouse marketplace to download custom profiles. 
 
-- **Build an MVP** - This one might be confusing considering the MVP is fully functional. What I mean is that the points above could have been addressed much earlier, with alot of time saved, if HyperSets had not launched with so many features. Looking back, I would have only picked **3 out of the 19 features listed**; an 85% cut! Which is the **true** meaning of an MVP. The only features needed to still solve the primary problem, providing a centralized location for custom presets to download; were SEO for search indexing, server side rendering to enable SEO, and a central feed of presets for download. 
+- **Build an MVP** - This one might be confusing considering the MVP is fully functional. What I mean is that the points above could have been addressed much earlier, with alot of time saved, if HyperSets had not launched with so many features. Looking back, I would have only picked **3 out of the 19 features listed** to launch with; that's an 85% cut! Which makes it a **true** MVP. The only features needed to still solve the primary problem, providing a centralized location for custom presets to download, were SEO for search indexing, server side rendering to enable SEO, and a central feed of presets for download. 
 
 #### Web Development lessons
 
