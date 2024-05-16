@@ -29,7 +29,8 @@ Publicly being hosted at https://Hyper-Sets.com.
   - [License](#license)
 ## Problem to solve
 
-There are talented people creating cool profiles, but dont have a platform to share it on. Unless they are capable of building a website to host their presets; chances are it would get uploaded on a public form like reddit and lost within the sea of content. Leading into alot of custom profiles scattered on the web, thus making it a hassel to explore alternatives outside of what the manufacture provides.
+There are talented people creating cool profiles, but dont have a platform to share it on. Unless they are capable of building a website to host their presets; chances are it would get uploaded on a public form like reddit and lost within the sea of content. Thus making it a hassel to explore alternatives outside of what the manufacture provides since alot of custom profiles are scattered on the web.
+
 ## Motivation
 
 I theorized that if users had a platform to upload, share, and download custom RGB profiles; along with an incentive of getting paid per download, then the number of profiles availables would increase. This would make it easier to find custom presets not only for my self, but the HyperX community as a whole. 
