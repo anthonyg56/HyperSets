@@ -94,7 +94,7 @@ I also at the time wanted to move away from non-relational databases and learn S
 
 ## Lessons Learned
 
-Out of all themy projects, i'm most proud of this one and helped me grow as a developer the most. There's alot to take away from the journey of building HyperSets to the point I would need to write 2 blog posts to cover everything. For the time being, ill try to highlight some key points I learned and believe is could help others to know.
+Out of all my projects, I'm most proud of this one and its helped me grow as a developer the most. There's alot to take away from the journey of building HyperSets to the point I would need to write 2 blog posts to cover everything. For the time being, i'll try to highlight some key points I learned and believe is could help others to know.
 
 #### Entrepreneurial lessons:
 
