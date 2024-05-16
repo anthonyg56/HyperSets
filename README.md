@@ -34,7 +34,8 @@ There are talented people creating cool profiles, but dont have a platform to sh
 
 I theorized that if users had a platform to upload, share, and download custom RGB profiles; along with an incentive of getting paid per download, then the number of profiles availables would increase. This would make it easier to find custom presets not only for my self, but the HyperX community as a whole. 
 
-I also at the time wanted to move away from non-relational databases and learn SQL to improve my chances of hirability. So i figured this would be a great opprotunity to do so.
+I also at the time wanted to move away from non-relational databases and learn SQL to. So i figured this would be a great opprotunity to do so.
+
 ## Tech Stack
 
 **UI\UX Design Tool:** Figma
@@ -93,7 +94,7 @@ I also at the time wanted to move away from non-relational databases and learn S
 
 ## Lessons Learned
 
-Out of all the projects I have made, this is the one i'm most proud of. There's alot to take away from the journey of building HyperSets to the point I would need to write 2 blog posts to cover everything. For the time being, ill try to highlight some key points I learned and believe is could help others to know.
+Out of all themy projects, i'm most proud of this one and helped me grow as a developer the most. There's alot to take away from the journey of building HyperSets to the point I would need to write 2 blog posts to cover everything. For the time being, ill try to highlight some key points I learned and believe is could help others to know.
 
 #### Entrepreneurial lessons:
 
