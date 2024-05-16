@@ -1,114 +1,122 @@
+
 # HyperSets
 
-HyperSets is an online platform I made for the HyperX community to store,
-discover, and illuminate their pc's peripheral setup.
+![HyperSets Homepage - Light Mode](./assets/images/home_light.gif)
+*HyperSets Homepage - Light Mode*
+  
+An online platform for the HyperX community to store, discover, and illuminate their pc's peripheral setup.
 
-It offers many profiles to enhance their environment through a combination of
-wide-ranging lighting effects, such as visual effects for ambient RGB lighting
-and key binding for games or work. There are also 50+ games to choose from to
-apply these effects.
+HyperSets offers a wide array of custom profiles for members to enhance their environment through a combination of visual effects for ambient RGB lighting and key binding macros for games or work. Along with a library of 50+ games to choose from that aligns with its aesthetics.
+
 
 ## Live Demo
 
-Publicly hosted at https://Hyper-Sets.com.
+Publicly being hosted at https://Hyper-Sets.com. 
+
 
 ## Table of Content
-
-- [Problem to solve](#Problemtosolve)
-- [Motivation](#motivation)
-- [Tech Stack](#techstack)
-- [Features](#features)
-- [Screenshots](#screenshots)
-- [Lessons Learned](#lessonlearned)
-- [License](#license)
-
+- [HyperSets](#hypersets)
+  - [Live Demo](#live-demo)
+  - [Table of Content](#table-of-content)
+  - [Problem to solve](#problem-to-solve)
+  - [Motivation](#motivation)
+  - [Tech Stack](#tech-stack)
+  - [Features](#features)
+  - [Screenshots](#screenshots)
+  - [Lessons Learned](#lessons-learned)
+      - [Entrepreneurial lessons:](#entrepreneurial-lessons)
+      - [Web Development lessons](#web-development-lessons)
+  - [License](#license)
 ## Problem to solve
 
-- Alot of profiles on the web are scattered on multiple platforms. This makes it
-  a hassel trying to find and download custom ones for users that want to
-  explore alternatives outside of what the manufacture provides.
-
-- There are talented people creating cool profiles, but dont have a platform to
-  share it on. Unless they we're capable of building a website to host their
-  presets; chances are it would get lost within the sea of content on a public
-  form like reddit.
-
+There are talented people creating cool profiles, but dont have a platform to share it on. Unless they are capable of building a website to host their presets; chances are it would get uploaded on a public form like reddit and lost within the sea of content. Leading into alot of custom profiles scattered on the web, thus making it a hassel to explore alternatives outside of what the manufacture provides.
 ## Motivation
 
-I theorized that if users had a platform to upload, share, and download custom
-RGB profiles; along with an incentive of getting paid per download, then the
-number of profiles availables would increase. This would mnake it easier to find
-custom presets not only for my self, but the HyperX community as a whole.
+I theorized that if users had a platform to upload, share, and download custom RGB profiles; along with an incentive of getting paid per download, then the number of profiles availables would increase. This would make it easier to find custom presets not only for my self, but the HyperX community as a whole. 
 
-I also at the time wanted to move away from non-relational databases and learn
-SQL to improve my chances of hirability. So i figured this would be a great
-opprotunity to do so.
-
+I also at the time wanted to move away from non-relational databases and learn SQL to improve my chances of hirability. So i figured this would be a great opprotunity to do so.
 ## Tech Stack
+
+**UI\UX Design Tool:** Figma
 
 **Programming Language:** TypeScript
 
-**Client:** React, React Hook Form, React Drop Zone, Framer Motion, Next.Js,
-Zod, lucide-react, TailwindCSS, clsx, AceternityUI, ShadcnUI
+**Client:** React, React Hook Form, React Drop Zone, Framer Motion, Next.Js, Zod, lucide-react, TailwindCSS, clsx, AceternityUI, ShadcnUI
 
 **Server:** Node, Supabase, PostgreSQL
+
+**Project Management:** Trello
+
+**Devops:** Vercel
 
 ## Features
 
 - Light/dark mode toggle.
 - Server side rendering.
 - SEO
+- Scehma Validation for form submissions
 - Forgot password/password resets.
-- Open Authentication (OAuth) for both sign up and login with providers Google,
-  Discord, and Twitch.
+- Open Authentication (OAuth) for both sign up and login with providers Google, Discord, and Twitch.
 - Email and password authentication.
 - User sessions with HTTP only cookies containing refresh and access tokens.
-- Multistep form that is accessible on every page but carefully possitioned to
-  seamless fit within the ui.
-- Toast notifications for specific events on client like an invalid login
-  attempt, or successfull upload.
-- Realtime notification system for when a member interacts with a preset (like,
-  comment, download).
-- Feedback system on all content related to presets via comments, likes, and
-  ratings
-- Profile page for members to share _all_ of their creations via url
+- Multistep form that is accessible on every page but carefully possitioned to seamless fit within the ui.
+- Toast notifications for specific events on client like an invalid login attempt, or successfull upload.
+- Realtime notification system for when a member interacts with a preset (like, comment, download).
+- Feedback system on all content related to presets via comments, likes, and ratings
+- Profile page for members to share *all* of their creations via url
 - Cloud storage for uploading images
 - Image optimization via Next.js <Image /> component
 - Search display to find the exact preset you need
-- Preset feed that can be filtered via hardware, game, and effects; as well as
-  sorted by date uploaded, download amount, or views.
-- Settings where a user can tweak the their profile info, security info, as well
-  as presets.
+- Preset feed that can be filtered via hardware, game, and effects; as well as sorted by date uploaded, download amount, or views.
+- Settings where a user can tweak the their profile info, security info, as well as presets.
 - PostgreSQL RLS policies for added database security
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![Presets Page](./assets/images/presets_page.png)
+*Feed of presets on path /presets*/
+
+![App Screenshot](./assets/images/profile_page.png)
+*A members profile page and all their presets created*
+
+![App Screenshot](./assets/images/empty_comments.png)
+*Comment sheet for an invidual preset*
+
+![App Screenshot](./assets/images/Screenshot%202024-05-14%20044735.png)
+*Security settings where members can update their password and other authentication settings*
+
+![App Screenshot](./assets/images/Screenshot%202024-05-11%20143416.png)
+*Form for creating and uploading a new preset, but in a modal*
+
+![App Screenshot](./assets/images/Screenshot%202024-05-14%20043706.png)
+*Login page for users to sign in via OAuth providers Discord, Twitch, and Google, or just email and password*
 
 ## Lessons Learned
 
-#### Entrepreneurial lesson
+Out of all the projects I have made, this is the one i'm most proud of. There's alot to take away from the journey of building HyperSets to the point I would need to write 2 blog posts to cover everything. For the time being, ill try to highlight some key points I learned and believe is could help others to know.
 
-The biggest entrepreneurial takeaway that I got after launch was to **always
-validate your idea and try to build an audience first**.
+#### Entrepreneurial lessons:
 
-At launch i was completely lost as to how to get users because I had not told
-anyone about it besides my friends and family. Despite providing good positive &
-negative feedback, they were not the users i was making the app for and i soon
-learned that i was blindlessly hoping that my users would love it. I knew the
-target audience i was trying to reach and where to find them, but they knew
-nothing about me or my product thus making it difficult to establish trust.
+The biggest entrepreneurial takeaway that I got after launch covers how I could have done better to validate the idea and why its important to **properly**: 
 
-Another way i failed to validate the idea was by not doing a thorough enough
-market research on competitors. A few days after launch, I reached out to the
-user that inspired me to build HyperSets (he ran a personal page for corsair
-profiles), and he informed me that there was a software out called SignalsRGB
-doing what i was trying to do. Except far much better and they exapanded out to
-all manufactures for both periphreals and rgb tower components (fans, ram stick,
-etc).
+- **Build an audience before launch** - It very quickly became apparent that blindlessly expecting an audience to love any product, with out solid proof of evidence its 100% what they want, is a bad idea. At launch time, I was completely lost on how to get users because no one knew about it outside of my friend. When it came time to sharing, people did not like it as much as id hop
 
-validate the idea and build an audience do good market research launcing late
+- **Do *extensive* market research** - I naievely was under the the impression that HyperSets was first to market with the idea and paid the price. After reaching out to someone that had done something similar on reddit, they informed me about an application called SignalsRGB that is doing almost exactly what HyperSets is aiming for. Except theres already an audience for their platform, software build for desktop that syncs led's effects with both pc periphreals and tower components, as well as an inhouse marketplace to download custom profiles. 
 
+- **Build an MVP** - This one might be confusing considering the MVP is fully functional. What I mean is that the points above could have been addressed much earlier, with alot of time saved, if HyperSets had not launched with so many features. Looking back, I would have only picked **3 out of the 19 features listed**; an 85% cut! Which is the **true** meaning of an MVP. The only features needed to still solve the primary problem, providing a centralized location for custom presets to download, were SEO for search indexing, server side rendering to enable SEO, and a central feed of presets scraped off the web available for download. 
+
+#### Web Development lessons
+
+For context, all points are presented from the perspective of a solo/hobbiest web developer and I apologize ahead of time if I misconstrue any topics due to insufficent industry knowledge.
+
+- **No designer? Use a UI/Component library** - I typically prefer to draw a mockup in Figma and then write the code for personal projects because most ui libraries are not appealing to me nor accissible enough to change. [ShadCN/UI](https://ui.shadcn.com/), voted the [hottest project of the year](https://risingstars.js.org/2023/en) on github, has completely changed my perspective on these tools. The pages and layout that I made on the fly (without wireframing) with Shadcn/ui were more robust and aestically pleasing compared to what i made in Figma; while also only taking about 10% of the time and effort to make. 
+
+- **Relational databases are better for most situations** - That is, unless your projects data requirements are very clear and the benefits of a non-relational database is absolutely needed. Otherwise, relational databases are, more often than not, the better choice due to ACID properties that help maintain data integrity and transactional reliability. This makes querying data more predictable no matter the service, and is why, unless I absolutely need a non-relational database, will be sticking with PostgresSQL over MongoDB moving forward for my personal projects.
+
+- **A Javascript framework isnt always needed** - There are a ton of frameworks made with Javascript that have revolutionized the way we build user interfaces and use the web today. While some devs claim that if you’re not using tools like react, next.js, or svelte then you’re falling behind; others will argue that these tools have introduced a ton of unnecessary complexity into the web development ecosystem, and i agree. But just like everything else we use, whether or not to use a framework depends on the situation at hand. I believe devs should use the tools they are best with, if time is of the essence when starting out, over adopting a new language or framework. After the code base and architecture is established, or if the situation calls for it, then move onto the technology that is best overall. For HyperSets, I did not need to use React or Next.Js, these are just my default go to's cause it's what I work the fastest in.
+
+- **The limitations of JavaScript\TypeScript** - I have been working with JavaScript\Typescript on and off for atleast 5 years now and due to the nature of how i learned (outside of a traditional 9 -5 or school setting), there were some gaps in my knowledge i did not even know i had. The catalyst for me that has helped close that gap, as well as lead to the biggest pardigm shift in regards to personal understanding of computer science fundementals, was one sentance: "JavaScript is a Scripting language". To some this is obvious, but for me it completely challenged the way i viewed the language, and programming as a whole. It's embarrsising to say but before hand, i saw JavasScript as a *general use* programming language (i know, i know) since it's everywhere and couldn't have been more wrong. I now know that its a scripting language meant to be interpreted in the browser or a node.js runtime enviorment. This is an important relization in my career because it caused a chain reaction of discovering new knowledge and intimately familiarzing my self with programming outside of the browser. a newfound wanderlust comparable to when I first started developing.
+  
 ## License
 
 MIT License
@@ -131,3 +139,4 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
