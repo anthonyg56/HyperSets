@@ -113,32 +113,25 @@ For context, all points presented are from the perspective of a solo/hobbiest we
 
 - **No designer? Use a UI/Component library** - I typically prefer to draw a mockup in Figma and then write the code for personal projects because most ui libraries are not appealing to me nor accissible enough to change. [ShadCN/UI](https://ui.shadcn.com/), voted the [hottest project of the year](https://risingstars.js.org/2023/en) on github, has completely changed my perspective on these tools. The design that I made on the fly (without wireframing) was more aestically pleasing compared to what i made in Figma. It also was more robust since and took about 10% of the time + effort to make without sacrificing any controll or ownership over the components.
 
-- **Relational databases are better for most situations** - That is, unless your projects data requirements are very clear and the benefits of a non-relational database is absolutely needed. Otherwise, relational databases are, more often than not, the better choice due to ACID properties that help maintain data integrity and transactional reliability. This makes querying data more predictable no matter the service, and is why, unless I absolutely need a non-relational database, will be sticking with PostgresSQL over MongoDB moving forward for my personal projects.
+- **Relational databases are better for most situations** - That is, unless your projects data requirements are very clear and the benefits of a non-relational database is absolutely needed. Otherwise, relational databases are, more often than not, the better choice due to ACID properties maintaining data integrity and reliability. This makes querying data more predictable no matter the service, and is why, unless I absolutely need a non-relational database, will be sticking with PostgresSQL over MongoDB moving forward for my personal projects.
 
-- **A Javascript framework isnt always needed** - There are a ton of frameworks made with Javascript that have revolutionized the way we build user interfaces and use the web today. While some devs claim that if you’re not using tools like react, next.js, or svelte then you’re falling behind; others will argue that these tools have introduced a ton of unnecessary complexity into the web development ecosystem, and i agree. But just like everything else we use, whether or not to use a framework depends on the situation at hand. I believe devs should use the tools they are best with, if time is of the essence, over adopting a new language or framework. After PMF (product market fit) is established, or if the situation calls for it, then move onto the technology that is best overall. For HyperSets, I did not need to use React or Next.Js, these are just my default go to's cause it's what I work the fastest in.
+- **A Javascript framework isnt always needed** - There are a ton of frameworks made with Javascript that have revolutionized the way we build user interfaces and use the web today. While some devs claim that if you’re not using tools like react, next.js, or svelte then you’re falling behind; others will argue that these tools have introduced a ton of unnecessary complexity into the web development ecosystem, and i agree. But just like everything else we use, whether or not to use a framework depends on the situation at hand. I believe devs should use the tools they are best with, if time is of the essence, over adopting a new language or framework. After PMF (product market fit) is established, or if the situation calls for it, then move onto the technology that is best overall. For HyperSets, I realized as i was finishing that I did not need to use React or Next.Js. These have just been my default go to's cause it's what I work the fastest in.
 
-- **The limitations of JavaScript\TypeScript** - I have been working with JavaScript\Typescript on and off for atleast 5 years now and due to the nature of how i learned (outside of a traditional 9 -5 or school setting), there were some gaps in my knowledge i did not even know i had. The catalyst for me that has helped close that gap, as well as lead to the biggest pardigm shift in regards to personal understanding of computer science fundementals, was one sentance: "JavaScript is a Scripting language". To some this is obvious, but for me it completely challenged the way i viewed the language, and programming as a whole. It's embarrsising to say but before hand, i saw JavasScript as a *general use* programming language (i know, i know) since it's everywhere but i couldn't have been more wrong. I now know that its a scripting language meant to be interpreted in the browser or a node.js runtime enviorment. This is an important to note because knowing a languages limitations helps you understand its scope of use better. This relization sent me down a rabbit hole that improved my deph of understanding of key programming fundementals like pointers & references, memmory manipulation, how the size of a value is determined in bytes and bits, and many more. As well as adopting my first compiled language: [Golang](https://go.dev/).
+- **The limitations of JavaScript\TypeScript** - It's is an important to be aware of a languages limitations as it helps to be more efficent in writing code when you understand its scope of use better. I have been working with JavaScript\Typescript on and off for atleast 5 years now and due to the nature of how i learned (outside of a traditional 9 -5 or school setting), there were some gaps in my knowledge. What helped close that gap, was one hearing one sentance in this [video](https://www.youtube.com/watch?v=pEfrdAtAmqk&t=1s): "JavaScript is a Scripting language". To some this is obvious, but for me at the time it completely reframed the way i viewed the language as well as programming as a whole. Just like many people i saw JavasScript as a *general use* programming language (i know, i know) since it's everywhere, but i couldn't have been more wrong. This relization sent me down a rabbit hole that improved my deph of understanding key programming fundementals like pointers & references, memmory manipulation, how the size of a value is determined in bytes and bits, and many more. I understand now JavaScript is scripting language meant to be interpreted in the browser or a node.js runtime enviorment. Which is why im adopting my first compiled language, [Golang](https://go.dev/), to expand the things I can build and stay closer to programming fundementals.
   
 ## License
 
-MIT License
+Copyright 2024 Anthony Saywala Gayflor
 
-Copyright (c) 2024 HyperSets
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+    http://www.apache.org/licenses/LICENSE-2.0
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
