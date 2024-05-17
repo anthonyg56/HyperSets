@@ -23,9 +23,6 @@ Publicly being hosted at https://Hyper-Sets.com.
   - [Tech Stack](#tech-stack)
   - [Features](#features)
   - [Screenshots](#screenshots)
-  - [Lessons Learned](#lessons-learned)
-      - [Entrepreneurial lessons:](#entrepreneurial-lessons)
-      - [Web Development lessons](#web-development-lessons)
   - [License](#license)
 ## Problem to solve
 
@@ -92,32 +89,6 @@ I also at the time wanted to move away from non-relational databases and learn S
 
 ![App Screenshot](./assets/images/Screenshot%202024-05-14%20043706.png)
 *Login page for users to sign in via OAuth providers Discord, Twitch, and Google, or just email and password*
-
-## Lessons Learned
-
-Out of all my projects, Hypersets has helped me grow as a developer the most due to its scope. There's alot to take away to the point that I would need to write 2 blog posts to cover everything. For the time being, I'll try to highlight some key points I learned and believe is could help others to know.
-
-#### Entrepreneurial lessons:
-
-The biggest entrepreneurial takeaways I want to share covers how I could have done better to validate the idea and why its important to **properly**: 
-
-- **Build an audience before launch** - It quickly became apparent that blindlessly hoping my target audience would love the product, with out solid proof its 100% what they want, was a bad idea. At launch time, I was completely lost on how to get users because no one knew about it outside of my inner circle. When it came time to sharing, people did not like it as much as I'd hope.
-
-- **Do *extensive* market research** - I naievely was under the impression that HyperSets was first to market and paid the price. After reaching out to someone who has done something similar on reddit, they informed me about an application called SignalsRGB that is doing almost exactly what HyperSets is aiming for. Except theres already an audience for their platform, software build for desktop to syncs led's effects for both pc periphreals and tower components, as well as an inhouse marketplace to download custom profiles. 
-
-- **Build an MVP** - This one might be confusing considering the MVP is fully functional. What I mean is that the points above could have been addressed much earlier, with alot of time saved, if HyperSets had not launched with so many features. Looking back, I would have only picked **3 out of the 19 features listed** to launch with; that's an 85% cut! Which makes it a **true** MVP. The only features needed to still solve the primary problem, providing a centralized location for custom presets to download, were SEO for search indexing, server side rendering to enable SEO, and a central feed of presets for download. 
-
-#### Web Development lessons
-
-For context, all points presented are from the perspective of a solo/hobbiest web developer and I apologize ahead of time if I misconstrue any topics due to insufficent industry knowledge.
-
-- **No designer? Use a UI/Component library** - I typically prefer to draw a mockup in Figma and then write the code for personal projects because most ui libraries are not appealing to me nor accissible enough to change. [ShadCN/UI](https://ui.shadcn.com/), voted the [hottest project of the year](https://risingstars.js.org/2023/en) on github, has completely changed my perspective on these tools. The design that I made on the fly (without wireframing) was more aestically pleasing compared to what i made in Figma. It also was more robust since and took about 10% of the time + effort to make without sacrificing any controll or ownership over the components.
-
-- **Relational databases are better for most situations** - That is, unless your projects data requirements are very clear and the benefits of a non-relational database is absolutely needed. Otherwise, relational databases are, more often than not, the better choice due to ACID properties maintaining data integrity and reliability. This makes querying data more predictable no matter the service, and is why, unless I absolutely need a non-relational database, will be sticking with PostgresSQL over MongoDB moving forward for my personal projects.
-
-- **A Javascript framework isnt always needed** - There are a ton of frameworks made with Javascript that have revolutionized the way we build user interfaces and use the web today. While some devs claim that if you’re not using tools like react, next.js, or svelte then you’re falling behind; others will argue that these tools have introduced a ton of unnecessary complexity into the web development ecosystem, and i agree. But just like everything else we use, whether or not to use a framework depends on the situation at hand. I believe devs should use the tools they are best with, if time is of the essence, over adopting a new language or framework. After PMF (product market fit) is established, or if the situation calls for it, then move onto the technology that is best overall. For HyperSets, I realized as i was finishing that I did not need to use React or Next.Js. These have just been my default go to's cause it's what I work the fastest in.
-
-- **The limitations of JavaScript\TypeScript** - It's is an important to be aware of a languages limitations as it helps to be more efficent in writing code when you understand its scope of use better. I have been working with JavaScript\Typescript on and off for atleast 5 years now and due to the nature of how i learned (outside of a traditional 9 -5 or school setting), there were some gaps in my knowledge. What helped close that gap, was one hearing one sentance in this [video](https://www.youtube.com/watch?v=pEfrdAtAmqk&t=1s): "JavaScript is a Scripting language". To some this is obvious, but for me at the time it completely reframed the way i viewed the language as well as programming as a whole. Just like many people i saw JavasScript as a *general use* programming language (i know, i know) since it's everywhere, but i couldn't have been more wrong. This relization sent me down a rabbit hole that improved my deph of understanding key programming fundementals like pointers & references, memmory manipulation, how the size of a value is determined in bytes and bits, and many more. I understand now JavaScript is scripting language meant to be interpreted in the browser or a node.js runtime enviorment. Which is why im adopting my first compiled language, [Golang](https://go.dev/), to expand the things I can build and stay closer to programming fundementals.
   
 ## License
 
