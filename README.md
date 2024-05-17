@@ -35,9 +35,9 @@ My theory was if users had a central platform to upload, share, and download cus
 
 The primary motivation to build HyperSets were:
 - To centralize custom presets available on the web for HyperX.
-- Take a chance at building something for cosumers
-- Move away from non-relational databases and learn SQL through hypersets
-- Build a strong portfolio
+- Take a chance at building something for cosumers.
+- Move away from non-relational databases and learn SQL.
+- Strengthen portfolio.
 
 ## Tech Stack
 
@@ -70,8 +70,8 @@ The primary motivation to build HyperSets were:
 - Preset feed that can be filtered via hardware, game, and effects; as well as sorted by varius paramaters.
 
 ### Technical
-- Server side rendering.
 - SEO.
+- Server side rendering.
 - Scehma Validation for form submissions.
 - User sessions with HTTP only cookies containing refresh and access tokens.
 - Cloud storage for uploading images.
