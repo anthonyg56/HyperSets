@@ -1,4 +1,3 @@
-
 # HyperSets
 
 ![HyperSets Homepage - Light Mode](./assets/images/home_light.gif)
@@ -6,33 +5,39 @@
   
 An online platform for the HyperX community to store, discover, and illuminate their pc's peripheral setup.
 
-HyperSets offers a wide array of custom profiles for members to enhance their environment through a combination of visual effects for ambient RGB lighting and key binding macros for games or work. Along with a library of 50+ games to choose from that aligns with its aesthetics.
+HyperSets offers a wide array of custom NGenuity profiles for members to enhance their environment through a combination of visual effects for ambient RGB lighting and key binding macros for games or work. Along with a library of 50+ games to choose from that aligns with its aesthetics.
 
 
 ## Live Demo
 
 Publicly being hosted at https://Hyper-Sets.com. 
 
-
-## Table of Content
+## Table of Contents
 - [HyperSets](#hypersets)
   - [Live Demo](#live-demo)
-  - [Table of Content](#table-of-content)
+  - [Table of Contents](#table-of-contents)
   - [Problem to solve](#problem-to-solve)
   - [Motivation](#motivation)
   - [Tech Stack](#tech-stack)
   - [Features](#features)
+    - [User Facing](#user-facing)
+    - [Technical](#technical)
   - [Screenshots](#screenshots)
   - [License](#license)
+  
 ## Problem to solve
 
 There are talented people creating cool profiles, but dont have a platform to share it on. Unless they are capable of building a website to host their presets; chances are it would get uploaded on a public form like reddit and lost within the sea of content. Thus making it a hassel to explore alternatives outside of what the manufacture provides since alot of custom profiles are scattered on the web.
 
+My theory was if users had a central platform to upload, share, and download custom NGenuity RGB profiles; along with an incentive of getting paid per download of their preset. Not only would this help organize profiles on the web, the number of profiles availables would increase as well.
+
 ## Motivation
 
-I theorized that if users had a platform to upload, share, and download custom RGB profiles; along with an incentive of getting paid per download, then the number of profiles availables would increase. This would make it easier to find custom presets not only for my self, but the HyperX community as a whole. 
-
-I also at the time wanted to move away from non-relational databases and learn SQL. So i figured this would be a great opprotunity to do so.
+The primary motivation to build HyperSets were:
+- To centralize custom presets available on the web for HyperX.
+- Take a chance at building something for cosumers
+- Move away from non-relational databases and learn SQL through hypersets
+- Build a strong portfolio
 
 ## Tech Stack
 
@@ -50,24 +55,28 @@ I also at the time wanted to move away from non-relational databases and learn S
 
 ## Features
 
+
+### User Facing
 - Light/dark mode toggle.
-- Server side rendering.
-- SEO.
-- Scehma Validation for form submissions.
-- Forgot password/password resets.
-- Open Authentication (OAuth) for both sign up and login with providers Google, Discord, and Twitch.
 - Email and password authentication.
-- User sessions with HTTP only cookies containing refresh and access tokens.
-- Multistep form that is accessible on every page but carefully possitioned to seamless fit within the ui.
+- Forgot password/password resets.
+- Open Authentication (OAuth) with providers Google, Discord, and Twitch for both sign up and login.
+- Profile page for members to share *all* of their creations via url.
+- Settings page for members to tweak their profile, security, and presets info.
+- Accessible Multistep form for creating a preset, that is accessible on every page but carefully possitioned to seamless fit within the ui.
 - Toast notifications for specific events on client like an invalid login attempt, or successfull upload.
 - Realtime notification system for when a member interacts with a preset (like, comment, download).
 - Feedback system on all content related to presets via comments, likes, and ratings.
-- Profile page for members to share *all* of their creations via url.
+- Preset feed that can be filtered via hardware, game, and effects; as well as sorted by varius paramaters.
+
+### Technical
+- Server side rendering.
+- SEO.
+- Scehma Validation for form submissions.
+- User sessions with HTTP only cookies containing refresh and access tokens.
 - Cloud storage for uploading images.
 - Image optimization via Next.js <Image /> component.
 - Search display to find the exact preset you need.
-- Preset feed that can be filtered via hardware, game, and effects; as well as sorted by date uploaded, download amount, or views.
-- Settings where a user can tweak the their profile info, security info, as well as presets.
 - PostgreSQL RLS policies for added database security.
 
 ## Screenshots
