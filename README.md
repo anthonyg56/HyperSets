@@ -60,7 +60,7 @@ The primary motivation to build HyperSets were:
 - Light/dark mode toggle.
 - Email and password authentication.
 - Forgot password/password resets.
-- Open Authentication (OAuth) with providers Google, Discord, and Twitch for both sign up and login.
+- Open Authorization (OAuth) with providers Google, Discord, and Twitch for both sign up and login.
 - Profile page for members to share *all* of their creations via url.
 - Settings page for members to tweak their profile, security, and presets info.
 - Accessible Multistep form for creating a preset, that is accessible on every page but carefully possitioned to seamless fit within the ui.
